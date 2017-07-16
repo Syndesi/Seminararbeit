@@ -1,0 +1,8 @@
+{
+  "db": {
+    "host":     "localhost",
+    "database": "seminararbeit",
+    "username": "user",
+    "password": "password"
+  }
+}
