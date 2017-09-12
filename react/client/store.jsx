@@ -4,16 +4,10 @@ import _ from 'lodash';
 
 class Store {
 
-  @observable applicationName = "Datenow.me";
-  @observable apiURL = "http://localhost/mango5777/api/";
-  @observable history = null;
-  @observable langCode = 'en';
-  @observable lang = false;
+  @observable string = "Datenow.me";
 
   constructor(){
     console.log('loaded');
-    console.log(this.getL('registerDescription'));
-    this.loadLang(this.langCode);
   }
 
   loadLang(code){
@@ -37,23 +31,7 @@ class Store {
     }
     return '';
   }
-
-  /*
-  sendPost(data, f){
-    // AJAX-request with url-encoded data
-    fetch(this.props.store.apiURL, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
-      },
-      body: this.objToUrl(data)
-    })
-    .then((resp) => resp.json())
-    .then(function(data){
-      console.log(data);
-      f(data);
-    });
-  }*/
+  
 }
 
 var store = window.s = new Store();
