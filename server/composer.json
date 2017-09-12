@@ -1,0 +1,17 @@
+{
+    "require": {
+        "respect/validation": "^1.1",
+        "phpmailer/phpmailer": "^6.0",
+        "symfony/yaml": "^3.3",
+        "propel/propel": "^2.0@dev",
+        "browscap/browscap-php": "^3.0"
+    },
+    "autoload": {
+        "files": ["./api/orm/conf/config.php"],
+        "classmap": [
+            "api/orm/classes/",
+            "api/orm/classes/Base/",
+            "api/orm/classes/Map/"
+        ]
+    }
+}

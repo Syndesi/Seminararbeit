@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="default" defaultIdMethod="native">
+  <table name="uba_station" phpName="UbaStation">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="name" type="varchar" size="256" required="true" />
+    <column name="code" type="varchar" size="10" required="true" />
+    <column name="network" type="varchar" size="2" required="true" />
+    <column name="lat" type="float" required="false" />
+    <column name="lng" type="float" required="false" />
+    <column name="alt" type="float" required="false" />
+  </table>
+  <table name="uba_o3_smw" phpName="UbaO3">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="station_id" type="integer" required="true" />
+    <column name="time" type="timestamp" required="true" />
+    <column name="value" type="float" required="true" />
+    <foreign-key foreignTable="uba_station">
+      <reference local="station_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="uba_so2_smw" phpName="UbaSO2">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="station_id" type="integer" required="true" />
+    <column name="time" type="timestamp" required="true" />
+    <column name="value" type="float" required="true" />
+    <foreign-key foreignTable="uba_station">
+      <reference local="station_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="uba_pm10_smw" phpName="UbaPM10">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="station_id" type="integer" required="true" />
+    <column name="time" type="timestamp" required="true" />
+    <column name="value" type="float" required="true" />
+    <foreign-key foreignTable="uba_station">
+      <reference local="station_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="uba_no2_smw" phpName="UbaNO2">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="station_id" type="integer" required="true" />
+    <column name="time" type="timestamp" required="true" />
+    <column name="value" type="float" required="true" />
+    <foreign-key foreignTable="uba_station">
+      <reference local="station_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="uba_co_8smw" phpName="UbaCO">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="station_id" type="integer" required="true" />
+    <column name="time" type="timestamp" required="true" />
+    <column name="value" type="float" required="true" />
+    <foreign-key foreignTable="uba_station">
+      <reference local="station_id" foreign="id"/>
+    </foreign-key>
+  </table>
+
+  <table name="dwd_station" phpName="DwdStation">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="name" type="varchar" size="256" required="true" />
+    <column name="lat" type="float" required="false" />
+    <column name="lng" type="float" required="false" />
+    <column name="alt" type="float" required="false" />
+  </table>
+  <table name="dwd_air_temperature" phpName="DwdAirTemperature">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="station_id" type="integer" required="true" />
+    <column name="time" type="timestamp" required="true" />
+    <column name="quality" type="integer" required="true" />
+    <column name="tt_tu" type="float" required="false" />
+    <column name="rf_tu" type="float" required="false" />
+    <foreign-key foreignTable="dwd_station">
+      <reference local="station_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="dwd_cloudines" phpName="DwdCloudines">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="station_id" type="integer" required="true" />
+    <column name="time" type="timestamp" required="true" />
+    <column name="quality" type="integer" required="true" />
+    <column name="v_n_i" type="varchar" size="1" required="false" />
+    <column name="v_n" type="integer" required="false" />
+    <foreign-key foreignTable="dwd_station">
+      <reference local="station_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="dwd_precipitation" phpName="DwdPrecipitation">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="station_id" type="integer" required="true" />
+    <column name="time" type="timestamp" required="true" />
+    <column name="quality" type="integer" required="true" />
+    <column name="r1" type="float" required="false" />
+    <column name="rs_ind" type="boolean" required="false" />
+    <column name="wrtr" type="integer" required="false" />
+    <foreign-key foreignTable="dwd_station">
+      <reference local="station_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="dwd_pressure" phpName="DwdPressure">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="station_id" type="integer" required="true" />
+    <column name="time" type="timestamp" required="true" />
+    <column name="quality" type="integer" required="true" />
+    <column name="p" type="float" required="false" />
+    <column name="p0" type="float" required="false" />
+    <foreign-key foreignTable="dwd_station">
+      <reference local="station_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="dwd_soil_temperature" phpName="DwdSoilTemperature">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="station_id" type="integer" required="true" />
+    <column name="time" type="timestamp" required="true" />
+    <column name="quality" type="integer" required="true" />
+    <column name="v_te002" type="float" required="false" />
+    <column name="v_te005" type="float" required="false" />
+    <column name="v_te010" type="float" required="false" />
+    <column name="v_te020" type="float" required="false" />
+    <column name="v_te050" type="float" required="false" />
+    <column name="v_te100" type="float" required="false" />
+    <foreign-key foreignTable="dwd_station">
+      <reference local="station_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="dwd_solar" phpName="DwdSolar">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="station_id" type="integer" required="true" />
+    <column name="time" type="timestamp" required="true" />
+    <column name="quality" type="integer" required="true" />
+    <column name="atmo_lberg" type="float" required="false" />
+    <column name="fd_lberg" type="float" required="false" />
+    <column name="fg_lberg" type="float" required="false" />
+    <column name="sd_lberg" type="integer" required="false" />
+    <column name="zenit" type="float" required="false" />
+    <foreign-key foreignTable="dwd_station">
+      <reference local="station_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="dwd_sun" phpName="DwdSun">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="station_id" type="integer" required="true" />
+    <column name="time" type="timestamp" required="true" />
+    <column name="quality" type="integer" required="true" />
+    <column name="sd_so" type="float" required="false" />
+    <foreign-key foreignTable="dwd_station">
+      <reference local="station_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="dwd_wind" phpName="DwdWind">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="station_id" type="integer" required="true" />
+    <column name="time" type="timestamp" required="true" />
+    <column name="quality" type="integer" required="true" />
+    <column name="f" type="float" required="false" />
+    <column name="d" type="integer" required="false" />
+    <foreign-key foreignTable="dwd_station">
+      <reference local="station_id" foreign="id"/>
+    </foreign-key>
+  </table>
+</database>
