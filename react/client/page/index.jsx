@@ -4,6 +4,9 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import C3Chart from 'react-c3js';
 import 'c3/c3.css';
 
+import CardStation from '../components/cardStation.jsx';
+import CardMap from '../components/cardMap.jsx';
+
 @observer
 export default class Index extends React.Component {
 
@@ -36,7 +39,7 @@ export default class Index extends React.Component {
     };
     return (
       <div className="row">
-        <div className="col s8 m8">
+        <div className="col s12 m4">
           <div className="card">
             <div className="card-image waves-effect waves-block waves-light">
               <C3Chart data={data} padding={padding} />
@@ -98,6 +101,12 @@ export default class Index extends React.Component {
               </Scrollbars>
             </div>
           </div>
+        </div>
+        <div className="col s12 m4">
+          <CardStation></CardStation>
+        </div>
+        <div className="col s12 m4">
+          <CardMap></CardMap>
         </div>
       </div>
     );

@@ -2,23 +2,42 @@
 set_time_limit(0);
 
 require_once __DIR__.'/../lib/route.php';
+use Propel\Runtime\Propel;
+use Map\UbaO3TableMap;
+use Map\UbaSO2TableMap;
+use Map\UbaPM10TableMap;
+use Map\UbaNO2TableMap;
+use Map\UbaCOTableMap;
 
 class UbaRoute extends \lib\Route {
 
   public function __construct($r){
     parent::__construct($r);
-    $this->addRoute('GET:/', function(){$this->getReport();});                                               // /api/uba
-    $this->addRoute('GET:/stations', function($p){$this->getStations();});                                   // /api/uba/stations
-    $this->addRoute('GET:/stations/{network:a}', function($p){$this->getStationsByNetwork($p['network']);}); // /api/uba/stations/BY
-    $this->addRoute('GET:/station/{id:i}', function($p){$this->getStationById($p['id']);});                  // /api/uba/station/1
-    $this->addRoute('GET:/station/{code:a}', function($p){$this->getStationByCode($p['code']);});            // /api/uba/station/DEBB048
-    $this->addRoute('GET:/o3/{day}', function($p){$this->getO3($p['day']);});                                // /api/uba/o3/2017-09-08
-    $this->addRoute('GET:/o3/{day}/{hour:i}', function($p){$this->getO3($p['day'], $p['hour']);});           // /api/uba/o3/2017-09-08/12
-    $this->addRoute('POST:/o3/{day}', function($p){$this->importO3($p['day']);});                            // /api/uba/o3/2017-09-08
-    $this->addRoute('POST:/so2/{day}', function($p){$this->importSO2($p['day']);});                          // /api/uba/so2/2017-09-08
-    $this->addRoute('POST:/pm10/{day}', function($p){$this->importPM10($p['day']);});                        // /api/uba/pm10/2017-09-08
-    $this->addRoute('POST:/no2/{day}', function($p){$this->importNO2($p['day']);});                          // /api/uba/no2/2017-09-08
-    $this->addRoute('POST:/co/{day}', function($p){$this->importCO($p['day']);});                            // /api/uba/co/2017-09-08
+    $this->addRoute('GET:/', function(){$this->getReport();});                                                   // /api/uba
+    $this->addRoute('GET:/stations', function($p){$this->getStations();});                                       // /api/uba/stations
+    $this->addRoute('GET:/stations/{network:a}', function($p){$this->getStationsByNetwork($p['network']);});     // /api/uba/stations/BY
+    $this->addRoute('GET:/station/{id:i}', function($p){$this->getStationById($p['id']);});                      // /api/uba/station/1
+    $this->addRoute('GET:/station/{code:a}', function($p){$this->getStationByCode($p['code']);});                // /api/uba/station/DEBB048
+    // O3
+    $this->addRoute('GET:/o3/{day}', function($p){$this->getValue('o3', $p['day']);});                           // /api/uba/o3/2017-09-08
+    $this->addRoute('GET:/o3/{day}/{hour:i}', function($p){$this->getValue('o3', $p['day'], $p['hour']);});      // /api/uba/o3/2017-09-08/12
+    $this->addRoute('POST:/o3/{day}', function($p){$this->importO3($p['day']);});                                // /api/uba/o3/2017-09-08
+    // SO2
+    $this->addRoute('GET:/so2/{day}', function($p){$this->getValue('so2', $p['day']);});                         // /api/uba/so2/2017-09-08
+    $this->addRoute('GET:/so2/{day}/{hour:i}', function($p){$this->getValue('so2', $p['day'], $p['hour']);});    // /api/uba/so2/2017-09-08/12
+    $this->addRoute('POST:/so2/{day}', function($p){$this->importSO2($p['day']);});                              // /api/uba/so2/2017-09-08
+    // PM10
+    $this->addRoute('GET:/pm10/{day}', function($p){$this->getValue('pm10', $p['day']);});                       // /api/uba/pm10/2017-09-08
+    $this->addRoute('GET:/pm10/{day}/{hour:i}', function($p){$this->getValue('pm10', $p['day'], $p['hour']);});  // /api/uba/pm10/2017-09-08/12
+    $this->addRoute('POST:/pm10/{day}', function($p){$this->importPM10($p['day']);});                            // /api/uba/pm10/2017-09-08
+    // NO2
+    $this->addRoute('GET:/no2/{day}', function($p){$this->getValue('no2', $p['day']);});                         // /api/uba/no2/2017-09-08
+    $this->addRoute('GET:/no2/{day}/{hour:i}', function($p){$this->getValue('no2', $p['day'], $p['hour']);});    // /api/uba/no2/2017-09-08/12
+    $this->addRoute('POST:/no2/{day}', function($p){$this->importNO2($p['day']);});                              // /api/uba/no2/2017-09-08
+    // CO
+    $this->addRoute('GET:/co/{day}', function($p){$this->getValue('co', $p['day']);});                           // /api/uba/co/2017-09-08
+    $this->addRoute('GET:/co/{day}/{hour:i}', function($p){$this->getValue('co', $p['day'], $p['hour']);});      // /api/uba/co/2017-09-08/12
+    $this->addRoute('POST:/co/{day}', function($p){$this->importCO($p['day']);});                                // /api/uba/co/2017-09-08
   }
 
   private function getReport(){
@@ -92,6 +111,8 @@ class UbaRoute extends \lib\Route {
     if(0 < $entrys){
       throw new Exception('There are already '.$entrys.' O3-entrys for the day '.$start->format('d-m-Y').' saved.');
     }
+    $con = Propel::getWriteConnection(UbaO3TableMap::DATABASE_NAME);
+    $con->beginTransaction();
     $this->readFile($url, function($data){
       if(count($data) == 7){
         $ubaO3 = new UbaO3();
@@ -102,7 +123,50 @@ class UbaRoute extends \lib\Route {
         $ubaO3->save();
       }
     });
+    $con->commit();
     $this->r->finish('finished');
+  }
+
+  private function getValue($type, $date, $hour = false){
+    $start = DateTime::createFromFormat('Y-m-d', $date);
+    $end = clone $start;
+    if($hour){
+      $start->setTime($hour, 1);
+      $end->setTime($hour + 1, 0);
+    } else {
+      $start->setTime(0, 1);
+      $end->setTime(24, 0);
+    }
+    $entrys = $this->getQuery($type)
+      ->filterByTime(array('min' => $start, 'max' => $end))
+      ->orderByTime()
+      ->orderByStationId();
+    $res = [];
+    foreach($entrys as $entry){
+      $time = $entry->getTime()->format('d.m.Y H:i');
+      if(!array_key_exists($time, $res)){
+        $res[$time] = [];
+      }
+      $res[$time][$entry->getStationId()] = $entry->getValue();
+    }
+    $this->r->finish($res);
+  }
+
+  private function getQuery($query){
+    switch($query){
+      case 'o3':
+        return UbaO3Query::create();
+      case 'no2':
+        return UbaNO2Query::create();
+      case 'pm10':
+        return UbaPM10Query::create();
+      case 'so2':
+        return UbaSO2Query::create();
+      case 'co':
+        return UbaCOQuery::create();
+      default:
+        throw new Exception('Query ['.$type.'] is unknown.');
+    }
   }
 
   private function getO3($day, $hour = false){
@@ -143,6 +207,8 @@ class UbaRoute extends \lib\Route {
     if(0 < $entrys){
       throw new Exception('There are already '.$entrys.' SO2-entrys for the day '.$start->format('d-m-Y').' saved.');
     }
+    $con = Propel::getWriteConnection(UbaSO2TableMap::DATABASE_NAME);
+    $con->beginTransaction();
     $this->readFile($url, function($data){
       if(count($data) == 7){
         $ubaSO2 = new UbaSO2();
@@ -153,6 +219,7 @@ class UbaRoute extends \lib\Route {
         $ubaSO2->save();
       }
     });
+    $con->commit();
     $this->r->finish('finished');
   }
 
@@ -172,6 +239,8 @@ class UbaRoute extends \lib\Route {
     if(0 < $entrys){
       throw new Exception('There are already '.$entrys.' PM10-entrys for the day '.$start->format('d-m-Y').' saved.');
     }
+    $con = Propel::getWriteConnection(UbaPM10TableMap::DATABASE_NAME);
+    $con->beginTransaction();
     $this->readFile($url, function($data){
       if(count($data) == 7){
         $ubaPM10 = new UbaPM10();
@@ -182,6 +251,7 @@ class UbaRoute extends \lib\Route {
         $ubaPM10->save();
       }
     });
+    $con->commit();
     $this->r->finish('finished');
   }
 
@@ -201,6 +271,8 @@ class UbaRoute extends \lib\Route {
     if(0 < $entrys){
       throw new Exception('There are already '.$entrys.' NO2-entrys for the day '.$start->format('d-m-Y').' saved.');
     }
+    $con = Propel::getWriteConnection(UbaNO2TableMap::DATABASE_NAME);
+    $con->beginTransaction();
     $this->readFile($url, function($data){
       if(count($data) == 7){
         $ubaNO2 = new UbaNO2();
@@ -211,6 +283,7 @@ class UbaRoute extends \lib\Route {
         $ubaNO2->save();
       }
     });
+    $con->commit();
     $this->r->finish('finished');
   }
 
@@ -230,6 +303,8 @@ class UbaRoute extends \lib\Route {
     if(0 < $entrys){
       throw new Exception('There are already '.$entrys.' CO-entrys for the day '.$start->format('d-m-Y').' saved.');
     }
+    $con = Propel::getWriteConnection(UbaCOTableMap::DATABASE_NAME);
+    $con->beginTransaction();
     $this->readFile($url, function($data){
       if(count($data) == 7){
         $ubaCO = new UbaCO();
@@ -240,6 +315,7 @@ class UbaRoute extends \lib\Route {
         $ubaCO->save();
       }
     });
+    $con->commit();
     $this->r->finish('finished');
   }
 
