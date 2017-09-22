@@ -36,7 +36,7 @@ export default class Index extends React.Component {
     };
     return (
       <div className="row">
-        <div className="col s4 m4">
+        <div className="col s8 m8">
           <div className="card">
             <div className="card-image waves-effect waves-block waves-light">
               <C3Chart data={data} padding={padding} />

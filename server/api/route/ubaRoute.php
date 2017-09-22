@@ -7,12 +7,73 @@ class UbaRoute extends \lib\Route {
 
   public function __construct($r){
     parent::__construct($r);
-    $this->addRoute('GET:/', function(){$this->r->finish('UBA API');});
-    $this->addRoute('POST:/o3/{day}', function($p){$this->importO3($p['day']);}); // /api/uba/o3/2017-09-08
-    $this->addRoute('POST:/so2/{day}', function($p){$this->importSO2($p['day']);}); // /api/uba/so2/2017-09-08
-    $this->addRoute('POST:/pm10/{day}', function($p){$this->importPM10($p['day']);}); // /api/uba/pm10/2017-09-08
-    $this->addRoute('POST:/no2/{day}', function($p){$this->importNO2($p['day']);}); // /api/uba/no2/2017-09-08
-    $this->addRoute('POST:/co/{day}', function($p){$this->importCO($p['day']);}); // /api/uba/co/2017-09-08
+    $this->addRoute('GET:/', function(){$this->getReport();});                                               // /api/uba
+    $this->addRoute('GET:/stations', function($p){$this->getStations();});                                   // /api/uba/stations
+    $this->addRoute('GET:/stations/{network:a}', function($p){$this->getStationsByNetwork($p['network']);}); // /api/uba/stations/BY
+    $this->addRoute('GET:/station/{id:i}', function($p){$this->getStationById($p['id']);});                  // /api/uba/station/1
+    $this->addRoute('GET:/station/{code:a}', function($p){$this->getStationByCode($p['code']);});            // /api/uba/station/DEBB048
+    $this->addRoute('GET:/o3/{day}', function($p){$this->getO3($p['day']);});                                // /api/uba/o3/2017-09-08
+    $this->addRoute('GET:/o3/{day}/{hour:i}', function($p){$this->getO3($p['day'], $p['hour']);});           // /api/uba/o3/2017-09-08/12
+    $this->addRoute('POST:/o3/{day}', function($p){$this->importO3($p['day']);});                            // /api/uba/o3/2017-09-08
+    $this->addRoute('POST:/so2/{day}', function($p){$this->importSO2($p['day']);});                          // /api/uba/so2/2017-09-08
+    $this->addRoute('POST:/pm10/{day}', function($p){$this->importPM10($p['day']);});                        // /api/uba/pm10/2017-09-08
+    $this->addRoute('POST:/no2/{day}', function($p){$this->importNO2($p['day']);});                          // /api/uba/no2/2017-09-08
+    $this->addRoute('POST:/co/{day}', function($p){$this->importCO($p['day']);});                            // /api/uba/co/2017-09-08
+  }
+
+  private function getReport(){
+    $tables = [
+      "NO2"  => UbaNO2Query::create()->count(),
+      "PM10" => UbaPM10Query::create()->count(),
+      "O3"   => UbaO3Query::create()->count(),
+      "SO2"  => UbaSO2Query::create()->count(),
+      "CO"   => UbaCOQuery::create()->count()
+    ];
+    $data = [
+      "total"  => $tables["NO2"]+$tables["PM10"]+$tables["O3"]+$tables["CO"]+$tables["SO2"],
+      "tables" => $tables
+    ];
+    $this->r->finish($data);
+  }
+
+  private function getStationById($id = 0){
+    $entry = UbaStationQuery::create()->findPK($id);
+    if($entry){
+      $this->r->finish($entry->toArray());
+    } else {
+      throw new Exception('No station with the id ['.$id.'] found.');
+    }
+  }
+
+  private function getStationByCode($code){
+    $entry = UbaStationQuery::create()
+      ->filterByCode($code)
+      ->findOne();
+    if($entry){
+      $this->r->finish($entry->toArray());
+    } else {
+      throw new Exception('No station with the code ['.$code.'] found.');
+    }
+  }
+
+  private function getStations(){
+    $entrys = UbaStationQuery::create()->find();
+    $res = [];
+    foreach($entrys as $entry){
+      $res[] = $entry->toArray();
+    }
+    $this->r->finish($res);
+  }
+
+  private function getStationsByNetwork($network){
+    $entrys = UbaStationQuery::create()
+      ->filterByNetwork(strtoupper($network))
+      ->find();
+    $res = [];
+    foreach($entrys as $entry){
+      $res[] = $entry->toArray();
+    }
+    $this->r->finish($res);
   }
 
   private function importO3($day){
@@ -42,6 +103,28 @@ class UbaRoute extends \lib\Route {
       }
     });
     $this->r->finish('finished');
+  }
+
+  private function getO3($day, $hour = false){
+    $start = DateTime::createFromFormat('Y-m-d', $day);
+    $end = clone $start;
+    if($hour){
+      $start->setTime($hour, 1);
+      $end->setTime($hour + 1, 0);
+    } else {
+      $start->setTime(0, 1);
+      $end->setTime(24, 0);
+    }
+    $entrys = UbaO3Query::create()
+      ->filterByTime(array('min' => $start, 'max' => $end))
+      ->orderByTime()
+      ->orderByStationId()
+      ->limit(10);
+    $res = [];
+    foreach($entrys as $entry){
+      $res[] = $entry->toArray();
+    }
+    $this->r->finish($res);
   }
 
   private function importSO2($day){
