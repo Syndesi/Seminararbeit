@@ -1,0 +1,43 @@
+propel:
+  general:
+    project: Syndesi
+    version: 2.0.0-dev
+  paths:
+    # Directory where the project files (`schema.xml`, etc.) are located.
+    # Default value is current path #
+    projectDir: current_path/../api/orm
+    # The directory where Propel expects to find your `schema.xml` file.
+    schemaDir: current-path/../api/orm
+    # The directory where Propel should output classes, sql, config, etc.
+    # Default value is current path #
+    outputDir: current-path/../api/orm
+    # The directory where Propel should output generated object model classes.
+    phpDir: current-path/../api/orm/classes
+    # The directory where Propel should output the compiled runtime configuration.
+    phpConfDir: current-path/../api/orm/conf
+    # The directory where Propel should output the generated DDL (or data insert statements, etc.)
+    sqlDir: current-path/../api/orm/sql
+    # Directory in which your composer.json resides
+    composerDir: current-path/../
+
+  database:
+    connections:
+      default:
+        adapter: mysql
+        classname: Propel\Runtime\Connection\ConnectionWrapper
+        dsn: "mysql:host=localhost;dbname=seminararbeit"
+        user: seminararbeit
+        password: wMHo60z1HhTnVVq5
+        settings:
+          charset: utf8mb4
+          queries:
+            utf8: "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci, COLLATION_CONNECTION = utf8mb4_unicode_ci, COLLATION_DATABASE = utf8mb4_unicode_ci, COLLATION_SERVER = utf8mb4_unicode_ci"
+
+  runtime:
+    defaultConnection: default
+    connections:
+      - default
+  generator:
+    defaultConnection: default
+    connections:
+      - default
