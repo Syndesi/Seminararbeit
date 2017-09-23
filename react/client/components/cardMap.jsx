@@ -28,7 +28,7 @@ export default class CardMap extends React.Component {
   render() {
     return (
       <div className="card">
-        <div className="card-image waves-effect waves-block waves-light">
+        <div className="card-image">
           <div className="map"></div>
         </div>
         <div className="card-content">
