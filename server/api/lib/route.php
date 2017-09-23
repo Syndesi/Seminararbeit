@@ -5,14 +5,17 @@ class Route {
 
   private $routes = [];
   private $regexShortcuts = array(
-    ':i}'  => ':[0-9]+}',
-    ':a}'  => ':[0-9A-Za-z]+}',
-    ':h}'  => ':[0-9A-Fa-f]+}',
-    ':c}'  => ':[a-zA-Z0-9+_\-\.]+}'
+    ':i}'  => ':[0-9]+}',             // int
+    ':a}'  => ':[0-9A-Za-z]+}',       // alphanumeric
+    ':h}'  => ':[0-9A-Fa-f]+}',       // hex
+    ':c}'  => ':[a-zA-Z0-9+_\-\.]+}', // strings
+    ':d}'  => ':[0-9-]+}',            // dates 2017-09-23
+    ':f}'  => ':[0-9.]+}'             // floats 0.234
   );
 
   public function __construct($r){
     $this->r = $r;
+    $this->addRoute('GET:/', function(){$this->getRoutes();});
   }
 
   /**
@@ -35,6 +38,17 @@ class Route {
   }
 
   /**
+   * Returns a list of all activated routes.
+   */
+  public function getRoutes(){
+    $res = [];
+    foreach($this->routes as $route => $func){
+      $res[] = $route;
+    }
+    $this->r->finish($res);
+  }
+
+  /**
    * Checks if a given route is covered by the classes´ routes and if it is, executes the function behind it.
    * @param  string $route the remaining part of the url
    */
@@ -53,7 +67,7 @@ class Route {
    * @param  string $route the route with no matches
    */
   public function defaultRoute($route = ''){
-    throw new \Exception('This Route does not exist.');
+    throw new \Exception('This Route does not exist. You can get a list of all available routes under /api/'.$this->r->api.'/');
   }
 
   /**

@@ -1,7 +1,5 @@
 <?php
 require_once __DIR__.'/../lib/route.php';
-use User;
-use UserQuery;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\NestedValidationException;
 

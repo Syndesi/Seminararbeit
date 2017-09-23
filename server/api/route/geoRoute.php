@@ -7,7 +7,6 @@ class GeoRoute extends \lib\Route {
 
   public function __construct($r){
     parent::__construct($r);
-    $this->addRoute('GET:/', function(){$this->info();});
     $this->addRoute('GET:/place/{address}', function($p){$this->getPlace($p['address']);});
   }
 
@@ -46,10 +45,6 @@ class GeoRoute extends \lib\Route {
       return $file['results'][0]['elevation'];
     }
     return false;
-  }
-
-  private function info(){
-    $this->r->finish('Hello world :D');
   }
 
 }

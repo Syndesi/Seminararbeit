@@ -11,7 +11,6 @@ class DwdRoute extends \lib\Route {
     $this->ftp = new \lib\FTP('ftp-cdc.dwd.de');
     $this->ftp->login();
     $this->ftp->pasv(true);
-    $this->addRoute('GET:/', function(){$this->r->finish('DWD API');});
     $this->addRoute('POST:/airTemperature/{station}', function($p){$this->importAirTemperature($p['station']);}); // /api/uba/o3/2017-09-08
   }
 
