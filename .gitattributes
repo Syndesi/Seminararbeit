@@ -1,0 +1,5 @@
+server/vendor/* linguist-vendored
+server/api/orm/classes/Base/* linguist-generated=true
+server/api/orm/classes/Map/* linguist-generated=true
+server/api/orm/conf/* linguist-generated=true
+server/api/orm/sql/* linguist-generated=true
