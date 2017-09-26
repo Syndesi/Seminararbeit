@@ -39,7 +39,7 @@ export default class Index extends React.Component {
     };
     return (
       <div className="row">
-        <div className="col s12 m4">
+        <div className="col s12 m12">
           <div className="card">
             <div className="card-image waves-effect waves-block waves-light">
               <C3Chart data={data} padding={padding} />
@@ -102,10 +102,10 @@ export default class Index extends React.Component {
             </div>
           </div>
         </div>
-        <div className="col s12 m4">
+        <div className="col s12 m12">
           <CardStation></CardStation>
         </div>
-        <div className="col s12 m4">
+        <div className="col s12 m12">
           <CardMap></CardMap>
         </div>
       </div>
