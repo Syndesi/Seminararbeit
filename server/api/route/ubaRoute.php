@@ -173,6 +173,7 @@ class UbaRoute extends \lib\Route {
         break;
     }
     $url = 'https://www.umweltbundesamt.de/uaq/csv/stations/data?'.$urlParam.'&group[]=station&range[]='.$start->getTimestamp().','.$end->getTimestamp();
+    //$this->r->finish($url);
     $entrys = $this->getQuery($substance)
       ->filterByTime(array('min' => $start->setTime(0, 1), 'max' => $end))
       ->count();
@@ -219,6 +220,27 @@ class UbaRoute extends \lib\Route {
       $station->save();
     }
     return $station->getId();
+  }
+
+  private function getStationValue2($type, $station, $date){
+    $start = DateTime::createFromFormat('Y-m-d', $date);
+    $end = clone $start;
+    $start->setTime(0, 1);
+    $end->setTime(24, 0);
+    $entrys = $this->getQuery($type)
+      ->filterByTime(array('min' => $start, 'max' => $end))
+      ->filterByStationId($station)
+      ->orderByTime()
+      ->orderByStationId();
+    $res = [];
+    foreach($entrys as $entry){
+      $time = $entry->getTime()->format('d.m.Y H:i');
+      if(!array_key_exists($time, $res)){
+        $res[$time] = [];
+      }
+      $res[$time][$entry->getStationId()] = $entry->getValue();
+    }
+    $this->r->finish($res);
   }
 
   private function getValue($type, $date, $hour = false){
