@@ -124,7 +124,7 @@ DROP TABLE IF EXISTS `dwd_station`;
 
 CREATE TABLE `dwd_station`
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id` INTEGER NOT NULL,
     `name` VARCHAR(256) NOT NULL,
     `lat` FLOAT,
     `lng` FLOAT,

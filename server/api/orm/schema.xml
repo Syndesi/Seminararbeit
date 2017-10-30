@@ -56,7 +56,7 @@
   </table>
 
   <table name="dwd_station" phpName="DwdStation">
-    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="false" />
     <column name="name" type="varchar" size="256" required="true" />
     <column name="lat" type="float" required="false" />
     <column name="lng" type="float" required="false" />

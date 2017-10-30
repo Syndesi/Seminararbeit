@@ -144,7 +144,7 @@ class DwdStationTableMap extends TableMap
         $this->setIdentifierQuoting(false);
         $this->setClassName('\\DwdStation');
         $this->setPackage('');
-        $this->setUseIdGenerator(true);
+        $this->setUseIdGenerator(false);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 256, null);
@@ -465,10 +465,6 @@ class DwdStationTableMap extends TableMap
             $criteria = clone $criteria; // rename for clarity
         } else {
             $criteria = $criteria->buildCriteria(); // build Criteria from DwdStation object
-        }
-
-        if ($criteria->containsKey(DwdStationTableMap::COL_ID) && $criteria->keyContainsValue(DwdStationTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.DwdStationTableMap::COL_ID.')');
         }
 
 
