@@ -35,6 +35,7 @@ class Dwd2Route extends \lib\Route {
     parent::__construct($r);
     date_default_timezone_set('Europe/Berlin');
     $this->addRoute('POST:/import/{station:i}/{type:a}', function($p){$this->importData($p['station'], $p['type']);});
+    $this->addRoute('POST:/import/stations', function($p){$this->importStations();});
     // import functions
     //$this->addRoute('POST:/{type:a}/{station:i}', function($p){$this->importStationData($p['type'], $p['station']);});
     // display functions
@@ -44,41 +45,16 @@ class Dwd2Route extends \lib\Route {
 
   // routes
 
-  private function timestampToDateTime(string $ts){
-    // 2016042801
-    $dateTime = new \DateTime();
-    $dateTime->setDate(substr($ts, 0, 4), substr($ts, 4, 2), substr($ts, 6, 2));
-    $dateTime->setTime(substr($ts, 8, 2), 0);
-    return $dateTime;
-  }
-
-  private function getStationId($id, $name = 'unknown'){
-    $station = DwdStationQuery::create()->findPK($id);
-    if(!$station){
-      $station = new DwdStation();
-      $station->setId($id);
-      $station->setName($name);
-      $station->save();
+  private function importStations(){
+    $res = [];
+    foreach($this->types2 as $type => $dirs){
+      foreach($dirs as $i => $dir){
+        $url = $this->searchFtpPathsForFile('pub/CDC/observations_germany/climate/hourly/'.$dir, '_Beschreibung_Stationen.txt');
+        $path = $this->downloadFile($url);
+        $res[] = $path;
+      }
     }
-    return $station->getId();
-  }
-
-  private function filterFalse($value){
-    if($value == '-999'){
-      return null;
-    }
-    return $value;
-  }
-
-  private function getFileUrl($type, $station){
-    $dir = 'pub/CDC/observations_germany/climate/hourly/'.$type;
-    $ftp = $this->getFtpConnection();
-    $paths = ftp_nlist($ftp, $dir);
-    $paths = preg_grep('/_'.$station.'_/', $paths);
-    if(!$paths){
-      return false;
-    }
-    return array_shift($paths);
+    $this->r->finish($res);
   }
 
   private function importData(string $station, string $type){
@@ -90,6 +66,44 @@ class Dwd2Route extends \lib\Route {
     $minDate = new \DateTime();
     $minDate->setDate(2007, 1, 1);
     $minDate->setTime(0, 0);
+    $stationId = $this->getStationId(intval($station));
+    Propel::disableInstancePooling(); // needed for 100k+ inserted rows...
+    switch($type){
+      case 'TU':
+        $query = DwdAirTemperatureQuery::create();
+        break;
+      case 'N':
+        $query = DwdCloudinessQuery::create();
+        break;
+      case 'RR':
+        $query = DwdPrecipitationQuery::create();
+        break;
+      case 'P0':
+        $query = DwdPressureQuery::create();
+        break;
+      case 'EB':
+        $query = DwdSoilTemperatureQuery::create();
+        break;
+      case 'ST':
+        $query = DwdSolarQuery::create();
+        break;
+      case 'SD':
+        $query = DwdSunQuery::create();
+        break;
+      case 'FF':
+        $query = DwdWindQuery::create();
+        break;
+      default:
+        throw new Exception('Unknown type ['.$type.'].');
+        break;
+    }
+    $latestEntry = $query->filterByStationId($stationId)->orderByTime('desc')->findOne();
+    if($latestEntry){
+      $latestEntryTime = $latestEntry->getTime();
+      if($latestEntryTime > $minDate){
+        $minDate = $latestEntryTime;
+      }
+    }
     foreach($this->types2[$type] as $i => $part){
       $url = $this->getFileUrl($part, $station);
       if(!$url){
@@ -99,10 +113,8 @@ class Dwd2Route extends \lib\Route {
       $path = $this->searchPathsForFile($directory, 'produkt', 'txt');
       if($file = fopen($path, 'r')){
         $header = $this->parseCsvLine($file);
-        $data   = [];
+        $data = [];
         $i = 0;
-        $stationId = $this->getStationId(intval($station));
-        Propel::disableInstancePooling(); // needed for 100k+ inserted rows...
         $con = Propel::getWriteConnection(Map\DwdAirTemperatureTableMap::DATABASE_NAME);
         $con->beginTransaction();
         while(!feof($file)){
@@ -110,7 +122,7 @@ class Dwd2Route extends \lib\Route {
           if($values){
             $data = array_combine($header, $values);
             $time = $this->timestampToDateTime($data['MESS_DATUM']);
-            if($minDate <= $time){
+            if($minDate < $time){
               switch($type){
                 case 'TU':
                   $entry = new DwdAirTemperature();
@@ -187,10 +199,139 @@ class Dwd2Route extends \lib\Route {
         $con->commit();
       }
     }
-    //$url = $this->getFile();
-    //$url = 'pub/CDC/observations_germany/climate/hourly/'.$this->getType($type).'/stundenwerte_'.strtoupper($type).'_'.$station.'_akt.zip';
+    if($insertedEntrys == 0){
+      $this->r->finish('Already up to date.');
+    }
     $this->r->finish('Inserted entrys: '.$insertedEntrys);
   }
+
+  // helper-functions
+
+  // (OLD) SSV-READER-METHODS
+  private function ssvGetSpaces($lines){
+    $spaces       = [];
+    $leftAligned  = [];
+    $rightAligned = [];
+    $res          = [];
+    foreach($lines as $line){
+      foreach(str_split($line) as $i => $char){
+        if(!array_key_exists($i, $spaces)){
+          $spaces[$i] = [0, 0];
+        }
+        if($char == ' '){
+          $spaces[$i][0]++;
+        }
+        $spaces[$i][1]++;
+      }
+    }
+    foreach($spaces as $i => $space){
+      $spaces[$i] = $space[0] / $space[1];
+    }
+    foreach($spaces as $i => $space){
+      if(array_key_exists($i - 1, $spaces)){
+        if($spaces[$i - 1] == 0 && $spaces[$i] > 0){
+          $leftAligned[] = $i;
+        }
+      }
+      if(array_key_exists($i + 1, $spaces)){
+        if($spaces[$i + 1] == 0 && $spaces[$i] > 0){
+          $rightAligned[] = $i;
+        }
+      }
+    }
+    foreach($leftAligned as $i => $pos){
+      $left = $leftAligned[$i];
+      if(array_key_exists($i, $rightAligned)){
+        $res[$i] = $rightAligned[$i];
+      }
+      if($spaces[$left - 1] == 0 && $spaces[$left] == 1){
+        $res[$i] = $left;
+      }
+    }
+    return $res;
+  }
+
+  private function ssvSplitLine($line, $headers, $spaces){
+    $res = [];
+    $start = 0;
+    $length = 0;
+    foreach($headers as $i => $header){
+      if(array_key_exists($i - 1, $spaces)){
+        $start = $spaces[$i - 1];
+      }
+      if(array_key_exists($i, $spaces)){
+        $length = $spaces[$i] - $start;
+      } else {
+        $length = strlen($line) - $start;
+      }
+      $res[$header] = trim(substr($line, $start, $length));
+    }
+    return $res;
+  }
+
+  private function ssvParseCSV($path){
+    $header = [];
+    /*
+Stations_id von_datum bis_datum Stationshoehe geoBreite geoLaenge Stationsname Bundesland
+----------- --------- --------- ------------- --------- --------- ----------------------------------------- ----------
+00003 19500401 20110331            202     50.7827    6.0941 Aachen                                   Nordrhein-Westfalen                                                                               
+00044 20070401 20171006             44     52.9335    8.2370 Großenkneten                             Niedersachsen                                                                                     
+00052 19760101 19880101             46     53.6623   10.1990 Ahrensburg-Wulfsdorf                     Schleswig-Holstein                                                                                
+00071 20091201 20171006            759     48.2156    8.9784 Albstadt-Badkap                          Baden-Württemberg                                                                                 
+00073 20070401 20171006            340     48.6159   13.0506 Aldersbach-Kriestorf                     Bayern                                                                                            
+00078 20041101 20171006             65     52.4853    7.9126 Alfhausen                                Niedersachsen                                                                                     
+00091 20040901 20171006            300     50.7446    9.3450 Alsfeld-Eifa                             Hessen                                                                                            
+00102 20020101 20171006             32     53.8617    8.1266 Leuchtturm Alte Weser                    Niedersachsen                                                                                     
+     */
+    if($file = fopen($path, 'r')){
+      $header  = explode(' ', trim($this->readLine($file)));
+      $divider = $this->readLine($file);
+      $lines = [$this->readLine($file), $this->readLine($file), $this->readLine($file), $this->readLine($file), $this->readLine($file), $this->readLine($file), $this->readLine($file), $this->readLine($file)];
+      $spaces = $this->getSpaces($lines);
+      $res = [];
+      foreach($lines as $line){
+        $res[] = $this->splitLine($line, $header, $spaces);
+      }
+      /*
+      while(!feof($file)){
+        $line = $this->readLine($file);
+
+        //$data = explode(';', $line);
+      }*/
+      fclose($file);
+    } else {
+      throw new Exception('Could not read the file.');
+    }
+    return $res;
+  }
+
+
+
+  private function timestampToDateTime(string $ts){
+    $dateTime = new \DateTime();
+    $dateTime->setDate(substr($ts, 0, 4), substr($ts, 4, 2), substr($ts, 6, 2));
+    $dateTime->setTime(substr($ts, 8, 2), 0);
+    return $dateTime;
+  }
+
+  private function getStationId($id, $name = 'unknown'){
+    $station = DwdStationQuery::create()->findPK($id);
+    if(!$station){
+      $station = new DwdStation();
+      $station->setId($id);
+      $station->setName($name);
+      $station->save();
+    }
+    return $station->getId();
+  }
+
+  private function filterFalse($value){
+    if($value == '-999'){
+      return null;
+    }
+    return $value;
+  }
+
 
   private function searchPathsForFile($directory, $key, $extension){
     if(!is_dir($directory)){
@@ -204,10 +345,6 @@ class Dwd2Route extends \lib\Route {
     return false;
   }
 
-  private function importStations($type){
-    $path = 'SD_Stundenwerte_Beschreibung_Stationen.txt';
-  }
-
   private function getType($type){
     $type = trim(strtoupper($type));
     if(!array_key_exists($type, $this->types2)){
@@ -215,12 +352,6 @@ class Dwd2Route extends \lib\Route {
     }
     return $this->types2[$type];
   }
-
-  private function importStationData($type, $station){
-    $path = 'stundenwerte_FF_{station}_akt.zip';
-  }
-
-  // helper-functions
 
   // FTP-helper-functions
 
@@ -236,6 +367,27 @@ class Dwd2Route extends \lib\Route {
       throw new Exception('FTP: Could not enable passive-mode.');
     }
     return $ftp;
+  }
+
+  private function getFileUrl($type, $station){
+    $dir = 'pub/CDC/observations_germany/climate/hourly/'.$type;
+    $ftp = $this->getFtpConnection();
+    $paths = ftp_nlist($ftp, $dir);
+    $paths = preg_grep('/_'.$station.'_/', $paths);
+    if(!$paths){
+      return false;
+    }
+    return array_shift($paths);
+  }
+
+  private function searchFtpPathsForFile($path, $key){
+    $ftp = $this->getFtpConnection();
+    $paths = ftp_nlist($ftp, $path);
+    $paths = preg_grep('/'.$key.'/', $paths);
+    if(!$paths){
+      return false;
+    }
+    return array_shift($paths);
   }
 
   /**

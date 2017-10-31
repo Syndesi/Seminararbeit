@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!-->
+<html class=" js no-touch rgba hsla textshadow opacity svg" style="" lang="en"><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>Understanding the beta distribution (using baseball statistics) – Variance Explained</title>
+<meta name="description" content="Note: I originally published a version of this post as an answer to this Cross Validated question.
+
+">
+<meta name="keywords" content="statistics, education">
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Understanding the beta distribution (using baseball statistics)">
+<meta name="twitter:description" content="Note: I originally published a version of this post as an answer to this Cross Validated question.
+
+">
+<meta name="twitter:site" content="@drob">
+<meta name="twitter:creator" content="@drob">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://varianceexplained.org/images/default-thumb.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Understanding the beta distribution (using baseball statistics)">
+<meta property="og:description" content="Note: I originally published a version of this post as an answer to this Cross Validated question.
+
+">
+<meta property="og:url" content="http://varianceexplained.org/statistics/beta_distribution_and_baseball/">
+<meta property="og:site_name" content="Variance Explained">
+
+
+
+
+
+<link rel="canonical" href="http://varianceexplained.org/statistics/beta_distribution_and_baseball/">
+<link href="http://varianceexplained.org/feed.xml" type="application/atom+xml" rel="alternate" title="Variance Explained Feed">
+
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/main.css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+	<script src="http://varianceexplained.org/assets/js/vendor/html5shiv.min.js"></script>
+	<script src="http://varianceexplained.org/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script async="" src="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/analytics.js"></script><script src="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/modernizr-2.js"></script>
+
+<!-- MathJax -->
+<script src="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/MathJax.js" id="">
+</script>
+
+<link href="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/css.css" rel="stylesheet" type="text/css">
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://varianceexplained.org/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://varianceexplained.org/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://varianceexplained.org/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://varianceexplained.org/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://varianceexplained.org/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://varianceexplained.org/images/apple-touch-icon-144x144-precomposed.png">
+
+<!-- Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-57723549-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1px; bottom: 2px; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><script type="text/javascript" async="" src="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/embed.js"></script><script async="" type="text/javascript" src="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/count.js"></script><style id="fit-vids-style">.fluid-width-video-wrapper{width:100%;position:relative;padding:0;}.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed {position:absolute;top:0;left:0;width:100%;height:100%;}</style><link rel="preload" as="style" href="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/a_data/lounge.css"><link rel="preload" as="script" href="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/a_data/common.js"><link rel="preload" as="script" href="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/a_data/lounge_002.js"><link rel="preload" as="script" href="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/a_data/config.js"><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style><script src="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/alfie.js" async="" charset="UTF-8"></script><style type="text/css">.MathJax_Display {text-align: center; margin: 1em 0em; position: relative; display: block!important; text-indent: 0; max-width: none; max-height: none; min-width: 0; min-height: 0; width: 100%}
+.MathJax .merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MathJax .MJX-monospace {font-family: monospace}
+.MathJax .MJX-sans-serif {font-family: sans-serif}
+#MathJax_Tooltip {background-color: InfoBackground; color: InfoText; border: 1px solid black; box-shadow: 2px 2px 5px #AAAAAA; -webkit-box-shadow: 2px 2px 5px #AAAAAA; -moz-box-shadow: 2px 2px 5px #AAAAAA; -khtml-box-shadow: 2px 2px 5px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true'); padding: 3px 4px; z-index: 401; position: absolute; left: 0; top: 0; width: auto; height: auto; display: none}
+.MathJax {display: inline; font-style: normal; font-weight: normal; line-height: normal; font-size: 100%; font-size-adjust: none; text-indent: 0; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0; min-height: 0; border: 0; padding: 0; margin: 0}
+.MathJax:focus, body :focus .MathJax {display: inline-table}
+.MathJax.MathJax_FullWidth {text-align: center; display: table-cell!important; width: 10000em!important}
+.MathJax img, .MathJax nobr, .MathJax a {border: 0; padding: 0; margin: 0; max-width: none; max-height: none; min-width: 0; min-height: 0; vertical-align: 0; line-height: normal; text-decoration: none}
+img.MathJax_strut {border: 0!important; padding: 0!important; margin: 0!important; vertical-align: 0!important}
+.MathJax span {display: inline; position: static; border: 0; padding: 0; margin: 0; vertical-align: 0; line-height: normal; text-decoration: none}
+.MathJax nobr {white-space: nowrap!important}
+.MathJax img {display: inline!important; float: none!important}
+.MathJax * {transition: none; -webkit-transition: none; -moz-transition: none; -ms-transition: none; -o-transition: none}
+.MathJax_Processing {visibility: hidden; position: fixed; width: 0; height: 0; overflow: hidden}
+.MathJax_Processed {display: none!important}
+.MathJax_ExBox {display: block!important; overflow: hidden; width: 1px; height: 60ex; min-height: 0; max-height: none}
+.MathJax .MathJax_EmBox {display: block!important; overflow: hidden; width: 1px; height: 60em; min-height: 0; max-height: none}
+.MathJax_LineBox {display: table!important}
+.MathJax_LineBox span {display: table-cell!important; width: 10000em!important; min-width: 0; max-width: none; padding: 0; border: 0; margin: 0}
+.MathJax .MathJax_HitBox {cursor: text; background: white; opacity: 0; filter: alpha(opacity=0)}
+.MathJax .MathJax_HitBox * {filter: none; opacity: 1; background: transparent}
+#MathJax_Tooltip * {filter: none; opacity: 1; background: transparent}
+@font-face {font-family: MathJax_Main; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Main; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Bold.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Bold.otf?V=2.7.1') format('opentype'); font-weight: bold}
+@font-face {font-family: MathJax_Main; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Italic.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Italic.otf?V=2.7.1') format('opentype'); font-style: italic}
+@font-face {font-family: MathJax_Math; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Math-Italic.otf?V=2.7.1') format('opentype'); font-style: italic}
+@font-face {font-family: MathJax_Caligraphic; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Caligraphic-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size1; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size1-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size2; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size2-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size2-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size3; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size3-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size3-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size4; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size4-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size4-Regular.otf?V=2.7.1') format('opentype')}
+.MathJax .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+
+<body class="post"><div style="visibility: hidden; overflow: hidden; position: absolute; top: 0px; height: 1px; width: auto; padding: 0px; border: 0px none; margin: 0px; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal;"><div id="MathJax_Hidden"></div></div><div id="MathJax_Message" style="display: none;"></div>
+
+<!--[if lt IE 9]><div class="browser-upgrade alert alert-info">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div><![endif]-->
+
+<div class="navigation-wrapper">
+	<div class="site-name">
+		<a href="http://varianceexplained.org/">Variance Explained</a>
+	</div><!-- /.site-name -->
+	<div class="top-navigation">
+		<nav role="navigation" id="site-nav" class="nav"><button type="button" role="button" id="menutoggle" class="navtoogle navicon-lines-button x" aria-hidden="true"><span class="navicon-lines"></span>menu</button>
+		    <ul>
+		        
+					    
+					    <li><a href="http://varianceexplained.org/about/">About Me</a></li>
+					  
+					    
+					    <li><a href="http://varianceexplained.org/posts/">Posts</a></li>
+					  
+					    
+					    <li><a href="http://varianceexplained.org/RData/">R Course</a></li>
+					  
+					    
+					    <li><a href="http://varianceexplained.org/r/empirical-bayes-book/">Introduction to Empirical Bayes</a></li>
+					  
+		    </ul>
+		</nav>
+	</div><!-- /.top-navigation -->
+</div><!-- /.navigation-wrapper -->
+
+
+
+<div id="main" role="main">
+  <div class="article-author-side">
+    
+
+
+	<img src="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/david_robinson_picture2.jpg" class="bio-photo" alt="David Robinson bio photo">
+
+<h3>David Robinson</h3>
+<p>Data Scientist at Stack Overflow, works in R and Python.</p>
+<a href="mailto:drobinson@stackoverflow.com" class="author-social" target="_blank"><i class="fa fa-envelope-square"></i> Email</a>
+<a href="http://twitter.com/drob" class="author-social" target="_blank"><i class="fa fa-twitter-square"></i> Twitter</a>
+
+
+
+
+
+<a href="http://github.com/dgrtwo" class="author-social" target="_blank"><i class="fa fa-github"></i> Github</a>
+<a href="http://stackoverflow.com/users/712603" class="author-social" target="_blank"><i class="fa fa-stack-overflow"></i> Stack Overflow</a>
+
+
+
+
+
+
+<h4>Subscribe</h4>
+
+<form method="post" action="http://blogtrottr.com">
+    <input name="btr_email" placeholder="Your email" type="text"><br>
+    <input name="btr_url" value="http://varianceexplained.org/feed.xml" type="hidden">
+    <input name="schedule_type" value="0" type="hidden">
+    <input class="styled-button-4" value="Subscribe to this blog" type="submit">
+</form>
+
+<style type="text/css"> 
+.styled-button-4 {
+	-webkit-box-shadow:rgba(0,0,0,0.98) 0 1px 0 0;
+	-moz-box-shadow:rgba(0,0,0,0.98) 0 1px 0 0;
+	box-shadow:rgba(0,0,0,0.98) 0 1px 0 0;
+	background-color:#EEE;
+	border-radius:0;
+	-webkit-border-radius:0;
+	-moz-border-radius:0;
+	border:1px solid #999;
+	color:#666;
+	font-family:'Lucida Grande',Tahoma,Verdana,Arial,Sans-serif;
+	font-size:11px;
+	font-weight:700;
+	padding:2px 6px;
+	height:28px
+}
+</style>
+
+
+<h4>Recommended Blogs</h4>
+<ul>
+    <li><a href="https://www.datacamp.com/community/blog">DataCamp</a></li>
+    <li><a href="http://www.r-bloggers.com/">R Bloggers</a></li>
+    <li><a href="http://blog.rstudio.org/">RStudio Blog</a></li>
+    <li><a href="http://r4stats.com/">R4Stats</a></li>
+    <li><a href="http://simplystatistics.org/">Simply Statistics</a></li>
+</ul>
+
+  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      
+        <h1><a href="http://varianceexplained.org/statistics/beta_distribution_and_baseball/" rel="bookmark" title="Understanding the beta distribution (using baseball statistics)">Understanding the beta distribution (using baseball statistics)</a></h1>
+      
+    </div><!--/ .headline-wrap -->
+    <div class="article-wrap">
+      <p><em>Note: I originally published a version of this post as an answer to <a href="http://stats.stackexchange.com/a/47782/8373">this Cross Validated question</a>.</em></p>
+
+<p>Some distributions, like the normal, the binomial, and the uniform, 
+are described in statistics education alongside their real world 
+interpretations and applications, which means beginner statisticians 
+usually gain a solid understanding of them. But I’ve found that the <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta distribution</a>
+ is rarely explained in these intuitive terms- if its usefulness is 
+addressed at all, it’s often with dense terms like “conjugate prior and 
+“order statistic.” This is a shame, because the intuition behind the 
+beta is pretty cool.</p>
+
+<p>In short, the beta distribution can be understood as representing a probability distribution <em>of probabilities</em>-
+ that is, it represents all the possible values of a probability when we
+ don’t know what that probability is. Here is my favorite explanation of
+ this:</p>
+
+<p>Anyone who follows baseball is familiar with <a href="http://en.wikipedia.org/wiki/Batting_average#Major_League_Baseball">batting averages</a>-
+ simply the number of times a player gets a base hit divided by the 
+number of times he goes up at bat (so it’s just a percentage between 0 
+and 1). .266 is in general considered an average batting average, while 
+.300 is considered an excellent one.</p>
+
+<p>Imagine we have a baseball player, and we want to predict what his 
+season-long batting average will be. You might say we can just use his 
+batting average so far- but this will be a very poor measure at the 
+start of a season! If a player goes up to bat once and gets a single, 
+his batting average is briefly 1.000, while if he strikes out or walks, 
+his batting average is 0.000. It doesn’t get much better if you go up to
+ bat five or six times- you could get a lucky streak and get an average 
+of 1.000, or an unlucky streak and get an average of 0, neither of which
+ are a remotely good predictor of how you will bat that season.</p>
+
+<p>Why is your batting average in the first few hits not a good 
+predictor of your eventual batting average? When a player’s first at-bat
+ is a strikeout, why does no one predict that he’ll never get a hit all 
+season? Because we’re going in with <em>prior expectations.</em> We know
+ that in history, most batting averages over a season have hovered 
+between something like .215 and .360, with some extremely rare 
+exceptions on either side. We know that if a player gets a few 
+strikeouts in a row at the start, that might indicate he’ll end up a bit
+ worse than average, but we know he probably won’t deviate from that 
+range.</p>
+
+<p>Given our batting average problem, which can be represented with a <a href="http://en.wikipedia.org/wiki/Binomial_distribution">binomial distribution</a> (a series of successes and failures), the best way to represent these prior expectations (what we in statistics just call a <a href="http://en.wikipedia.org/wiki/Prior_probability">prior</a>)
+ is with the beta distribution- it’s saying, before we’ve seen the 
+player take his first swing, what we roughly expect his batting average 
+to be. The domain of the beta distribution is <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-1-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-1" style="width: 2.589em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.209em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.513em, 1002.11em, 2.836em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-2"><span class="mo" id="MathJax-Span-3" style="font-family: MathJax_Main;">(</span><span class="mn" id="MathJax-Span-4" style="font-family: MathJax_Main;">0</span><span class="mo" id="MathJax-Span-5" style="font-family: MathJax_Main;">,</span><span class="mn" id="MathJax-Span-6" style="font-family: MathJax_Main; padding-left: 0.167em;">1</span><span class="mo" id="MathJax-Span-7" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.352em; border-left: 0px solid; width: 0px; height: 1.285em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo stretchy="false">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">)</mo></math></span></span><script type="math/tex" id="MathJax-Element-1">(0, 1)</script>,
+ just like a probability, so we already know we’re on the right track- 
+but the appropriateness of the beta for this task goes far beyond that.</p>
+
+<p>We expect that the player’s season-long batting average will be most 
+likely around .27, but that it could reasonably range from .21 to .35. 
+This can be represented with a beta distribution with parameters <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-2-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;&amp;#x03B1;&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;81&lt;/mn&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-8" style="width: 3.451em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.963em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.597em, 1002.89em, 2.608em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-9"><span class="mi" id="MathJax-Span-10" style="font-family: MathJax_Math; font-style: italic;">α</span><span class="mo" id="MathJax-Span-11" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mn" id="MathJax-Span-12" style="font-family: MathJax_Main; padding-left: 0.278em;">81</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.088em; border-left: 0px solid; width: 0px; height: 0.923em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>α</mi><mo>=</mo><mn>81</mn></math></span></span><script type="math/tex" id="MathJax-Element-2">\alpha=81</script> and <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-3-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;&amp;#x03B2;&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;219&lt;/mn&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-13" style="width: 3.936em; display: inline-block;"><span style="display: inline-block; position: relative; width: 3.394em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.558em, 1003.35em, 2.78em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-14"><span class="mi" id="MathJax-Span-15" style="font-family: MathJax_Math; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.007em;"></span></span><span class="mo" id="MathJax-Span-16" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mn" id="MathJax-Span-17" style="font-family: MathJax_Main; padding-left: 0.278em;">219</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.288em; border-left: 0px solid; width: 0px; height: 1.168em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>β</mi><mo>=</mo><mn>219</mn></math></span></span><script type="math/tex" id="MathJax-Element-3">\beta=219</script>:</p>
+
+<p><img src="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/plot1-1.png" alt="center"></p>
+
+<p>I came up with these parameters for two reasons:</p>
+
+<ul>
+  <li>The mean is <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-4-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mfrac&gt;&lt;mi&gt;&amp;#x03B1;&lt;/mi&gt;&lt;mrow&gt;&lt;mi&gt;&amp;#x03B1;&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;&amp;#x03B2;&lt;/mi&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mfrac&gt;&lt;mn&gt;81&lt;/mn&gt;&lt;mrow&gt;&lt;mn&gt;81&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;219&lt;/mn&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;.270&lt;/mn&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-18" style="width: 10.348em; display: inline-block;"><span style="display: inline-block; position: relative; width: 8.89em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.365em, 1008.85em, 3.133em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-19"><span class="mfrac" id="MathJax-Span-20"><span style="display: inline-block; position: relative; width: 1.528em; height: 0px; margin-right: 0.12em; margin-left: 0.12em;"><span style="position: absolute; clip: rect(3.513em, 1000.43em, 4.156em, -1000em); top: -4.406em; left: 50%; margin-left: -0.226em;"><span class="mi" id="MathJax-Span-21" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">α</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(3.327em, 1001.41em, 4.286em, -1000em); top: -3.578em; left: 50%; margin-left: -0.704em;"><span class="mrow" id="MathJax-Span-22"><span class="mi" id="MathJax-Span-23" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">α</span><span class="mo" id="MathJax-Span-24" style="font-size: 70.7%; font-family: MathJax_Main;">+</span><span class="mi" id="MathJax-Span-25" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.005em;"></span></span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(0.849em, 1001.53em, 1.239em, -1000em); top: -1.298em; left: 0em;"><span style="display: inline-block; overflow: hidden; vertical-align: 0em; border-top: 1.3px solid; width: 1.528em; height: 0px;"></span><span style="display: inline-block; width: 0px; height: 1.078em;"></span></span></span></span><span class="mo" id="MathJax-Span-26" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mfrac" id="MathJax-Span-27" style="padding-left: 0.278em;"><span style="display: inline-block; position: relative; width: 2.438em; height: 0px; margin-right: 0.12em; margin-left: 0.12em;"><span style="position: absolute; clip: rect(3.354em, 1000.66em, 4.164em, -1000em); top: -4.414em; left: 50%; margin-left: -0.354em;"><span class="mn" id="MathJax-Span-28" style="font-size: 70.7%; font-family: MathJax_Main;">81</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(3.354em, 1002.29em, 4.207em, -1000em); top: -3.605em; left: 50%; margin-left: -1.159em;"><span class="mrow" id="MathJax-Span-29"><span class="mn" id="MathJax-Span-30" style="font-size: 70.7%; font-family: MathJax_Main;">81</span><span class="mo" id="MathJax-Span-31" style="font-size: 70.7%; font-family: MathJax_Main;">+</span><span class="mn" id="MathJax-Span-32" style="font-size: 70.7%; font-family: MathJax_Main;">219</span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(0.849em, 1002.44em, 1.239em, -1000em); top: -1.298em; left: 0em;"><span style="display: inline-block; overflow: hidden; vertical-align: 0em; border-top: 1.3px solid; width: 2.438em; height: 0px;"></span><span style="display: inline-block; width: 0px; height: 1.078em;"></span></span></span></span><span class="mo" id="MathJax-Span-33" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mn" id="MathJax-Span-34" style="font-family: MathJax_Main; padding-left: 0.278em;">.270</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.697em; border-left: 0px solid; width: 0px; height: 1.8em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>α</mi><mrow><mi>α</mi><mo>+</mo><mi>β</mi></mrow></mfrac><mo>=</mo><mfrac><mn>81</mn><mrow><mn>81</mn><mo>+</mo><mn>219</mn></mrow></mfrac><mo>=</mo><mn>.270</mn></math></span></span><script type="math/tex" id="MathJax-Element-4">\frac{\alpha}{\alpha+\beta}=\frac{81}{81+219}=.270</script></li>
+  <li>As you can see in the plot, this distribution lies almost entirely within <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-5-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mn&gt;.2&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mn&gt;.35&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-35" style="width: 3.828em; display: inline-block;"><span style="display: inline-block; position: relative; width: 3.287em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.513em, 1003.19em, 2.836em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-36"><span class="mo" id="MathJax-Span-37" style="font-family: MathJax_Main;">(</span><span class="mn" id="MathJax-Span-38" style="font-family: MathJax_Main;">.2</span><span class="mo" id="MathJax-Span-39" style="font-family: MathJax_Main;">,</span><span class="mn" id="MathJax-Span-40" style="font-family: MathJax_Main; padding-left: 0.167em;">.35</span><span class="mo" id="MathJax-Span-41" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.352em; border-left: 0px solid; width: 0px; height: 1.285em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo stretchy="false">(</mo><mn>.2</mn><mo>,</mo><mn>.35</mn><mo stretchy="false">)</mo></math></span></span><script type="math/tex" id="MathJax-Element-5">(.2, .35)</script>- the reasonable range for a batting average.</li>
+</ul>
+
+<p>You asked what the x axis represents in a beta distribution density 
+plot- here it represents his batting average. Thus notice that in this 
+case, not only is the y-axis a probability (or more precisely a 
+probability density), but the x-axis is as well (batting average is just
+ a probability of a hit, after all)! The beta distribution is 
+representing a probability distribution <em>of probabilities</em>.</p>
+
+<p>But here’s why the beta distribution is so appropriate. Imagine the 
+player gets a single hit. His record for the season is now “1 hit; 1 at 
+bat.” We have to then <em>update</em> our probabilities- we want to 
+shift this entire curve over just a bit to reflect our new information. 
+While the math for proving this is a bit involved (<a href="http://en.wikipedia.org/wiki/Conjugate_prior#Example">it’s shown here</a>), the result is <em>very simple</em>. The new beta distribution will be:</p>
+
+<span class="MathJax_Preview" style="color: inherit; display: none;"></span><div class="MathJax_Display" style="text-align: center;"><span class="MathJax" id="MathJax-Element-6-Frame" tabindex="0" style="text-align: center; position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;mstyle displaystyle=&quot;false&quot; scriptlevel=&quot;0&quot;&gt;&lt;mtext&gt;Beta&lt;/mtext&gt;&lt;/mstyle&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B1;&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mstyle displaystyle=&quot;false&quot; scriptlevel=&quot;0&quot;&gt;&lt;mtext&gt;hits&lt;/mtext&gt;&lt;/mstyle&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B2;&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mstyle displaystyle=&quot;false&quot; scriptlevel=&quot;0&quot;&gt;&lt;mtext&gt;misses&lt;/mtext&gt;&lt;/mstyle&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-42" style="width: 14.065em; display: inline-block;"><span style="display: inline-block; position: relative; width: 12.123em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.513em, 1012.03em, 2.836em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-43"><span class="mstyle" id="MathJax-Span-44"><span class="mrow" id="MathJax-Span-45"><span class="mtext" id="MathJax-Span-46" style="font-family: MathJax_Main;">Beta</span></span></span><span class="mo" id="MathJax-Span-47" style="font-family: MathJax_Main;">(</span><span class="msubsup" id="MathJax-Span-48"><span style="display: inline-block; position: relative; width: 1.069em; height: 0px;"><span style="position: absolute; clip: rect(3.383em, 1000.6em, 4.16em, -1000em); top: -3.987em; left: 0em;"><span class="mi" id="MathJax-Span-49" style="font-family: MathJax_Math; font-style: italic;">α</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; top: -3.837em; left: 0.64em;"><span class="mn" id="MathJax-Span-50" style="font-size: 70.7%; font-family: MathJax_Main;">0</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span></span></span><span class="mo" id="MathJax-Span-51" style="font-family: MathJax_Main; padding-left: 0.222em;">+</span><span class="mstyle" id="MathJax-Span-52" style="padding-left: 0.222em;"><span class="mrow" id="MathJax-Span-53"><span class="mtext" id="MathJax-Span-54" style="font-family: MathJax_Main;">hits</span></span></span><span class="mo" id="MathJax-Span-55" style="font-family: MathJax_Main;">,</span><span class="msubsup" id="MathJax-Span-56" style="padding-left: 0.167em;"><span style="display: inline-block; position: relative; width: 0.995em; height: 0px;"><span style="position: absolute; clip: rect(3.12em, 1000.57em, 4.343em, -1000em); top: -3.987em; left: 0em;"><span class="mi" id="MathJax-Span-57" style="font-family: MathJax_Math; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.007em;"></span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; top: -3.837em; left: 0.566em;"><span class="mn" id="MathJax-Span-58" style="font-size: 70.7%; font-family: MathJax_Main;">0</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span></span></span><span class="mo" id="MathJax-Span-59" style="font-family: MathJax_Main; padding-left: 0.222em;">+</span><span class="mstyle" id="MathJax-Span-60" style="padding-left: 0.222em;"><span class="mrow" id="MathJax-Span-61"><span class="mtext" id="MathJax-Span-62" style="font-family: MathJax_Main;">misses</span></span></span><span class="mo" id="MathJax-Span-63" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.352em; border-left: 0px solid; width: 0px; height: 1.285em;"></span></span></nobr><span class="MJX_Assistive_MathML MJX_Assistive_MathML_Block" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mstyle displaystyle="false" scriptlevel="0"><mtext>Beta</mtext></mstyle><mo stretchy="false">(</mo><msub><mi>α</mi><mn>0</mn></msub><mo>+</mo><mstyle displaystyle="false" scriptlevel="0"><mtext>hits</mtext></mstyle><mo>,</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><mstyle displaystyle="false" scriptlevel="0"><mtext>misses</mtext></mstyle><mo stretchy="false">)</mo></math></span></span></div><script type="math/tex; mode=display" id="MathJax-Element-6">\mbox{Beta}(\alpha_0+\mbox{hits}, \beta_0+\mbox{misses})</script>
+
+<p>Where <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-7-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B1;&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-64" style="width: 1.242em; display: inline-block;"><span style="display: inline-block; position: relative; width: 1.078em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.821em, 1001.08em, 2.752em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-65"><span class="msubsup" id="MathJax-Span-66"><span style="display: inline-block; position: relative; width: 1.069em; height: 0px;"><span style="position: absolute; clip: rect(3.383em, 1000.6em, 4.16em, -1000em); top: -3.987em; left: 0em;"><span class="mi" id="MathJax-Span-67" style="font-family: MathJax_Math; font-style: italic;">α</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; top: -3.837em; left: 0.64em;"><span class="mn" id="MathJax-Span-68" style="font-size: 70.7%; font-family: MathJax_Main;">0</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.255em; border-left: 0px solid; width: 0px; height: 0.83em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>α</mi><mn>0</mn></msub></math></span></span><script type="math/tex" id="MathJax-Element-7">\alpha_0</script> and <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-8-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B2;&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-69" style="width: 1.134em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.97em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.558em, 1000.97em, 2.78em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-70"><span class="msubsup" id="MathJax-Span-71"><span style="display: inline-block; position: relative; width: 0.995em; height: 0px;"><span style="position: absolute; clip: rect(3.12em, 1000.57em, 4.343em, -1000em); top: -3.987em; left: 0em;"><span class="mi" id="MathJax-Span-72" style="font-family: MathJax_Math; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.007em;"></span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; top: -3.837em; left: 0.566em;"><span class="mn" id="MathJax-Span-73" style="font-size: 70.7%; font-family: MathJax_Main;">0</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.288em; border-left: 0px solid; width: 0px; height: 1.168em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>β</mi><mn>0</mn></msub></math></span></span><script type="math/tex" id="MathJax-Element-8">\beta_0</script> are the parameters we started with- that is, 81 and 219. Thus, in this case, <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-9-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;&amp;#x03B1;&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-74" style="width: 0.757em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.647em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.821em, 1000.61em, 2.597em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-75"><span class="mi" id="MathJax-Span-76" style="font-family: MathJax_Math; font-style: italic;">α</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.075em; border-left: 0px solid; width: 0px; height: 0.65em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>α</mi></math></span></span><script type="math/tex" id="MathJax-Element-9">\alpha</script>  has increased by 1 (his one hit), while <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-10-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;&amp;#x03B2;&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-77" style="width: 0.703em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.593em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.558em, 1000.59em, 2.78em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-78"><span class="mi" id="MathJax-Span-79" style="font-family: MathJax_Math; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.007em;"></span></span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.288em; border-left: 0px solid; width: 0px; height: 1.168em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>β</mi></math></span></span><script type="math/tex" id="MathJax-Element-10">\beta</script> has not increased at all (no misses yet). That means our new distribution is <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-11-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mstyle displaystyle=&quot;false&quot; scriptlevel=&quot;0&quot;&gt;&lt;mtext&gt;Beta&lt;/mtext&gt;&lt;/mstyle&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mn&gt;81&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mn&gt;219&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-80" style="width: 8.731em; display: inline-block;"><span style="display: inline-block; position: relative; width: 7.489em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.513em, 1007.39em, 2.836em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-81"><span class="mstyle" id="MathJax-Span-82"><span class="mrow" id="MathJax-Span-83"><span class="mtext" id="MathJax-Span-84" style="font-family: MathJax_Main;">Beta</span></span></span><span class="mo" id="MathJax-Span-85" style="font-family: MathJax_Main;">(</span><span class="mn" id="MathJax-Span-86" style="font-family: MathJax_Main;">81</span><span class="mo" id="MathJax-Span-87" style="font-family: MathJax_Main; padding-left: 0.222em;">+</span><span class="mn" id="MathJax-Span-88" style="font-family: MathJax_Main; padding-left: 0.222em;">1</span><span class="mo" id="MathJax-Span-89" style="font-family: MathJax_Main;">,</span><span class="mn" id="MathJax-Span-90" style="font-family: MathJax_Main; padding-left: 0.167em;">219</span><span class="mo" id="MathJax-Span-91" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.352em; border-left: 0px solid; width: 0px; height: 1.285em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mstyle displaystyle="false" scriptlevel="0"><mtext>Beta</mtext></mstyle><mo stretchy="false">(</mo><mn>81</mn><mo>+</mo><mn>1</mn><mo>,</mo><mn>219</mn><mo stretchy="false">)</mo></math></span></span><script type="math/tex" id="MathJax-Element-11">\mbox{Beta}(81+1, 219)</script>. Let’s compare that to the original:</p>
+
+<p><img src="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/plot2-1.png" alt="center"></p>
+
+<p>Notice that it has barely changed at all- the change is indeed 
+invisible to the naked eye! (That’s because one hit doesn’t really mean 
+anything).</p>
+
+<p>However, the more the player hits over the course of the season, the 
+more the curve will shift to accommodate the new evidence, and 
+furthermore the more it will narrow based on the fact that we have more 
+proof. Let’s say halfway through the season he has been up to bat 300 
+times, hitting 100 out of those times. The new distribution would be <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-12-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mstyle displaystyle=&quot;false&quot; scriptlevel=&quot;0&quot;&gt;&lt;mtext&gt;beta&lt;/mtext&gt;&lt;/mstyle&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mn&gt;81&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;100&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mn&gt;219&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;200&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-92" style="width: 12.826em; display: inline-block;"><span style="display: inline-block; position: relative; width: 11.045em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.513em, 1010.95em, 2.836em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-93"><span class="mstyle" id="MathJax-Span-94"><span class="mrow" id="MathJax-Span-95"><span class="mtext" id="MathJax-Span-96" style="font-family: MathJax_Main;">beta</span></span></span><span class="mo" id="MathJax-Span-97" style="font-family: MathJax_Main;">(</span><span class="mn" id="MathJax-Span-98" style="font-family: MathJax_Main;">81</span><span class="mo" id="MathJax-Span-99" style="font-family: MathJax_Main; padding-left: 0.222em;">+</span><span class="mn" id="MathJax-Span-100" style="font-family: MathJax_Main; padding-left: 0.222em;">100</span><span class="mo" id="MathJax-Span-101" style="font-family: MathJax_Main;">,</span><span class="mn" id="MathJax-Span-102" style="font-family: MathJax_Main; padding-left: 0.167em;">219</span><span class="mo" id="MathJax-Span-103" style="font-family: MathJax_Main; padding-left: 0.222em;">+</span><span class="mn" id="MathJax-Span-104" style="font-family: MathJax_Main; padding-left: 0.222em;">200</span><span class="mo" id="MathJax-Span-105" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.352em; border-left: 0px solid; width: 0px; height: 1.285em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mstyle displaystyle="false" scriptlevel="0"><mtext>beta</mtext></mstyle><mo stretchy="false">(</mo><mn>81</mn><mo>+</mo><mn>100</mn><mo>,</mo><mn>219</mn><mo>+</mo><mn>200</mn><mo stretchy="false">)</mo></math></span></span><script type="math/tex" id="MathJax-Element-12">\mbox{beta}(81+100, 219+200)</script>:</p>
+
+<p><img src="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/plot3-1.png" alt="center"></p>
+
+<p>Notice the curve is now both thinner and shifted to the right (higher
+ batting average) than it used to be- we have a better sense of what the
+ player’s batting average is.</p>
+
+<p>One of the most interesting outputs of this formula is the expected 
+value of the resulting beta distribution, which is basically your new 
+estimate. Recall that the expected value of the beta distribution is <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-13-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mfrac&gt;&lt;mi&gt;&amp;#x03B1;&lt;/mi&gt;&lt;mrow&gt;&lt;mi&gt;&amp;#x03B1;&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;&amp;#x03B2;&lt;/mi&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-106" style="width: 2.104em; display: inline-block;"><span style="display: inline-block; position: relative; width: 1.778em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.532em, 1001.78em, 3.133em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-107"><span class="mfrac" id="MathJax-Span-108"><span style="display: inline-block; position: relative; width: 1.528em; height: 0px; margin-right: 0.12em; margin-left: 0.12em;"><span style="position: absolute; clip: rect(3.513em, 1000.43em, 4.156em, -1000em); top: -4.406em; left: 50%; margin-left: -0.226em;"><span class="mi" id="MathJax-Span-109" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">α</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(3.327em, 1001.41em, 4.286em, -1000em); top: -3.578em; left: 50%; margin-left: -0.704em;"><span class="mrow" id="MathJax-Span-110"><span class="mi" id="MathJax-Span-111" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">α</span><span class="mo" id="MathJax-Span-112" style="font-size: 70.7%; font-family: MathJax_Main;">+</span><span class="mi" id="MathJax-Span-113" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.005em;"></span></span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(0.849em, 1001.53em, 1.239em, -1000em); top: -1.298em; left: 0em;"><span style="display: inline-block; overflow: hidden; vertical-align: 0em; border-top: 1.3px solid; width: 1.528em; height: 0px;"></span><span style="display: inline-block; width: 0px; height: 1.078em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.697em; border-left: 0px solid; width: 0px; height: 1.608em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>α</mi><mrow><mi>α</mi><mo>+</mo><mi>β</mi></mrow></mfrac></math></span></span><script type="math/tex" id="MathJax-Element-13">\frac{\alpha}{\alpha+\beta}</script>. Thus, after 100 hits of 300 <em>real</em> at-bats, the expected value of the new beta distribution is <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-14-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mfrac&gt;&lt;mrow&gt;&lt;mn&gt;82&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;100&lt;/mn&gt;&lt;/mrow&gt;&lt;mrow&gt;&lt;mn&gt;82&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;100&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;219&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;200&lt;/mn&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;.303&lt;/mn&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-114" style="width: 10.455em; display: inline-block;"><span style="display: inline-block; position: relative; width: 8.998em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.323em, 1008.96em, 3.026em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-115"><span class="mfrac" id="MathJax-Span-116"><span style="display: inline-block; position: relative; width: 5.659em; height: 0px; margin-right: 0.12em; margin-left: 0.12em;"><span style="position: absolute; clip: rect(3.354em, 1002.29em, 4.207em, -1000em); top: -4.456em; left: 50%; margin-left: -1.159em;"><span class="mrow" id="MathJax-Span-117"><span class="mn" id="MathJax-Span-118" style="font-size: 70.7%; font-family: MathJax_Main;">82</span><span class="mo" id="MathJax-Span-119" style="font-size: 70.7%; font-family: MathJax_Main;">+</span><span class="mn" id="MathJax-Span-120" style="font-size: 70.7%; font-family: MathJax_Main;">100</span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(3.354em, 1005.51em, 4.207em, -1000em); top: -3.605em; left: 50%; margin-left: -2.77em;"><span class="mrow" id="MathJax-Span-121"><span class="mn" id="MathJax-Span-122" style="font-size: 70.7%; font-family: MathJax_Main;">82</span><span class="mo" id="MathJax-Span-123" style="font-size: 70.7%; font-family: MathJax_Main;">+</span><span class="mn" id="MathJax-Span-124" style="font-size: 70.7%; font-family: MathJax_Main;">100</span><span class="mo" id="MathJax-Span-125" style="font-size: 70.7%; font-family: MathJax_Main;">+</span><span class="mn" id="MathJax-Span-126" style="font-size: 70.7%; font-family: MathJax_Main;">219</span><span class="mo" id="MathJax-Span-127" style="font-size: 70.7%; font-family: MathJax_Main;">+</span><span class="mn" id="MathJax-Span-128" style="font-size: 70.7%; font-family: MathJax_Main;">200</span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(0.849em, 1005.66em, 1.239em, -1000em); top: -1.298em; left: 0em;"><span style="display: inline-block; overflow: hidden; vertical-align: 0em; border-top: 1.3px solid; width: 5.659em; height: 0px;"></span><span style="display: inline-block; width: 0px; height: 1.078em;"></span></span></span></span><span class="mo" id="MathJax-Span-129" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mn" id="MathJax-Span-130" style="font-family: MathJax_Main; padding-left: 0.278em;">.303</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.573em; border-left: 0px solid; width: 0px; height: 1.726em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mrow><mn>82</mn><mo>+</mo><mn>100</mn></mrow><mrow><mn>82</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>219</mn><mo>+</mo><mn>200</mn></mrow></mfrac><mo>=</mo><mn>.303</mn></math></span></span><script type="math/tex" id="MathJax-Element-14">\frac{82+100}{82+100+219+200}=.303</script>- notice that it is lower than the naive estimate of <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-15-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mfrac&gt;&lt;mn&gt;100&lt;/mn&gt;&lt;mrow&gt;&lt;mn&gt;100&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;200&lt;/mn&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;.333&lt;/mn&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-131" style="width: 7.169em; display: inline-block;"><span style="display: inline-block; position: relative; width: 6.142em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.365em, 1006.1em, 3.026em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-132"><span class="mfrac" id="MathJax-Span-133"><span style="display: inline-block; position: relative; width: 2.791em; height: 0px; margin-right: 0.12em; margin-left: 0.12em;"><span style="position: absolute; clip: rect(3.354em, 1001.03em, 4.164em, -1000em); top: -4.414em; left: 50%; margin-left: -0.53em;"><span class="mn" id="MathJax-Span-134" style="font-size: 70.7%; font-family: MathJax_Main;">100</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(3.354em, 1002.64em, 4.207em, -1000em); top: -3.605em; left: 50%; margin-left: -1.336em;"><span class="mrow" id="MathJax-Span-135"><span class="mn" id="MathJax-Span-136" style="font-size: 70.7%; font-family: MathJax_Main;">100</span><span class="mo" id="MathJax-Span-137" style="font-size: 70.7%; font-family: MathJax_Main;">+</span><span class="mn" id="MathJax-Span-138" style="font-size: 70.7%; font-family: MathJax_Main;">200</span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(0.849em, 1002.79em, 1.239em, -1000em); top: -1.298em; left: 0em;"><span style="display: inline-block; overflow: hidden; vertical-align: 0em; border-top: 1.3px solid; width: 2.791em; height: 0px;"></span><span style="display: inline-block; width: 0px; height: 1.078em;"></span></span></span></span><span class="mo" id="MathJax-Span-139" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mn" id="MathJax-Span-140" style="font-family: MathJax_Main; padding-left: 0.278em;">.333</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.573em; border-left: 0px solid; width: 0px; height: 1.676em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mn>100</mn><mrow><mn>100</mn><mo>+</mo><mn>200</mn></mrow></mfrac><mo>=</mo><mn>.333</mn></math></span></span><script type="math/tex" id="MathJax-Element-15">\frac{100}{100+200}=.333</script>, but higher than the estimate you started the season with (<span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-16-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mfrac&gt;&lt;mn&gt;81&lt;/mn&gt;&lt;mrow&gt;&lt;mn&gt;81&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;219&lt;/mn&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;.270&lt;/mn&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-141" style="width: 6.791em; display: inline-block;"><span style="display: inline-block; position: relative; width: 5.819em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.365em, 1005.78em, 3.026em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-142"><span class="mfrac" id="MathJax-Span-143"><span style="display: inline-block; position: relative; width: 2.438em; height: 0px; margin-right: 0.12em; margin-left: 0.12em;"><span style="position: absolute; clip: rect(3.354em, 1000.66em, 4.164em, -1000em); top: -4.414em; left: 50%; margin-left: -0.354em;"><span class="mn" id="MathJax-Span-144" style="font-size: 70.7%; font-family: MathJax_Main;">81</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(3.354em, 1002.29em, 4.207em, -1000em); top: -3.605em; left: 50%; margin-left: -1.159em;"><span class="mrow" id="MathJax-Span-145"><span class="mn" id="MathJax-Span-146" style="font-size: 70.7%; font-family: MathJax_Main;">81</span><span class="mo" id="MathJax-Span-147" style="font-size: 70.7%; font-family: MathJax_Main;">+</span><span class="mn" id="MathJax-Span-148" style="font-size: 70.7%; font-family: MathJax_Main;">219</span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(0.849em, 1002.44em, 1.239em, -1000em); top: -1.298em; left: 0em;"><span style="display: inline-block; overflow: hidden; vertical-align: 0em; border-top: 1.3px solid; width: 2.438em; height: 0px;"></span><span style="display: inline-block; width: 0px; height: 1.078em;"></span></span></span></span><span class="mo" id="MathJax-Span-149" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mn" id="MathJax-Span-150" style="font-family: MathJax_Main; padding-left: 0.278em;">.270</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.573em; border-left: 0px solid; width: 0px; height: 1.676em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mn>81</mn><mrow><mn>81</mn><mo>+</mo><mn>219</mn></mrow></mfrac><mo>=</mo><mn>.270</mn></math></span></span><script type="math/tex" id="MathJax-Element-16">\frac{81}{81+219}=.270</script>).
+ You might notice that this formula is equivalent to adding a “head 
+start” to the number of hits and non-hits of a player- you’re saying 
+“start him off in the season with 81 hits and 219 non hits on his 
+record”).</p>
+
+<p>Thus, the beta distribution is best for representing a probabilistic distribution <em>of probabilities</em>- the case where we don’t know what a probability is in advance, but we have some reasonable guesses.</p>
+
+
+      <hr>
+      <footer role="contentinfo">
+        <div class="article-author-bottom">
+          
+
+
+	<img src="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/david_robinson_picture2.jpg" class="bio-photo" alt="David Robinson bio photo">
+
+<h3>David Robinson</h3>
+<p>Data Scientist at Stack Overflow, works in R and Python.</p>
+<a href="mailto:drobinson@stackoverflow.com" class="author-social" target="_blank"><i class="fa fa-envelope-square"></i> Email</a>
+<a href="http://twitter.com/drob" class="author-social" target="_blank"><i class="fa fa-twitter-square"></i> Twitter</a>
+
+
+
+
+
+<a href="http://github.com/dgrtwo" class="author-social" target="_blank"><i class="fa fa-github"></i> Github</a>
+<a href="http://stackoverflow.com/users/712603" class="author-social" target="_blank"><i class="fa fa-stack-overflow"></i> Stack Overflow</a>
+
+
+
+
+
+
+<h4>Subscribe</h4>
+
+<form method="post" action="http://blogtrottr.com">
+    <input name="btr_email" placeholder="Your email" type="text"><br>
+    <input name="btr_url" value="http://varianceexplained.org/feed.xml" type="hidden">
+    <input name="schedule_type" value="0" type="hidden">
+    <input class="styled-button-4" value="Subscribe to this blog" type="submit">
+</form>
+
+<style type="text/css"> 
+.styled-button-4 {
+	-webkit-box-shadow:rgba(0,0,0,0.98) 0 1px 0 0;
+	-moz-box-shadow:rgba(0,0,0,0.98) 0 1px 0 0;
+	box-shadow:rgba(0,0,0,0.98) 0 1px 0 0;
+	background-color:#EEE;
+	border-radius:0;
+	-webkit-border-radius:0;
+	-moz-border-radius:0;
+	border:1px solid #999;
+	color:#666;
+	font-family:'Lucida Grande',Tahoma,Verdana,Arial,Sans-serif;
+	font-size:11px;
+	font-weight:700;
+	padding:2px 6px;
+	height:28px
+}
+</style>
+
+
+<h4>Recommended Blogs</h4>
+<ul>
+    <li><a href="https://www.datacamp.com/community/blog">DataCamp</a></li>
+    <li><a href="http://www.r-bloggers.com/">R Bloggers</a></li>
+    <li><a href="http://blog.rstudio.org/">RStudio Blog</a></li>
+    <li><a href="http://r4stats.com/">R4Stats</a></li>
+    <li><a href="http://simplystatistics.org/">Simply Statistics</a></li>
+</ul>
+
+        </div>
+        <p class="byline"><strong>Understanding the beta distribution (using baseball statistics)</strong> was published on <time datetime="2014-12-20T00:00:00+00:00">December 20, 2014</time>.</p>
+      </footer>
+    </div><!-- /.article-wrap -->
+  
+    <section id="disqus_thread"><iframe id="dsq-app731" name="dsq-app731" allowtransparency="true" scrolling="no" tabindex="0" title="Disqus" style="width: 1px !important; min-width: 100% !important; border: medium none !important; overflow: hidden !important; height: 3455px !important;" src="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/a.html" horizontalscrolling="no" verticalscrolling="no" frameborder="0" width="100%"></iframe></section><!-- /#disqus_thread -->
+  
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrap">
+  <div class="related-articles">
+  <h4>You might also enjoy <small class="pull-right">(<a href="http://varianceexplained.org/posts/">View all posts</a>)</small></h4>
+    <ul>
+    
+    </ul>
+    <hr>
+  </div><!-- /.related-articles -->
+  <footer>
+    
+
+<span>© 2017 David Robinson. Powered by <a href="http://jekyllrb.com/">Jekyll</a> using the <a href="http://mademistakes.com/minimal-mistakes/">Minimal Mistakes</a> theme.</span>
+
+  </footer>
+</div><!-- /.footer-wrap -->
+
+<script src="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/jquery.js"></script>
+<script>window.jQuery || document.write('<script src="http://varianceexplained.org/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="Understanding%20the%20beta%20distribution%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/scripts.js"></script>
+
+
+  
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'varianceexplained'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+	        
+
+
+<iframe style="display: none;"></iframe><div style="position: absolute; width: 0px; height: 0px; overflow: hidden; padding: 0px; border: 0px none; margin: 0px;"><div id="MathJax_Font_Test" style="position: absolute; visibility: hidden; top: 0px; left: 0px; width: auto; padding: 0px; border: 0px none; margin: 0px; white-space: nowrap; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; font-size: 40px; font-weight: normal; font-style: italic; font-size-adjust: none; font-family: MathJax_Math,sans-serif;"></div></div></body></html>
