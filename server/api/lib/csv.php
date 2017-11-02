@@ -23,6 +23,7 @@ class CSV {
           $lines[] = $line;
         }
       }
+    }
   }
 
   public function parse($divider = true){
@@ -60,7 +61,7 @@ class CSV {
     foreach($lines as $line){
       foreach(str_split($line) as $i => $char){
         if(!array_key_exists($i, $spaces)){
-          $spaces[$i] = [0, 0];
+          $spaces[$i] = [0, 0];  // [number of spaces, number of lines]
         }
         if($char == ' '){
           $spaces[$i][0]++;
@@ -84,9 +85,9 @@ class CSV {
       }
     }
     foreach($leftAligned as $i => $pos){
-      $left    = $leftAligned[$i];
+      $left = $leftAligned[$i];
       if(array_key_exists($i, $rightAligned)){
-        $res[$i] = $rightAligned[$i];
+        $res[$i] = $rightAligned[$i] - 1; // I don't know why -1, but it works ¯\_(ツ)_/¯
       }
       if($spaces[$left - 1] == 0 && $spaces[$left] == 1){
         $res[$i] = $left;

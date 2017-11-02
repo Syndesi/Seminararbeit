@@ -1,6 +1,7 @@
 <?php
 set_time_limit(0);
 require_once __DIR__.'/../lib/route.php';
+require_once __DIR__.'/../lib/csv.php';
 use Propel\Runtime\Propel;
 
 class Dwd2Route extends \lib\Route {
@@ -46,15 +47,39 @@ class Dwd2Route extends \lib\Route {
   // routes
 
   private function importStations(){
-    $res = [];
+    $imported = 0;
     foreach($this->types2 as $type => $dirs){
+      //$dirs = $this->types2['RR'];
       foreach($dirs as $i => $dir){
         $url = $this->searchFtpPathsForFile('pub/CDC/observations_germany/climate/hourly/'.$dir, '_Beschreibung_Stationen.txt');
         $path = $this->downloadFile($url);
-        $res[] = $path;
+        $csv = new \lib\CSV($path);
+        $stations = $csv->parse();
+        //$this->r->finish($stations);
+        foreach($stations as $j => $station){
+          $isImported = $this->importStation($station);
+          if($isImported){
+            $imported++;
+          }
+        }
       }
     }
-    $this->r->finish($res);
+    $this->r->finish($imported.' stations were imported.');
+  }
+
+  private function importStation($obj){
+    $query = DwdStationQuery::create()->findPK($obj['Stations_id']);
+    if($query != null){
+      return false;
+    }
+    $station = new DwdStation();
+    $station->setId($obj['Stations_id']);
+    $station->setName($obj['Stationsname']);
+    $station->setLat($obj['geoBreite']);
+    $station->setLng($obj['geoLaenge']);
+    $station->setAlt($obj['Stationshoehe']);
+    $res = $station->save();
+    return $res;
   }
 
   private function importData(string $station, string $type){
@@ -206,106 +231,6 @@ class Dwd2Route extends \lib\Route {
   }
 
   // helper-functions
-
-  // (OLD) SSV-READER-METHODS
-  private function ssvGetSpaces($lines){
-    $spaces       = [];
-    $leftAligned  = [];
-    $rightAligned = [];
-    $res          = [];
-    foreach($lines as $line){
-      foreach(str_split($line) as $i => $char){
-        if(!array_key_exists($i, $spaces)){
-          $spaces[$i] = [0, 0];
-        }
-        if($char == ' '){
-          $spaces[$i][0]++;
-        }
-        $spaces[$i][1]++;
-      }
-    }
-    foreach($spaces as $i => $space){
-      $spaces[$i] = $space[0] / $space[1];
-    }
-    foreach($spaces as $i => $space){
-      if(array_key_exists($i - 1, $spaces)){
-        if($spaces[$i - 1] == 0 && $spaces[$i] > 0){
-          $leftAligned[] = $i;
-        }
-      }
-      if(array_key_exists($i + 1, $spaces)){
-        if($spaces[$i + 1] == 0 && $spaces[$i] > 0){
-          $rightAligned[] = $i;
-        }
-      }
-    }
-    foreach($leftAligned as $i => $pos){
-      $left = $leftAligned[$i];
-      if(array_key_exists($i, $rightAligned)){
-        $res[$i] = $rightAligned[$i];
-      }
-      if($spaces[$left - 1] == 0 && $spaces[$left] == 1){
-        $res[$i] = $left;
-      }
-    }
-    return $res;
-  }
-
-  private function ssvSplitLine($line, $headers, $spaces){
-    $res = [];
-    $start = 0;
-    $length = 0;
-    foreach($headers as $i => $header){
-      if(array_key_exists($i - 1, $spaces)){
-        $start = $spaces[$i - 1];
-      }
-      if(array_key_exists($i, $spaces)){
-        $length = $spaces[$i] - $start;
-      } else {
-        $length = strlen($line) - $start;
-      }
-      $res[$header] = trim(substr($line, $start, $length));
-    }
-    return $res;
-  }
-
-  private function ssvParseCSV($path){
-    $header = [];
-    /*
-Stations_id von_datum bis_datum Stationshoehe geoBreite geoLaenge Stationsname Bundesland
------------ --------- --------- ------------- --------- --------- ----------------------------------------- ----------
-00003 19500401 20110331            202     50.7827    6.0941 Aachen                                   Nordrhein-Westfalen                                                                               
-00044 20070401 20171006             44     52.9335    8.2370 Großenkneten                             Niedersachsen                                                                                     
-00052 19760101 19880101             46     53.6623   10.1990 Ahrensburg-Wulfsdorf                     Schleswig-Holstein                                                                                
-00071 20091201 20171006            759     48.2156    8.9784 Albstadt-Badkap                          Baden-Württemberg                                                                                 
-00073 20070401 20171006            340     48.6159   13.0506 Aldersbach-Kriestorf                     Bayern                                                                                            
-00078 20041101 20171006             65     52.4853    7.9126 Alfhausen                                Niedersachsen                                                                                     
-00091 20040901 20171006            300     50.7446    9.3450 Alsfeld-Eifa                             Hessen                                                                                            
-00102 20020101 20171006             32     53.8617    8.1266 Leuchtturm Alte Weser                    Niedersachsen                                                                                     
-     */
-    if($file = fopen($path, 'r')){
-      $header  = explode(' ', trim($this->readLine($file)));
-      $divider = $this->readLine($file);
-      $lines = [$this->readLine($file), $this->readLine($file), $this->readLine($file), $this->readLine($file), $this->readLine($file), $this->readLine($file), $this->readLine($file), $this->readLine($file)];
-      $spaces = $this->getSpaces($lines);
-      $res = [];
-      foreach($lines as $line){
-        $res[] = $this->splitLine($line, $header, $spaces);
-      }
-      /*
-      while(!feof($file)){
-        $line = $this->readLine($file);
-
-        //$data = explode(';', $line);
-      }*/
-      fclose($file);
-    } else {
-      throw new Exception('Could not read the file.');
-    }
-    return $res;
-  }
-
-
 
   private function timestampToDateTime(string $ts){
     $dateTime = new \DateTime();
