@@ -214,51 +214,51 @@ class DwdRoute extends \lib\Route {
                 case 'N':
                   $entry = new DwdCloudiness();
                   $entry->setQuality($data['QN_8']);
-                  $entry->setVNI($data['V_N_I']);
-                  $entry->setVN($data['V_N']);
+                  $entry->setVNI($this->filterFalse($data['V_N_I']));
+                  $entry->setVN($this->filterFalse($data['V_N']));
                   break;
                 case 'RR':
                   $entry = new DwdPrecipitation();
                   $entry->setQuality($data['QN_8']);
-                  $entry->setR1($data['R1']);
-                  $entry->setRsInd($data['RS_IND']);
-                  $entry->setWrtr($data['WRTR']);
+                  $entry->setR1($this->filterFalse($data['R1']));
+                  $entry->setRsInd($this->filterFalse($data['RS_IND']));
+                  $entry->setWrtr($this->filterFalse($data['WRTR']));
                   break;
                 case 'P0':
                   $entry = new DwdPressure();
                   $entry->setQuality($data['QN_8']);
-                  $entry->setP($data['P']);
-                  $entry->setP0($data['P0']);
+                  $entry->setP($this->filterFalse($data['P']));
+                  $entry->setP0($this->filterFalse($data['P0']));
                   break;
                 case 'EB':
                   $entry = new DwdSoilTemperature();
                   $entry->setQuality($data['QN_2']);
-                  $entry->setVTe002($data['V_TE002']);
-                  $entry->setVTe005($data['V_TE005']);
-                  $entry->setVTe010($data['V_TE010']);
-                  $entry->setVTe020($data['V_TE020']);
-                  $entry->setVTe050($data['V_TE050']);
-                  $entry->setVTe100($data['V_TE100']);
+                  $entry->setVTe002($this->filterFalse($data['V_TE002']));
+                  $entry->setVTe005($this->filterFalse($data['V_TE005']));
+                  $entry->setVTe010($this->filterFalse($data['V_TE010']));
+                  $entry->setVTe020($this->filterFalse($data['V_TE020']));
+                  $entry->setVTe050($this->filterFalse($data['V_TE050']));
+                  $entry->setVTe100($this->filterFalse($data['V_TE100']));
                   break;
                 case 'ST':
                   $entry = new DwdSolar();
                   $entry->setQuality($data['QN_592']);
-                  $entry->setAtmoLberg($data['ATMO_LBERG']);
-                  $entry->setFdLberg($data['FD_LBERG']);
-                  $entry->setFgLberg($data['FG_LBERG']);
-                  $entry->setSdLberg($data['SD_LBERG']);
-                  $entry->setZenit($data['ZENIT']);
+                  $entry->setAtmoLberg($this->filterFalse($data['ATMO_LBERG']));
+                  $entry->setFdLberg($this->filterFalse($data['FD_LBERG']));
+                  $entry->setFgLberg($this->filterFalse($data['FG_LBERG']));
+                  $entry->setSdLberg($this->filterFalse($data['SD_LBERG']));
+                  $entry->setZenit($this->filterFalse($data['ZENIT']));
                   break;
                 case 'SD':
                   $entry = new DwdSun();
                   $entry->setQuality($data['QN_7']);
-                  $entry->setSdSo($data['SD_SO']);
+                  $entry->setSdSo($this->filterFalse($data['SD_SO']));
                   break;
                 case 'FF':
                   $entry = new DwdWind();
                   $entry->setQuality($data['QN_3']);
-                  $entry->setF($data['F']);
-                  $entry->setD($data['D']);
+                  $entry->setF($this->filterFalse($data['F']));
+                  $entry->setD($this->filterFalse($data['D']));
                   break;
                 default:
                   throw new Exception('Unknown type ['.$type.'].');
