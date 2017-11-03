@@ -2,13 +2,13 @@
 
 namespace Base;
 
-use \DwdCloudinesQuery as ChildDwdCloudinesQuery;
+use \DwdCloudinessQuery as ChildDwdCloudinessQuery;
 use \DwdStation as ChildDwdStation;
 use \DwdStationQuery as ChildDwdStationQuery;
 use \DateTime;
 use \Exception;
 use \PDO;
-use Map\DwdCloudinesTableMap;
+use Map\DwdCloudinessTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -23,18 +23,18 @@ use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
 
 /**
- * Base class that represents a row from the 'dwd_cloudines' table.
+ * Base class that represents a row from the 'dwd_cloudiness' table.
  *
  *
  *
  * @package    propel.generator..Base
  */
-abstract class DwdCloudines implements ActiveRecordInterface
+abstract class DwdCloudiness implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Map\\DwdCloudinesTableMap';
+    const TABLE_MAP = '\\Map\\DwdCloudinessTableMap';
 
 
     /**
@@ -119,7 +119,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Initializes internal state of Base\DwdCloudines object.
+     * Initializes internal state of Base\DwdCloudiness object.
      */
     public function __construct()
     {
@@ -214,9 +214,9 @@ abstract class DwdCloudines implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>DwdCloudines</code> instance.  If
-     * <code>obj</code> is an instance of <code>DwdCloudines</code>, delegates to
-     * <code>equals(DwdCloudines)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>DwdCloudiness</code> instance.  If
+     * <code>obj</code> is an instance of <code>DwdCloudiness</code>, delegates to
+     * <code>equals(DwdCloudiness)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -282,7 +282,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|DwdCloudines The current object, for fluid interface
+     * @return $this|DwdCloudiness The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -417,7 +417,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
      * Set the value of [id] column.
      *
      * @param int $v new value
-     * @return $this|\DwdCloudines The current object (for fluent API support)
+     * @return $this|\DwdCloudiness The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -427,7 +427,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[DwdCloudinesTableMap::COL_ID] = true;
+            $this->modifiedColumns[DwdCloudinessTableMap::COL_ID] = true;
         }
 
         return $this;
@@ -437,7 +437,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
      * Set the value of [station_id] column.
      *
      * @param int $v new value
-     * @return $this|\DwdCloudines The current object (for fluent API support)
+     * @return $this|\DwdCloudiness The current object (for fluent API support)
      */
     public function setStationId($v)
     {
@@ -447,7 +447,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
 
         if ($this->station_id !== $v) {
             $this->station_id = $v;
-            $this->modifiedColumns[DwdCloudinesTableMap::COL_STATION_ID] = true;
+            $this->modifiedColumns[DwdCloudinessTableMap::COL_STATION_ID] = true;
         }
 
         if ($this->aDwdStation !== null && $this->aDwdStation->getId() !== $v) {
@@ -462,7 +462,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\DwdCloudines The current object (for fluent API support)
+     * @return $this|\DwdCloudiness The current object (for fluent API support)
      */
     public function setTime($v)
     {
@@ -470,7 +470,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
         if ($this->time !== null || $dt !== null) {
             if ($this->time === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->time->format("Y-m-d H:i:s.u")) {
                 $this->time = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[DwdCloudinesTableMap::COL_TIME] = true;
+                $this->modifiedColumns[DwdCloudinessTableMap::COL_TIME] = true;
             }
         } // if either are not null
 
@@ -481,7 +481,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
      * Set the value of [quality] column.
      *
      * @param int $v new value
-     * @return $this|\DwdCloudines The current object (for fluent API support)
+     * @return $this|\DwdCloudiness The current object (for fluent API support)
      */
     public function setQuality($v)
     {
@@ -491,7 +491,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
 
         if ($this->quality !== $v) {
             $this->quality = $v;
-            $this->modifiedColumns[DwdCloudinesTableMap::COL_QUALITY] = true;
+            $this->modifiedColumns[DwdCloudinessTableMap::COL_QUALITY] = true;
         }
 
         return $this;
@@ -501,7 +501,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
      * Set the value of [v_n_i] column.
      *
      * @param string $v new value
-     * @return $this|\DwdCloudines The current object (for fluent API support)
+     * @return $this|\DwdCloudiness The current object (for fluent API support)
      */
     public function setVNI($v)
     {
@@ -511,7 +511,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
 
         if ($this->v_n_i !== $v) {
             $this->v_n_i = $v;
-            $this->modifiedColumns[DwdCloudinesTableMap::COL_V_N_I] = true;
+            $this->modifiedColumns[DwdCloudinessTableMap::COL_V_N_I] = true;
         }
 
         return $this;
@@ -521,7 +521,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
      * Set the value of [v_n] column.
      *
      * @param int $v new value
-     * @return $this|\DwdCloudines The current object (for fluent API support)
+     * @return $this|\DwdCloudiness The current object (for fluent API support)
      */
     public function setVN($v)
     {
@@ -531,7 +531,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
 
         if ($this->v_n !== $v) {
             $this->v_n = $v;
-            $this->modifiedColumns[DwdCloudinesTableMap::COL_V_N] = true;
+            $this->modifiedColumns[DwdCloudinessTableMap::COL_V_N] = true;
         }
 
         return $this;
@@ -573,25 +573,25 @@ abstract class DwdCloudines implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : DwdCloudinesTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : DwdCloudinessTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : DwdCloudinesTableMap::translateFieldName('StationId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : DwdCloudinessTableMap::translateFieldName('StationId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->station_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : DwdCloudinesTableMap::translateFieldName('Time', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : DwdCloudinessTableMap::translateFieldName('Time', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->time = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : DwdCloudinesTableMap::translateFieldName('Quality', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : DwdCloudinessTableMap::translateFieldName('Quality', TableMap::TYPE_PHPNAME, $indexType)];
             $this->quality = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : DwdCloudinesTableMap::translateFieldName('VNI', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : DwdCloudinessTableMap::translateFieldName('VNI', TableMap::TYPE_PHPNAME, $indexType)];
             $this->v_n_i = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : DwdCloudinesTableMap::translateFieldName('VN', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : DwdCloudinessTableMap::translateFieldName('VN', TableMap::TYPE_PHPNAME, $indexType)];
             $this->v_n = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
@@ -601,10 +601,10 @@ abstract class DwdCloudines implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = DwdCloudinesTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = DwdCloudinessTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\DwdCloudines'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\DwdCloudiness'), 0, $e);
         }
     }
 
@@ -649,13 +649,13 @@ abstract class DwdCloudines implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(DwdCloudinesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(DwdCloudinessTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildDwdCloudinesQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildDwdCloudinessQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -675,8 +675,8 @@ abstract class DwdCloudines implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see DwdCloudines::setDeleted()
-     * @see DwdCloudines::isDeleted()
+     * @see DwdCloudiness::setDeleted()
+     * @see DwdCloudiness::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -685,11 +685,11 @@ abstract class DwdCloudines implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(DwdCloudinesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(DwdCloudinessTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildDwdCloudinesQuery::create()
+            $deleteQuery = ChildDwdCloudinessQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -724,7 +724,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(DwdCloudinesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(DwdCloudinessTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -743,7 +743,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                DwdCloudinesTableMap::addInstanceToPool($this);
+                DwdCloudinessTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -812,33 +812,33 @@ abstract class DwdCloudines implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[DwdCloudinesTableMap::COL_ID] = true;
+        $this->modifiedColumns[DwdCloudinessTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . DwdCloudinesTableMap::COL_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . DwdCloudinessTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(DwdCloudinesTableMap::COL_ID)) {
+        if ($this->isColumnModified(DwdCloudinessTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(DwdCloudinesTableMap::COL_STATION_ID)) {
+        if ($this->isColumnModified(DwdCloudinessTableMap::COL_STATION_ID)) {
             $modifiedColumns[':p' . $index++]  = 'station_id';
         }
-        if ($this->isColumnModified(DwdCloudinesTableMap::COL_TIME)) {
+        if ($this->isColumnModified(DwdCloudinessTableMap::COL_TIME)) {
             $modifiedColumns[':p' . $index++]  = 'time';
         }
-        if ($this->isColumnModified(DwdCloudinesTableMap::COL_QUALITY)) {
+        if ($this->isColumnModified(DwdCloudinessTableMap::COL_QUALITY)) {
             $modifiedColumns[':p' . $index++]  = 'quality';
         }
-        if ($this->isColumnModified(DwdCloudinesTableMap::COL_V_N_I)) {
+        if ($this->isColumnModified(DwdCloudinessTableMap::COL_V_N_I)) {
             $modifiedColumns[':p' . $index++]  = 'v_n_i';
         }
-        if ($this->isColumnModified(DwdCloudinesTableMap::COL_V_N)) {
+        if ($this->isColumnModified(DwdCloudinessTableMap::COL_V_N)) {
             $modifiedColumns[':p' . $index++]  = 'v_n';
         }
 
         $sql = sprintf(
-            'INSERT INTO dwd_cloudines (%s) VALUES (%s)',
+            'INSERT INTO dwd_cloudiness (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -911,7 +911,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = DwdCloudinesTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = DwdCloudinessTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -969,11 +969,11 @@ abstract class DwdCloudines implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['DwdCloudines'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['DwdCloudiness'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['DwdCloudines'][$this->hashCode()] = true;
-        $keys = DwdCloudinesTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['DwdCloudiness'][$this->hashCode()] = true;
+        $keys = DwdCloudinessTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getStationId(),
@@ -1021,11 +1021,11 @@ abstract class DwdCloudines implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\DwdCloudines
+     * @return $this|\DwdCloudiness
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = DwdCloudinesTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = DwdCloudinessTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1036,7 +1036,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\DwdCloudines
+     * @return $this|\DwdCloudiness
      */
     public function setByPosition($pos, $value)
     {
@@ -1083,7 +1083,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = DwdCloudinesTableMap::getFieldNames($keyType);
+        $keys = DwdCloudinessTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
@@ -1122,7 +1122,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\DwdCloudines The current object, for fluid interface
+     * @return $this|\DwdCloudiness The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1142,25 +1142,25 @@ abstract class DwdCloudines implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(DwdCloudinesTableMap::DATABASE_NAME);
+        $criteria = new Criteria(DwdCloudinessTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(DwdCloudinesTableMap::COL_ID)) {
-            $criteria->add(DwdCloudinesTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(DwdCloudinessTableMap::COL_ID)) {
+            $criteria->add(DwdCloudinessTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(DwdCloudinesTableMap::COL_STATION_ID)) {
-            $criteria->add(DwdCloudinesTableMap::COL_STATION_ID, $this->station_id);
+        if ($this->isColumnModified(DwdCloudinessTableMap::COL_STATION_ID)) {
+            $criteria->add(DwdCloudinessTableMap::COL_STATION_ID, $this->station_id);
         }
-        if ($this->isColumnModified(DwdCloudinesTableMap::COL_TIME)) {
-            $criteria->add(DwdCloudinesTableMap::COL_TIME, $this->time);
+        if ($this->isColumnModified(DwdCloudinessTableMap::COL_TIME)) {
+            $criteria->add(DwdCloudinessTableMap::COL_TIME, $this->time);
         }
-        if ($this->isColumnModified(DwdCloudinesTableMap::COL_QUALITY)) {
-            $criteria->add(DwdCloudinesTableMap::COL_QUALITY, $this->quality);
+        if ($this->isColumnModified(DwdCloudinessTableMap::COL_QUALITY)) {
+            $criteria->add(DwdCloudinessTableMap::COL_QUALITY, $this->quality);
         }
-        if ($this->isColumnModified(DwdCloudinesTableMap::COL_V_N_I)) {
-            $criteria->add(DwdCloudinesTableMap::COL_V_N_I, $this->v_n_i);
+        if ($this->isColumnModified(DwdCloudinessTableMap::COL_V_N_I)) {
+            $criteria->add(DwdCloudinessTableMap::COL_V_N_I, $this->v_n_i);
         }
-        if ($this->isColumnModified(DwdCloudinesTableMap::COL_V_N)) {
-            $criteria->add(DwdCloudinesTableMap::COL_V_N, $this->v_n);
+        if ($this->isColumnModified(DwdCloudinessTableMap::COL_V_N)) {
+            $criteria->add(DwdCloudinessTableMap::COL_V_N, $this->v_n);
         }
 
         return $criteria;
@@ -1178,8 +1178,8 @@ abstract class DwdCloudines implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildDwdCloudinesQuery::create();
-        $criteria->add(DwdCloudinesTableMap::COL_ID, $this->id);
+        $criteria = ChildDwdCloudinessQuery::create();
+        $criteria->add(DwdCloudinessTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1241,7 +1241,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \DwdCloudines (or compatible) type.
+     * @param      object $copyObj An object of \DwdCloudiness (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
@@ -1268,7 +1268,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \DwdCloudines Clone of current object.
+     * @return \DwdCloudiness Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1285,7 +1285,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
      * Declares an association between this object and a ChildDwdStation object.
      *
      * @param  ChildDwdStation $v
-     * @return $this|\DwdCloudines The current object (for fluent API support)
+     * @return $this|\DwdCloudiness The current object (for fluent API support)
      * @throws PropelException
      */
     public function setDwdStation(ChildDwdStation $v = null)
@@ -1301,7 +1301,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildDwdStation object, it will not be re-added.
         if ($v !== null) {
-            $v->addDwdCloudines($this);
+            $v->addDwdCloudiness($this);
         }
 
 
@@ -1325,7 +1325,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aDwdStation->addDwdCloudiness($this);
+                $this->aDwdStation->addDwdCloudinesses($this);
              */
         }
 
@@ -1340,7 +1340,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
     public function clear()
     {
         if (null !== $this->aDwdStation) {
-            $this->aDwdStation->removeDwdCloudines($this);
+            $this->aDwdStation->removeDwdCloudiness($this);
         }
         $this->id = null;
         $this->station_id = null;
@@ -1378,7 +1378,7 @@ abstract class DwdCloudines implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(DwdCloudinesTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(DwdCloudinessTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**

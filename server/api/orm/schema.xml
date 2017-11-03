@@ -73,7 +73,7 @@
       <reference local="station_id" foreign="id"/>
     </foreign-key>
   </table>
-  <table name="dwd_cloudines" phpName="DwdCloudines">
+  <table name="dwd_cloudiness" phpName="DwdCloudiness">
     <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
     <column name="station_id" type="integer" required="true" />
     <column name="time" type="timestamp" required="true" />

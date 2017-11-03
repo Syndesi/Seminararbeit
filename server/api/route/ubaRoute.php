@@ -25,15 +25,16 @@ class UbaRoute extends \lib\Route {
 
   private function count(){
     $tables = [
-      "NO2"  => UbaNO2Query::create()->count(),
-      "PM10" => UbaPM10Query::create()->count(),
-      "O3"   => UbaO3Query::create()->count(),
-      "SO2"  => UbaSO2Query::create()->count(),
-      "CO"   => UbaCOQuery::create()->count()
+      'NO2'  => UbaNO2Query::create()->count(),
+      'PM10' => UbaPM10Query::create()->count(),
+      'O3'   => UbaO3Query::create()->count(),
+      'SO2'  => UbaSO2Query::create()->count(),
+      'CO'   => UbaCOQuery::create()->count()
     ];
     $data = [
-      "total"  => $tables["NO2"]+$tables["PM10"]+$tables["O3"]+$tables["CO"]+$tables["SO2"],
-      "tables" => $tables
+      'total'    => array_sum($tables),
+      'stations' => UbaStationQuery::create()>count(),
+      'tables'   => $tables
     ];
     $this->r->finish($data);
   }

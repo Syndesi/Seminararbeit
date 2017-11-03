@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \DwdCloudines;
-use \DwdCloudinesQuery;
+use \DwdCloudiness;
+use \DwdCloudinessQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'dwd_cloudines' table.
+ * This class defines the structure of the 'dwd_cloudiness' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class DwdCloudinesTableMap extends TableMap
+class DwdCloudinessTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class DwdCloudinesTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.DwdCloudinesTableMap';
+    const CLASS_NAME = '.Map.DwdCloudinessTableMap';
 
     /**
      * The default database name for this class
@@ -44,17 +44,17 @@ class DwdCloudinesTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'dwd_cloudines';
+    const TABLE_NAME = 'dwd_cloudiness';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\DwdCloudines';
+    const OM_CLASS = '\\DwdCloudiness';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'DwdCloudines';
+    const CLASS_DEFAULT = 'DwdCloudiness';
 
     /**
      * The total number of columns
@@ -74,32 +74,32 @@ class DwdCloudinesTableMap extends TableMap
     /**
      * the column name for the id field
      */
-    const COL_ID = 'dwd_cloudines.id';
+    const COL_ID = 'dwd_cloudiness.id';
 
     /**
      * the column name for the station_id field
      */
-    const COL_STATION_ID = 'dwd_cloudines.station_id';
+    const COL_STATION_ID = 'dwd_cloudiness.station_id';
 
     /**
      * the column name for the time field
      */
-    const COL_TIME = 'dwd_cloudines.time';
+    const COL_TIME = 'dwd_cloudiness.time';
 
     /**
      * the column name for the quality field
      */
-    const COL_QUALITY = 'dwd_cloudines.quality';
+    const COL_QUALITY = 'dwd_cloudiness.quality';
 
     /**
      * the column name for the v_n_i field
      */
-    const COL_V_N_I = 'dwd_cloudines.v_n_i';
+    const COL_V_N_I = 'dwd_cloudiness.v_n_i';
 
     /**
      * the column name for the v_n field
      */
-    const COL_V_N = 'dwd_cloudines.v_n';
+    const COL_V_N = 'dwd_cloudiness.v_n';
 
     /**
      * The default string format for model objects of the related table
@@ -115,7 +115,7 @@ class DwdCloudinesTableMap extends TableMap
     protected static $fieldNames = array (
         self::TYPE_PHPNAME       => array('Id', 'StationId', 'Time', 'Quality', 'VNI', 'VN', ),
         self::TYPE_CAMELNAME     => array('id', 'stationId', 'time', 'quality', 'vNI', 'vN', ),
-        self::TYPE_COLNAME       => array(DwdCloudinesTableMap::COL_ID, DwdCloudinesTableMap::COL_STATION_ID, DwdCloudinesTableMap::COL_TIME, DwdCloudinesTableMap::COL_QUALITY, DwdCloudinesTableMap::COL_V_N_I, DwdCloudinesTableMap::COL_V_N, ),
+        self::TYPE_COLNAME       => array(DwdCloudinessTableMap::COL_ID, DwdCloudinessTableMap::COL_STATION_ID, DwdCloudinessTableMap::COL_TIME, DwdCloudinessTableMap::COL_QUALITY, DwdCloudinessTableMap::COL_V_N_I, DwdCloudinessTableMap::COL_V_N, ),
         self::TYPE_FIELDNAME     => array('id', 'station_id', 'time', 'quality', 'v_n_i', 'v_n', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
@@ -129,7 +129,7 @@ class DwdCloudinesTableMap extends TableMap
     protected static $fieldKeys = array (
         self::TYPE_PHPNAME       => array('Id' => 0, 'StationId' => 1, 'Time' => 2, 'Quality' => 3, 'VNI' => 4, 'VN' => 5, ),
         self::TYPE_CAMELNAME     => array('id' => 0, 'stationId' => 1, 'time' => 2, 'quality' => 3, 'vNI' => 4, 'vN' => 5, ),
-        self::TYPE_COLNAME       => array(DwdCloudinesTableMap::COL_ID => 0, DwdCloudinesTableMap::COL_STATION_ID => 1, DwdCloudinesTableMap::COL_TIME => 2, DwdCloudinesTableMap::COL_QUALITY => 3, DwdCloudinesTableMap::COL_V_N_I => 4, DwdCloudinesTableMap::COL_V_N => 5, ),
+        self::TYPE_COLNAME       => array(DwdCloudinessTableMap::COL_ID => 0, DwdCloudinessTableMap::COL_STATION_ID => 1, DwdCloudinessTableMap::COL_TIME => 2, DwdCloudinessTableMap::COL_QUALITY => 3, DwdCloudinessTableMap::COL_V_N_I => 4, DwdCloudinessTableMap::COL_V_N => 5, ),
         self::TYPE_FIELDNAME     => array('id' => 0, 'station_id' => 1, 'time' => 2, 'quality' => 3, 'v_n_i' => 4, 'v_n' => 5, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
@@ -144,10 +144,10 @@ class DwdCloudinesTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('dwd_cloudines');
-        $this->setPhpName('DwdCloudines');
+        $this->setName('dwd_cloudiness');
+        $this->setPhpName('DwdCloudiness');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\DwdCloudines');
+        $this->setClassName('\\DwdCloudiness');
         $this->setPackage('');
         $this->setUseIdGenerator(true);
         // columns
@@ -230,7 +230,7 @@ class DwdCloudinesTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? DwdCloudinesTableMap::CLASS_DEFAULT : DwdCloudinesTableMap::OM_CLASS;
+        return $withPrefix ? DwdCloudinessTableMap::CLASS_DEFAULT : DwdCloudinessTableMap::OM_CLASS;
     }
 
     /**
@@ -244,22 +244,22 @@ class DwdCloudinesTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (DwdCloudines object, last column rank)
+     * @return array           (DwdCloudiness object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = DwdCloudinesTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = DwdCloudinesTableMap::getInstanceFromPool($key))) {
+        $key = DwdCloudinessTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = DwdCloudinessTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + DwdCloudinesTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + DwdCloudinessTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = DwdCloudinesTableMap::OM_CLASS;
-            /** @var DwdCloudines $obj */
+            $cls = DwdCloudinessTableMap::OM_CLASS;
+            /** @var DwdCloudiness $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            DwdCloudinesTableMap::addInstanceToPool($obj, $key);
+            DwdCloudinessTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -282,18 +282,18 @@ class DwdCloudinesTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = DwdCloudinesTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = DwdCloudinesTableMap::getInstanceFromPool($key))) {
+            $key = DwdCloudinessTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = DwdCloudinessTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var DwdCloudines $obj */
+                /** @var DwdCloudiness $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                DwdCloudinesTableMap::addInstanceToPool($obj, $key);
+                DwdCloudinessTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -314,12 +314,12 @@ class DwdCloudinesTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(DwdCloudinesTableMap::COL_ID);
-            $criteria->addSelectColumn(DwdCloudinesTableMap::COL_STATION_ID);
-            $criteria->addSelectColumn(DwdCloudinesTableMap::COL_TIME);
-            $criteria->addSelectColumn(DwdCloudinesTableMap::COL_QUALITY);
-            $criteria->addSelectColumn(DwdCloudinesTableMap::COL_V_N_I);
-            $criteria->addSelectColumn(DwdCloudinesTableMap::COL_V_N);
+            $criteria->addSelectColumn(DwdCloudinessTableMap::COL_ID);
+            $criteria->addSelectColumn(DwdCloudinessTableMap::COL_STATION_ID);
+            $criteria->addSelectColumn(DwdCloudinessTableMap::COL_TIME);
+            $criteria->addSelectColumn(DwdCloudinessTableMap::COL_QUALITY);
+            $criteria->addSelectColumn(DwdCloudinessTableMap::COL_V_N_I);
+            $criteria->addSelectColumn(DwdCloudinessTableMap::COL_V_N);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.station_id');
@@ -339,7 +339,7 @@ class DwdCloudinesTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(DwdCloudinesTableMap::DATABASE_NAME)->getTable(DwdCloudinesTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(DwdCloudinessTableMap::DATABASE_NAME)->getTable(DwdCloudinessTableMap::TABLE_NAME);
     }
 
     /**
@@ -347,16 +347,16 @@ class DwdCloudinesTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(DwdCloudinesTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(DwdCloudinesTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new DwdCloudinesTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(DwdCloudinessTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(DwdCloudinessTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new DwdCloudinessTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a DwdCloudines or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a DwdCloudiness or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or DwdCloudines object or primary key or array of primary keys
+     * @param mixed               $values Criteria or DwdCloudiness object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -367,27 +367,27 @@ class DwdCloudinesTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(DwdCloudinesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(DwdCloudinessTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \DwdCloudines) { // it's a model object
+        } elseif ($values instanceof \DwdCloudiness) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(DwdCloudinesTableMap::DATABASE_NAME);
-            $criteria->add(DwdCloudinesTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(DwdCloudinessTableMap::DATABASE_NAME);
+            $criteria->add(DwdCloudinessTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = DwdCloudinesQuery::create()->mergeWith($criteria);
+        $query = DwdCloudinessQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            DwdCloudinesTableMap::clearInstancePool();
+            DwdCloudinessTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                DwdCloudinesTableMap::removeInstanceFromPool($singleval);
+                DwdCloudinessTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -395,20 +395,20 @@ class DwdCloudinesTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the dwd_cloudines table.
+     * Deletes all rows from the dwd_cloudiness table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return DwdCloudinesQuery::create()->doDeleteAll($con);
+        return DwdCloudinessQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a DwdCloudines or Criteria object.
+     * Performs an INSERT on the database, given a DwdCloudiness or Criteria object.
      *
-     * @param mixed               $criteria Criteria or DwdCloudines object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or DwdCloudiness object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -417,22 +417,22 @@ class DwdCloudinesTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(DwdCloudinesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(DwdCloudinessTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from DwdCloudines object
+            $criteria = $criteria->buildCriteria(); // build Criteria from DwdCloudiness object
         }
 
-        if ($criteria->containsKey(DwdCloudinesTableMap::COL_ID) && $criteria->keyContainsValue(DwdCloudinesTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.DwdCloudinesTableMap::COL_ID.')');
+        if ($criteria->containsKey(DwdCloudinessTableMap::COL_ID) && $criteria->keyContainsValue(DwdCloudinessTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.DwdCloudinessTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = DwdCloudinesQuery::create()->mergeWith($criteria);
+        $query = DwdCloudinessQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -441,7 +441,7 @@ class DwdCloudinesTableMap extends TableMap
         });
     }
 
-} // DwdCloudinesTableMap
+} // DwdCloudinessTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-DwdCloudinesTableMap::buildTableMap();
+DwdCloudinessTableMap::buildTableMap();

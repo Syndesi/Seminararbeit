@@ -2,11 +2,11 @@
 
 namespace Base;
 
-use \DwdCloudines as ChildDwdCloudines;
-use \DwdCloudinesQuery as ChildDwdCloudinesQuery;
+use \DwdCloudiness as ChildDwdCloudiness;
+use \DwdCloudinessQuery as ChildDwdCloudinessQuery;
 use \Exception;
 use \PDO;
-use Map\DwdCloudinesTableMap;
+use Map\DwdCloudinessTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -16,104 +16,104 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'dwd_cloudines' table.
+ * Base class that represents a query for the 'dwd_cloudiness' table.
  *
  *
  *
- * @method     ChildDwdCloudinesQuery orderById($order = Criteria::ASC) Order by the id column
- * @method     ChildDwdCloudinesQuery orderByStationId($order = Criteria::ASC) Order by the station_id column
- * @method     ChildDwdCloudinesQuery orderByTime($order = Criteria::ASC) Order by the time column
- * @method     ChildDwdCloudinesQuery orderByQuality($order = Criteria::ASC) Order by the quality column
- * @method     ChildDwdCloudinesQuery orderByVNI($order = Criteria::ASC) Order by the v_n_i column
- * @method     ChildDwdCloudinesQuery orderByVN($order = Criteria::ASC) Order by the v_n column
+ * @method     ChildDwdCloudinessQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method     ChildDwdCloudinessQuery orderByStationId($order = Criteria::ASC) Order by the station_id column
+ * @method     ChildDwdCloudinessQuery orderByTime($order = Criteria::ASC) Order by the time column
+ * @method     ChildDwdCloudinessQuery orderByQuality($order = Criteria::ASC) Order by the quality column
+ * @method     ChildDwdCloudinessQuery orderByVNI($order = Criteria::ASC) Order by the v_n_i column
+ * @method     ChildDwdCloudinessQuery orderByVN($order = Criteria::ASC) Order by the v_n column
  *
- * @method     ChildDwdCloudinesQuery groupById() Group by the id column
- * @method     ChildDwdCloudinesQuery groupByStationId() Group by the station_id column
- * @method     ChildDwdCloudinesQuery groupByTime() Group by the time column
- * @method     ChildDwdCloudinesQuery groupByQuality() Group by the quality column
- * @method     ChildDwdCloudinesQuery groupByVNI() Group by the v_n_i column
- * @method     ChildDwdCloudinesQuery groupByVN() Group by the v_n column
+ * @method     ChildDwdCloudinessQuery groupById() Group by the id column
+ * @method     ChildDwdCloudinessQuery groupByStationId() Group by the station_id column
+ * @method     ChildDwdCloudinessQuery groupByTime() Group by the time column
+ * @method     ChildDwdCloudinessQuery groupByQuality() Group by the quality column
+ * @method     ChildDwdCloudinessQuery groupByVNI() Group by the v_n_i column
+ * @method     ChildDwdCloudinessQuery groupByVN() Group by the v_n column
  *
- * @method     ChildDwdCloudinesQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildDwdCloudinesQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildDwdCloudinesQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildDwdCloudinessQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildDwdCloudinessQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildDwdCloudinessQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildDwdCloudinesQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildDwdCloudinesQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildDwdCloudinesQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method     ChildDwdCloudinessQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method     ChildDwdCloudinessQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method     ChildDwdCloudinessQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildDwdCloudinesQuery leftJoinDwdStation($relationAlias = null) Adds a LEFT JOIN clause to the query using the DwdStation relation
- * @method     ChildDwdCloudinesQuery rightJoinDwdStation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DwdStation relation
- * @method     ChildDwdCloudinesQuery innerJoinDwdStation($relationAlias = null) Adds a INNER JOIN clause to the query using the DwdStation relation
+ * @method     ChildDwdCloudinessQuery leftJoinDwdStation($relationAlias = null) Adds a LEFT JOIN clause to the query using the DwdStation relation
+ * @method     ChildDwdCloudinessQuery rightJoinDwdStation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DwdStation relation
+ * @method     ChildDwdCloudinessQuery innerJoinDwdStation($relationAlias = null) Adds a INNER JOIN clause to the query using the DwdStation relation
  *
- * @method     ChildDwdCloudinesQuery joinWithDwdStation($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DwdStation relation
+ * @method     ChildDwdCloudinessQuery joinWithDwdStation($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DwdStation relation
  *
- * @method     ChildDwdCloudinesQuery leftJoinWithDwdStation() Adds a LEFT JOIN clause and with to the query using the DwdStation relation
- * @method     ChildDwdCloudinesQuery rightJoinWithDwdStation() Adds a RIGHT JOIN clause and with to the query using the DwdStation relation
- * @method     ChildDwdCloudinesQuery innerJoinWithDwdStation() Adds a INNER JOIN clause and with to the query using the DwdStation relation
+ * @method     ChildDwdCloudinessQuery leftJoinWithDwdStation() Adds a LEFT JOIN clause and with to the query using the DwdStation relation
+ * @method     ChildDwdCloudinessQuery rightJoinWithDwdStation() Adds a RIGHT JOIN clause and with to the query using the DwdStation relation
+ * @method     ChildDwdCloudinessQuery innerJoinWithDwdStation() Adds a INNER JOIN clause and with to the query using the DwdStation relation
  *
  * @method     \DwdStationQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildDwdCloudines findOne(ConnectionInterface $con = null) Return the first ChildDwdCloudines matching the query
- * @method     ChildDwdCloudines findOneOrCreate(ConnectionInterface $con = null) Return the first ChildDwdCloudines matching the query, or a new ChildDwdCloudines object populated from the query conditions when no match is found
+ * @method     ChildDwdCloudiness findOne(ConnectionInterface $con = null) Return the first ChildDwdCloudiness matching the query
+ * @method     ChildDwdCloudiness findOneOrCreate(ConnectionInterface $con = null) Return the first ChildDwdCloudiness matching the query, or a new ChildDwdCloudiness object populated from the query conditions when no match is found
  *
- * @method     ChildDwdCloudines findOneById(int $id) Return the first ChildDwdCloudines filtered by the id column
- * @method     ChildDwdCloudines findOneByStationId(int $station_id) Return the first ChildDwdCloudines filtered by the station_id column
- * @method     ChildDwdCloudines findOneByTime(string $time) Return the first ChildDwdCloudines filtered by the time column
- * @method     ChildDwdCloudines findOneByQuality(int $quality) Return the first ChildDwdCloudines filtered by the quality column
- * @method     ChildDwdCloudines findOneByVNI(string $v_n_i) Return the first ChildDwdCloudines filtered by the v_n_i column
- * @method     ChildDwdCloudines findOneByVN(int $v_n) Return the first ChildDwdCloudines filtered by the v_n column *
+ * @method     ChildDwdCloudiness findOneById(int $id) Return the first ChildDwdCloudiness filtered by the id column
+ * @method     ChildDwdCloudiness findOneByStationId(int $station_id) Return the first ChildDwdCloudiness filtered by the station_id column
+ * @method     ChildDwdCloudiness findOneByTime(string $time) Return the first ChildDwdCloudiness filtered by the time column
+ * @method     ChildDwdCloudiness findOneByQuality(int $quality) Return the first ChildDwdCloudiness filtered by the quality column
+ * @method     ChildDwdCloudiness findOneByVNI(string $v_n_i) Return the first ChildDwdCloudiness filtered by the v_n_i column
+ * @method     ChildDwdCloudiness findOneByVN(int $v_n) Return the first ChildDwdCloudiness filtered by the v_n column *
 
- * @method     ChildDwdCloudines requirePk($key, ConnectionInterface $con = null) Return the ChildDwdCloudines by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildDwdCloudines requireOne(ConnectionInterface $con = null) Return the first ChildDwdCloudines matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildDwdCloudiness requirePk($key, ConnectionInterface $con = null) Return the ChildDwdCloudiness by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildDwdCloudiness requireOne(ConnectionInterface $con = null) Return the first ChildDwdCloudiness matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildDwdCloudines requireOneById(int $id) Return the first ChildDwdCloudines filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildDwdCloudines requireOneByStationId(int $station_id) Return the first ChildDwdCloudines filtered by the station_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildDwdCloudines requireOneByTime(string $time) Return the first ChildDwdCloudines filtered by the time column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildDwdCloudines requireOneByQuality(int $quality) Return the first ChildDwdCloudines filtered by the quality column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildDwdCloudines requireOneByVNI(string $v_n_i) Return the first ChildDwdCloudines filtered by the v_n_i column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildDwdCloudines requireOneByVN(int $v_n) Return the first ChildDwdCloudines filtered by the v_n column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildDwdCloudiness requireOneById(int $id) Return the first ChildDwdCloudiness filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildDwdCloudiness requireOneByStationId(int $station_id) Return the first ChildDwdCloudiness filtered by the station_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildDwdCloudiness requireOneByTime(string $time) Return the first ChildDwdCloudiness filtered by the time column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildDwdCloudiness requireOneByQuality(int $quality) Return the first ChildDwdCloudiness filtered by the quality column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildDwdCloudiness requireOneByVNI(string $v_n_i) Return the first ChildDwdCloudiness filtered by the v_n_i column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildDwdCloudiness requireOneByVN(int $v_n) Return the first ChildDwdCloudiness filtered by the v_n column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildDwdCloudines[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildDwdCloudines objects based on current ModelCriteria
- * @method     ChildDwdCloudines[]|ObjectCollection findById(int $id) Return ChildDwdCloudines objects filtered by the id column
- * @method     ChildDwdCloudines[]|ObjectCollection findByStationId(int $station_id) Return ChildDwdCloudines objects filtered by the station_id column
- * @method     ChildDwdCloudines[]|ObjectCollection findByTime(string $time) Return ChildDwdCloudines objects filtered by the time column
- * @method     ChildDwdCloudines[]|ObjectCollection findByQuality(int $quality) Return ChildDwdCloudines objects filtered by the quality column
- * @method     ChildDwdCloudines[]|ObjectCollection findByVNI(string $v_n_i) Return ChildDwdCloudines objects filtered by the v_n_i column
- * @method     ChildDwdCloudines[]|ObjectCollection findByVN(int $v_n) Return ChildDwdCloudines objects filtered by the v_n column
- * @method     ChildDwdCloudines[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildDwdCloudiness[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildDwdCloudiness objects based on current ModelCriteria
+ * @method     ChildDwdCloudiness[]|ObjectCollection findById(int $id) Return ChildDwdCloudiness objects filtered by the id column
+ * @method     ChildDwdCloudiness[]|ObjectCollection findByStationId(int $station_id) Return ChildDwdCloudiness objects filtered by the station_id column
+ * @method     ChildDwdCloudiness[]|ObjectCollection findByTime(string $time) Return ChildDwdCloudiness objects filtered by the time column
+ * @method     ChildDwdCloudiness[]|ObjectCollection findByQuality(int $quality) Return ChildDwdCloudiness objects filtered by the quality column
+ * @method     ChildDwdCloudiness[]|ObjectCollection findByVNI(string $v_n_i) Return ChildDwdCloudiness objects filtered by the v_n_i column
+ * @method     ChildDwdCloudiness[]|ObjectCollection findByVN(int $v_n) Return ChildDwdCloudiness objects filtered by the v_n column
+ * @method     ChildDwdCloudiness[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
-abstract class DwdCloudinesQuery extends ModelCriteria
+abstract class DwdCloudinessQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Base\DwdCloudinesQuery object.
+     * Initializes internal state of \Base\DwdCloudinessQuery object.
      *
      * @param     string $dbName The database name
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\DwdCloudines', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\DwdCloudiness', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildDwdCloudinesQuery object.
+     * Returns a new ChildDwdCloudinessQuery object.
      *
      * @param     string $modelAlias The alias of a model in the query
      * @param     Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildDwdCloudinesQuery
+     * @return ChildDwdCloudinessQuery
      */
     public static function create($modelAlias = null, Criteria $criteria = null)
     {
-        if ($criteria instanceof ChildDwdCloudinesQuery) {
+        if ($criteria instanceof ChildDwdCloudinessQuery) {
             return $criteria;
         }
-        $query = new ChildDwdCloudinesQuery();
+        $query = new ChildDwdCloudinessQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -136,7 +136,7 @@ abstract class DwdCloudinesQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildDwdCloudines|array|mixed the result, formatted by the current formatter
+     * @return ChildDwdCloudiness|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ConnectionInterface $con = null)
     {
@@ -145,7 +145,7 @@ abstract class DwdCloudinesQuery extends ModelCriteria
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(DwdCloudinesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(DwdCloudinessTableMap::DATABASE_NAME);
         }
 
         $this->basePreSelect($con);
@@ -158,7 +158,7 @@ abstract class DwdCloudinesQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = DwdCloudinesTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
+        if ((null !== ($obj = DwdCloudinessTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -175,11 +175,11 @@ abstract class DwdCloudinesQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildDwdCloudines A model object, or null if the key is not found
+     * @return ChildDwdCloudiness A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, station_id, time, quality, v_n_i, v_n FROM dwd_cloudines WHERE id = :p0';
+        $sql = 'SELECT id, station_id, time, quality, v_n_i, v_n FROM dwd_cloudiness WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -190,10 +190,10 @@ abstract class DwdCloudinesQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildDwdCloudines $obj */
-            $obj = new ChildDwdCloudines();
+            /** @var ChildDwdCloudiness $obj */
+            $obj = new ChildDwdCloudiness();
             $obj->hydrate($row);
-            DwdCloudinesTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
+            DwdCloudinessTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -206,7 +206,7 @@ abstract class DwdCloudinesQuery extends ModelCriteria
      * @param     mixed $key Primary key to use for the query
      * @param     ConnectionInterface $con A connection object
      *
-     * @return ChildDwdCloudines|array|mixed the result, formatted by the current formatter
+     * @return ChildDwdCloudiness|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -248,12 +248,12 @@ abstract class DwdCloudinesQuery extends ModelCriteria
      *
      * @param     mixed $key Primary key to use for the query
      *
-     * @return $this|ChildDwdCloudinesQuery The current query, for fluid interface
+     * @return $this|ChildDwdCloudinessQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(DwdCloudinesTableMap::COL_ID, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(DwdCloudinessTableMap::COL_ID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -261,12 +261,12 @@ abstract class DwdCloudinesQuery extends ModelCriteria
      *
      * @param     array $keys The list of primary key to use for the query
      *
-     * @return $this|ChildDwdCloudinesQuery The current query, for fluid interface
+     * @return $this|ChildDwdCloudinessQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(DwdCloudinesTableMap::COL_ID, $keys, Criteria::IN);
+        return $this->addUsingAlias(DwdCloudinessTableMap::COL_ID, $keys, Criteria::IN);
     }
 
     /**
@@ -285,18 +285,18 @@ abstract class DwdCloudinesQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDwdCloudinesQuery The current query, for fluid interface
+     * @return $this|ChildDwdCloudinessQuery The current query, for fluid interface
      */
     public function filterById($id = null, $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
             if (isset($id['min'])) {
-                $this->addUsingAlias(DwdCloudinesTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(DwdCloudinessTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($id['max'])) {
-                $this->addUsingAlias(DwdCloudinesTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(DwdCloudinessTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -307,7 +307,7 @@ abstract class DwdCloudinesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DwdCloudinesTableMap::COL_ID, $id, $comparison);
+        return $this->addUsingAlias(DwdCloudinessTableMap::COL_ID, $id, $comparison);
     }
 
     /**
@@ -328,18 +328,18 @@ abstract class DwdCloudinesQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDwdCloudinesQuery The current query, for fluid interface
+     * @return $this|ChildDwdCloudinessQuery The current query, for fluid interface
      */
     public function filterByStationId($stationId = null, $comparison = null)
     {
         if (is_array($stationId)) {
             $useMinMax = false;
             if (isset($stationId['min'])) {
-                $this->addUsingAlias(DwdCloudinesTableMap::COL_STATION_ID, $stationId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(DwdCloudinessTableMap::COL_STATION_ID, $stationId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($stationId['max'])) {
-                $this->addUsingAlias(DwdCloudinesTableMap::COL_STATION_ID, $stationId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(DwdCloudinessTableMap::COL_STATION_ID, $stationId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -350,7 +350,7 @@ abstract class DwdCloudinesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DwdCloudinesTableMap::COL_STATION_ID, $stationId, $comparison);
+        return $this->addUsingAlias(DwdCloudinessTableMap::COL_STATION_ID, $stationId, $comparison);
     }
 
     /**
@@ -371,18 +371,18 @@ abstract class DwdCloudinesQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDwdCloudinesQuery The current query, for fluid interface
+     * @return $this|ChildDwdCloudinessQuery The current query, for fluid interface
      */
     public function filterByTime($time = null, $comparison = null)
     {
         if (is_array($time)) {
             $useMinMax = false;
             if (isset($time['min'])) {
-                $this->addUsingAlias(DwdCloudinesTableMap::COL_TIME, $time['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(DwdCloudinessTableMap::COL_TIME, $time['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($time['max'])) {
-                $this->addUsingAlias(DwdCloudinesTableMap::COL_TIME, $time['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(DwdCloudinessTableMap::COL_TIME, $time['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -393,7 +393,7 @@ abstract class DwdCloudinesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DwdCloudinesTableMap::COL_TIME, $time, $comparison);
+        return $this->addUsingAlias(DwdCloudinessTableMap::COL_TIME, $time, $comparison);
     }
 
     /**
@@ -412,18 +412,18 @@ abstract class DwdCloudinesQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDwdCloudinesQuery The current query, for fluid interface
+     * @return $this|ChildDwdCloudinessQuery The current query, for fluid interface
      */
     public function filterByQuality($quality = null, $comparison = null)
     {
         if (is_array($quality)) {
             $useMinMax = false;
             if (isset($quality['min'])) {
-                $this->addUsingAlias(DwdCloudinesTableMap::COL_QUALITY, $quality['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(DwdCloudinessTableMap::COL_QUALITY, $quality['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($quality['max'])) {
-                $this->addUsingAlias(DwdCloudinesTableMap::COL_QUALITY, $quality['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(DwdCloudinessTableMap::COL_QUALITY, $quality['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -434,7 +434,7 @@ abstract class DwdCloudinesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DwdCloudinesTableMap::COL_QUALITY, $quality, $comparison);
+        return $this->addUsingAlias(DwdCloudinessTableMap::COL_QUALITY, $quality, $comparison);
     }
 
     /**
@@ -449,7 +449,7 @@ abstract class DwdCloudinesQuery extends ModelCriteria
      * @param     string $vNI The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDwdCloudinesQuery The current query, for fluid interface
+     * @return $this|ChildDwdCloudinessQuery The current query, for fluid interface
      */
     public function filterByVNI($vNI = null, $comparison = null)
     {
@@ -459,7 +459,7 @@ abstract class DwdCloudinesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DwdCloudinesTableMap::COL_V_N_I, $vNI, $comparison);
+        return $this->addUsingAlias(DwdCloudinessTableMap::COL_V_N_I, $vNI, $comparison);
     }
 
     /**
@@ -478,18 +478,18 @@ abstract class DwdCloudinesQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDwdCloudinesQuery The current query, for fluid interface
+     * @return $this|ChildDwdCloudinessQuery The current query, for fluid interface
      */
     public function filterByVN($vN = null, $comparison = null)
     {
         if (is_array($vN)) {
             $useMinMax = false;
             if (isset($vN['min'])) {
-                $this->addUsingAlias(DwdCloudinesTableMap::COL_V_N, $vN['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(DwdCloudinessTableMap::COL_V_N, $vN['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($vN['max'])) {
-                $this->addUsingAlias(DwdCloudinesTableMap::COL_V_N, $vN['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(DwdCloudinessTableMap::COL_V_N, $vN['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -500,7 +500,7 @@ abstract class DwdCloudinesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DwdCloudinesTableMap::COL_V_N, $vN, $comparison);
+        return $this->addUsingAlias(DwdCloudinessTableMap::COL_V_N, $vN, $comparison);
     }
 
     /**
@@ -511,20 +511,20 @@ abstract class DwdCloudinesQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildDwdCloudinesQuery The current query, for fluid interface
+     * @return ChildDwdCloudinessQuery The current query, for fluid interface
      */
     public function filterByDwdStation($dwdStation, $comparison = null)
     {
         if ($dwdStation instanceof \DwdStation) {
             return $this
-                ->addUsingAlias(DwdCloudinesTableMap::COL_STATION_ID, $dwdStation->getId(), $comparison);
+                ->addUsingAlias(DwdCloudinessTableMap::COL_STATION_ID, $dwdStation->getId(), $comparison);
         } elseif ($dwdStation instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(DwdCloudinesTableMap::COL_STATION_ID, $dwdStation->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(DwdCloudinessTableMap::COL_STATION_ID, $dwdStation->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
             throw new PropelException('filterByDwdStation() only accepts arguments of type \DwdStation or Collection');
         }
@@ -536,7 +536,7 @@ abstract class DwdCloudinesQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildDwdCloudinesQuery The current query, for fluid interface
+     * @return $this|ChildDwdCloudinessQuery The current query, for fluid interface
      */
     public function joinDwdStation($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
@@ -583,21 +583,21 @@ abstract class DwdCloudinesQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildDwdCloudines $dwdCloudines Object to remove from the list of results
+     * @param   ChildDwdCloudiness $dwdCloudiness Object to remove from the list of results
      *
-     * @return $this|ChildDwdCloudinesQuery The current query, for fluid interface
+     * @return $this|ChildDwdCloudinessQuery The current query, for fluid interface
      */
-    public function prune($dwdCloudines = null)
+    public function prune($dwdCloudiness = null)
     {
-        if ($dwdCloudines) {
-            $this->addUsingAlias(DwdCloudinesTableMap::COL_ID, $dwdCloudines->getId(), Criteria::NOT_EQUAL);
+        if ($dwdCloudiness) {
+            $this->addUsingAlias(DwdCloudinessTableMap::COL_ID, $dwdCloudiness->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
     }
 
     /**
-     * Deletes all rows from the dwd_cloudines table.
+     * Deletes all rows from the dwd_cloudiness table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
@@ -605,7 +605,7 @@ abstract class DwdCloudinesQuery extends ModelCriteria
     public function doDeleteAll(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(DwdCloudinesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(DwdCloudinessTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -616,8 +616,8 @@ abstract class DwdCloudinesQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            DwdCloudinesTableMap::clearInstancePool();
-            DwdCloudinesTableMap::clearRelatedInstancePool();
+            DwdCloudinessTableMap::clearInstancePool();
+            DwdCloudinessTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -635,26 +635,26 @@ abstract class DwdCloudinesQuery extends ModelCriteria
     public function delete(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(DwdCloudinesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(DwdCloudinessTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(DwdCloudinesTableMap::DATABASE_NAME);
+        $criteria->setDbName(DwdCloudinessTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
 
-            DwdCloudinesTableMap::removeInstanceFromPool($criteria);
+            DwdCloudinessTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
-            DwdCloudinesTableMap::clearRelatedInstancePool();
+            DwdCloudinessTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
     }
 
-} // DwdCloudinesQuery
+} // DwdCloudinessQuery

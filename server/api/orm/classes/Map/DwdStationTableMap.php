@@ -165,13 +165,13 @@ class DwdStationTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'DwdAirTemperatures', false);
-        $this->addRelation('DwdCloudines', '\\DwdCloudines', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('DwdCloudiness', '\\DwdCloudiness', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':station_id',
     1 => ':id',
   ),
-), null, null, 'DwdCloudiness', false);
+), null, null, 'DwdCloudinesses', false);
         $this->addRelation('DwdPrecipitation', '\\DwdPrecipitation', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

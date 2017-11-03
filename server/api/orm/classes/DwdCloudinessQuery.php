@@ -1,9 +1,9 @@
 <?php
 
-use Base\DwdCloudines as BaseDwdCloudines;
+use Base\DwdCloudinessQuery as BaseDwdCloudinessQuery;
 
 /**
- * Skeleton subclass for representing a row from the 'dwd_cloudines' table.
+ * Skeleton subclass for performing query and update operations on the 'dwd_cloudiness' table.
  *
  *
  *
@@ -12,7 +12,7 @@ use Base\DwdCloudines as BaseDwdCloudines;
  * long as it does not already exist in the output directory.
  *
  */
-class DwdCloudines extends BaseDwdCloudines
+class DwdCloudinessQuery extends BaseDwdCloudinessQuery
 {
 
 }
