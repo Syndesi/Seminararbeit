@@ -1,21 +1,27 @@
 import React from 'react';
-import {observer} from 'mobx-react';
 import {Switch, Route} from 'react-router-dom';
+
+import Header from './component/header.jsx';
+
 
 import Index from './site/index.jsx';
 import Demo from './site/demo.jsx';
+import Map from './site/map.jsx';
+import Icon from './site/icon.jsx';
 
-@observer
+
 export default class Router extends React.Component {
 
   render() {
     var store = this.props.store;
-    var text = 'text: '+store.text;
     return (
       <div className="app">
+        <Header store={store} />
         <Switch>
-          <Route exact path='/' render={()=><Index store={store} />}/>
-          <Route path='/:id' component={Demo}/>
+          <Route exact path='/' render={(route)=><Index route={route} store={store} />}/>
+          <Route path='/demo/:id' render={(route)=><Demo route={route} store={store} />}/>
+          <Route path='/map' render={(route)=><Map route={route} store={store} />}/>
+          <Route path='/icon' render={(route)=><Icon route={route} store={store} />}/>
         </Switch>
       </div>
     );

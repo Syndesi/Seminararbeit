@@ -4,6 +4,8 @@ import {BrowserRouter} from 'react-router-dom';
 
 require('./font/roboto/stylesheet.scss');
 require('./font/robotoMono/stylesheet.scss');
+require('./font/material/stylesheet.scss');
+require('./font/icomoon/stylesheet.scss');
 require('./style/main.scss');
 
 
