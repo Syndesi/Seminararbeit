@@ -10,7 +10,7 @@ export default class Map extends React.Component {
     return (
       <div className="container">
         <div className="row">
-          <div className="col-8">
+          <div className="col-md-8">
             <div className="card">
               <div className="card-img-top">
                 <Mapbox />
@@ -21,7 +21,7 @@ export default class Map extends React.Component {
               </div>
             </div>
           </div>
-          <div className="col-4">
+          <div className="col-md-4">
             <div className="card">
               <div className="card-body">
                 <h4 className="card-title">Stationsdaten</h4>
