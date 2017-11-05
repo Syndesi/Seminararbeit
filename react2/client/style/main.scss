@@ -36,3 +36,29 @@ body {
 .weather {
   color:#924DA3;
 }
+
+.markerContainer {
+  width:0px;
+  height:0px;
+  position:relative;
+  margin:0px;
+  padding:0px;
+  > * {
+    position:absolute;
+    top:0px;
+    left:0px;
+    border-bottom:2px solid red;
+  }
+  > .markerLeft {
+    transform:translate(0px, -50%);
+  }
+  > .markerTop {
+    transform:translate(-50%, 0px);
+  }
+  > .markerRight {
+    transform:translate(-100%, -50%);
+  }
+  > .markerBottom {
+    transform:translate(-50%, -100%);
+  }
+}

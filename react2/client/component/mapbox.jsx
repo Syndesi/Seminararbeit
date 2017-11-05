@@ -5,13 +5,24 @@ import {Button, Popover, PopoverHeader, PopoverBody} from 'reactstrap';
 
 export default class Mapbox extends React.Component {
 
-  isFullscreen = false;
   accessToken = 'pk.eyJ1Ijoic29lcmVua2xlaW4iLCJhIjoiTFhjai1qcyJ9.JvmV0WKbbrySeFyHJQYRfg';
+  styles = {
+    'Streets':           ['mapbox://styles/mapbox/streets-v9',                     'https://api.mapbox.com/styles/v1/mapbox/streets-v9/static/'],
+    'Light':             ['mapbox://styles/mapbox/light-v9',                       'https://api.mapbox.com/styles/v1/mapbox/light-v9/static/'],
+    'Dark':              ['mapbox://styles/mapbox/dark-v9',                        'https://api.mapbox.com/styles/v1/mapbox/dark-v9/static/'],
+    'Outdoors':          ['mapbox://styles/mapbox/outdoors-v9',                    'https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/static/'],
+    'Satellite':         ['mapbox://styles/mapbox/satellite-v9',                   'https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/'],
+    'Satellite-Streets': ['mapbox://styles/mapbox/satellite-streets-v9',           'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v9/static/'],
+    'custom':            ['mapbox://styles/soerenklein/cj7w3d3g63oc82rp8g68m2m8u', 'https://api.mapbox.com/styles/v1/soerenklein/cj7w3d3g63oc82rp8g68m2m8u/static/']
+  };
 
   constructor(props){
     super(props);
     this.state = {
-      isLayerOpen: false
+      isLayerOpen: false,
+      currentStyle: 'Streets',
+      isFullscreen: false,
+      layers: []
     };
   }
 
@@ -29,13 +40,38 @@ export default class Mapbox extends React.Component {
     map.fitBounds([[5.8663425, 47.2701115], [15.0418962, 55.0815]]);
     // [[-73.9876, 40.7661], [-73.9397, 40.8002]];
     this.map = map;
-    map.once('moveend', function() {
-      console.log(map.getCenter());
-      console.log(map.getZoom());
-    });
+    this.props.store.map = this;
+    //map.once('moveend', function() {
+    //  console.log(map.getCenter());
+    //  console.log(map.getZoom());
+    //});
     //this.map.on('rotate', function(e){
     //  self.handleRotation();
     //});
+    //console.log('1');
+    //var el = <p className="icon icomoon">dwd</p>;
+    //console.log('2');
+    //console.log(mapboxgl);
+    ////var marker = new mapboxgl.Marker('<h1>so only html?</h1>');
+    //  //.setLngLat([10.942, 48.4254]);
+    //  //.addTo(map);
+    //var el = document.createElement('div');
+    //el.className = 'marker';
+    //new mapboxgl.Marker(el)
+    //.setLngLat([10.942, 48.4254])
+    //.addTo(this.map);
+    //var marker = this.addMarker(<p className="icon icomoon markerRight">dwd</p>, [10.897716, 48.052787], {});
+  }
+
+  addMarker(react, coords, options){
+    var el = document.createElement('div');
+    el.className = "markerContainer";
+    ReactDOM.render(react, el);
+    console.log(-el.offsetHeight/2);
+    var marker = new mapboxgl.Marker(el, {offset: [0, 0]})
+               .setLngLat(coords)
+               .addTo(this.map);
+    return marker;
   }
 
   home(){
@@ -65,19 +101,20 @@ export default class Mapbox extends React.Component {
 
   componentDidUpdate(){
     this.map.resize();
-    console.log(this.state);
   }
 
   fullscreen(){
-    console.log('fullscreen');
-    this.isFullscreen = !this.isFullscreen;
-    this.forceUpdate();
+    this.setState({
+      isFullscreen: !this.state.isFullscreen
+    });
   }
 
   setStyle(el){
     var style = el.currentTarget.getAttribute('data-style');
-    console.log(style);
-    this.map.setStyle('mapbox://styles/mapbox/'+style);
+    this.map.setStyle(this.styles[style][0]);
+    this.setState({
+      currentStyle: style
+    });
   }
 
   toggleLayers(){
@@ -86,18 +123,33 @@ export default class Mapbox extends React.Component {
     });
   }
 
-  getStaticMapLink(style){
-    return 'https://api.mapbox.com/styles/v1/mapbox/'+style+'/static/10.45411,51.34185,2.8/120x120?access_token='+this.accessToken;
+  getStaticMapLink(key){
+    return this.styles[key][1]+'10.45411,51.34185,2.8/120x120?access_token='+this.accessToken;
   }
 
   render() {
-    // mapbox-styles:
-    var mapClass = '';
-    if(this.isFullscreen){
-      mapClass = 'fullscreen';
+    var mapClass = 'mapComponent';
+    if(this.state.isFullscreen){
+      mapClass += ' fullscreen';
     }
+    var maps = [];
+    for(var key in this.styles){
+      var buttonClass = 'm-2 p-0';
+      if(this.state.currentStyle == key){
+        buttonClass += ' active';
+      }
+      maps.push(
+        <Button outline className={buttonClass} data-style={key} onClick={this.setStyle.bind(this)}>
+          <div className="img">
+            <img src={this.getStaticMapLink(key)} alt={key} />
+          </div>
+          <p>{key}</p>
+        </Button>
+      );
+    }
+
     return (
-      <div className={'mapComponent '+mapClass} >
+      <div className={mapClass} >
         <div className="map" data-element="map"></div>
         <div className="overlay">
           <div className="btn-group-vertical" role="group" aria-label="Basic example">
@@ -112,42 +164,7 @@ export default class Mapbox extends React.Component {
             <Popover className="mapLayerPopover" placement="right" isOpen={this.state.isLayerOpen} target="layers" toggle={this.toggleLayers.bind(this)}>
               <PopoverHeader>Style</PopoverHeader>
               <PopoverBody>
-                <Button outline className="active m-2 p-0" data-style="streets-v9" onClick={this.setStyle.bind(this)}>
-                  <div className="img">
-                    <img src={this.getStaticMapLink('streets-v9')} alt="Mapbox streets" />
-                  </div>
-                  <p>Streets</p>
-                </Button>
-                <Button outline className="m-2 p-0" data-style="light-v9" onClick={this.setStyle.bind(this)}>
-                  <div className="img">
-                    <img src={this.getStaticMapLink('light-v9')} alt="Mapbox light" />
-                  </div>
-                  <p>Light</p>
-                </Button>
-                <Button outline className="m-2 p-0" data-style="dark-v9" onClick={this.setStyle.bind(this)}>
-                  <div className="img">
-                    <img src={this.getStaticMapLink('dark-v9')} alt="Mapbox dark" />
-                  </div>
-                  <p>Dark</p>
-                </Button>
-                <Button outline className="m-2 p-0" data-style="outdoors-v9" onClick={this.setStyle.bind(this)}>
-                  <div className="img">
-                    <img src={this.getStaticMapLink('outdoors-v9')} alt="Mapbox outdoors" />
-                  </div>
-                  <p>Outdoors</p>
-                </Button>
-                <Button outline className="m-2 p-0" data-style="satellite-v9" onClick={this.setStyle.bind(this)}>
-                  <div className="img">
-                    <img src={this.getStaticMapLink('satellite-v9')} alt="Mapbox satellite" />
-                  </div>
-                  <p>Satellite</p>
-                </Button>
-                <Button outline className="m-2 p-0" data-style="satellite-streets-v9" onClick={this.setStyle.bind(this)}>
-                  <div className="img">
-                    <img src={this.getStaticMapLink('satellite-streets-v9')} alt="Mapbox satellite-streets" />
-                  </div>
-                  <p>Satellite-Streets</p>
-                </Button>
+                {maps}
               </PopoverBody>
             </Popover>
           </div>

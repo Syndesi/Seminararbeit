@@ -13,7 +13,7 @@ import Store from './store.jsx';
 import Router from './router.jsx';
 
 ReactDOM.render((
-  <BrowserRouter>
+  <BrowserRouter basename="/">
     <Router store={Store} />
   </BrowserRouter>
 ), document.getElementById('app'));
