@@ -3,6 +3,7 @@ import {observer} from 'mobx-react';
 import axios from 'axios';
 
 import Mapbox from '../component/mapbox.jsx';
+import Diagram from '../component/diagram.jsx';
 
 @observer
 export default class Map extends React.Component {
@@ -71,6 +72,7 @@ export default class Map extends React.Component {
               <div className="card-body">
                 <h4 className="card-title">Stationsdaten</h4>
                 <p className="card-text">Diagram etc.</p>
+                <Diagram />
                 <table className="table">
                   <thead>
                     <tr>
