@@ -18,3 +18,7 @@ https://www.umweltbundesamt.de/uaq/csv/stations/data?pollutant[]=NO2&scope[]=1SM
 co 8smw
 https://www.umweltbundesamt.de/uaq/csv/stations/data?pollutant[]=CO&scope[]=8SMW&group[]=station&range[]=1504947600,1504951200
 https://www.umweltbundesamt.de/uaq/csv/stations/data?pollutant[]=CO&scope[]=8SMW&group[]=station&range[]=1504908000,1504994400
+
+
+# changes before public
+* point.php : Google-API login data

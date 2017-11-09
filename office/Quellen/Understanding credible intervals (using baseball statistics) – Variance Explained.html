@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!-->
+<html class=" js no-touch rgba hsla textshadow opacity svg" style="" lang="en"><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>Understanding credible intervals (using baseball statistics) – Variance Explained</title>
+<meta name="description" content="Previously in this series
+
+">
+<meta name="keywords" content="r, statistics, education">
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Understanding credible intervals (using baseball statistics)">
+<meta name="twitter:description" content="Previously in this series
+
+">
+<meta name="twitter:site" content="@drob">
+<meta name="twitter:creator" content="@drob">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://varianceexplained.org/images/default-thumb.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Understanding credible intervals (using baseball statistics)">
+<meta property="og:description" content="Previously in this series
+
+">
+<meta property="og:url" content="http://varianceexplained.org/r/credible_intervals_baseball/">
+<meta property="og:site_name" content="Variance Explained">
+
+
+
+
+
+<link rel="canonical" href="http://varianceexplained.org/r/credible_intervals_baseball/">
+<link href="http://varianceexplained.org/feed.xml" type="application/atom+xml" rel="alternate" title="Variance Explained Feed">
+
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/main.css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+	<script src="http://varianceexplained.org/assets/js/vendor/html5shiv.min.js"></script>
+	<script src="http://varianceexplained.org/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script async="" src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/analytics.js"></script><script src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/modernizr-2.js"></script>
+
+<!-- MathJax -->
+<script src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/MathJax.js" id="">
+</script>
+
+<link href="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/css.css" rel="stylesheet" type="text/css">
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://varianceexplained.org/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://varianceexplained.org/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://varianceexplained.org/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://varianceexplained.org/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://varianceexplained.org/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://varianceexplained.org/images/apple-touch-icon-144x144-precomposed.png">
+
+<!-- Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-57723549-1', 'auto');
+  ga('send', 'pageview');
+</script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1px; bottom: 2px; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style>
+
+
+
+<script type="text/javascript" async="" src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/embed.js"></script><script async="" type="text/javascript" src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/count.js"></script><style id="fit-vids-style">.fluid-width-video-wrapper{width:100%;position:relative;padding:0;}.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed {position:absolute;top:0;left:0;width:100%;height:100%;}</style><link rel="preload" as="style" href="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/a_data/lounge.css"><link rel="preload" as="script" href="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/a_data/common.js"><link rel="preload" as="script" href="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/a_data/lounge_002.js"><link rel="preload" as="script" href="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/a_data/config.js"><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style><style type="text/css">.MathJax_Display {text-align: center; margin: 1em 0em; position: relative; display: block!important; text-indent: 0; max-width: none; max-height: none; min-width: 0; min-height: 0; width: 100%}
+.MathJax .merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MathJax .MJX-monospace {font-family: monospace}
+.MathJax .MJX-sans-serif {font-family: sans-serif}
+#MathJax_Tooltip {background-color: InfoBackground; color: InfoText; border: 1px solid black; box-shadow: 2px 2px 5px #AAAAAA; -webkit-box-shadow: 2px 2px 5px #AAAAAA; -moz-box-shadow: 2px 2px 5px #AAAAAA; -khtml-box-shadow: 2px 2px 5px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true'); padding: 3px 4px; z-index: 401; position: absolute; left: 0; top: 0; width: auto; height: auto; display: none}
+.MathJax {display: inline; font-style: normal; font-weight: normal; line-height: normal; font-size: 100%; font-size-adjust: none; text-indent: 0; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0; min-height: 0; border: 0; padding: 0; margin: 0}
+.MathJax:focus, body :focus .MathJax {display: inline-table}
+.MathJax.MathJax_FullWidth {text-align: center; display: table-cell!important; width: 10000em!important}
+.MathJax img, .MathJax nobr, .MathJax a {border: 0; padding: 0; margin: 0; max-width: none; max-height: none; min-width: 0; min-height: 0; vertical-align: 0; line-height: normal; text-decoration: none}
+img.MathJax_strut {border: 0!important; padding: 0!important; margin: 0!important; vertical-align: 0!important}
+.MathJax span {display: inline; position: static; border: 0; padding: 0; margin: 0; vertical-align: 0; line-height: normal; text-decoration: none}
+.MathJax nobr {white-space: nowrap!important}
+.MathJax img {display: inline!important; float: none!important}
+.MathJax * {transition: none; -webkit-transition: none; -moz-transition: none; -ms-transition: none; -o-transition: none}
+.MathJax_Processing {visibility: hidden; position: fixed; width: 0; height: 0; overflow: hidden}
+.MathJax_Processed {display: none!important}
+.MathJax_ExBox {display: block!important; overflow: hidden; width: 1px; height: 60ex; min-height: 0; max-height: none}
+.MathJax .MathJax_EmBox {display: block!important; overflow: hidden; width: 1px; height: 60em; min-height: 0; max-height: none}
+.MathJax_LineBox {display: table!important}
+.MathJax_LineBox span {display: table-cell!important; width: 10000em!important; min-width: 0; max-width: none; padding: 0; border: 0; margin: 0}
+.MathJax .MathJax_HitBox {cursor: text; background: white; opacity: 0; filter: alpha(opacity=0)}
+.MathJax .MathJax_HitBox * {filter: none; opacity: 1; background: transparent}
+#MathJax_Tooltip * {filter: none; opacity: 1; background: transparent}
+@font-face {font-family: MathJax_Main; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Main; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Bold.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Bold.otf?V=2.7.1') format('opentype'); font-weight: bold}
+@font-face {font-family: MathJax_Main; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Italic.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Italic.otf?V=2.7.1') format('opentype'); font-style: italic}
+@font-face {font-family: MathJax_Math; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Math-Italic.otf?V=2.7.1') format('opentype'); font-style: italic}
+@font-face {font-family: MathJax_Caligraphic; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Caligraphic-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size1; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size1-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size2; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size2-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size2-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size3; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size3-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size3-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size4; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size4-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size4-Regular.otf?V=2.7.1') format('opentype')}
+.MathJax .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style><script src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/alfie.js" async="" charset="UTF-8"></script></head>
+
+<body class="post"><div style="visibility: hidden; overflow: hidden; position: absolute; top: 0px; height: 1px; width: auto; padding: 0px; border: 0px none; margin: 0px; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal;"><div id="MathJax_Hidden"></div></div><div id="MathJax_Message" style="display: none;"></div>
+
+<!--[if lt IE 9]><div class="browser-upgrade alert alert-info">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div><![endif]-->
+
+<div class="navigation-wrapper">
+	<div class="site-name">
+		<a href="http://varianceexplained.org/">Variance Explained</a>
+	</div><!-- /.site-name -->
+	<div class="top-navigation">
+		<nav role="navigation" id="site-nav" class="nav"><button type="button" role="button" id="menutoggle" class="navtoogle navicon-lines-button x" aria-hidden="true"><span class="navicon-lines"></span>menu</button>
+		    <ul>
+		        
+					    
+					    <li><a href="http://varianceexplained.org/about/">About Me</a></li>
+					  
+					    
+					    <li><a href="http://varianceexplained.org/posts/">Posts</a></li>
+					  
+					    
+					    <li><a href="http://varianceexplained.org/RData/">R Course</a></li>
+					  
+					    
+					    <li><a href="http://varianceexplained.org/r/empirical-bayes-book/">Introduction to Empirical Bayes</a></li>
+					  
+		    </ul>
+		</nav>
+	</div><!-- /.top-navigation -->
+</div><!-- /.navigation-wrapper -->
+
+
+
+<div id="main" role="main">
+  <div class="article-author-side">
+    
+
+
+	<img src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/david_robinson_picture2.jpg" class="bio-photo" alt="David Robinson bio photo">
+
+<h3>David Robinson</h3>
+<p>Data Scientist at Stack Overflow, works in R and Python.</p>
+<a href="mailto:drobinson@stackoverflow.com" class="author-social" target="_blank"><i class="fa fa-envelope-square"></i> Email</a>
+<a href="http://twitter.com/drob" class="author-social" target="_blank"><i class="fa fa-twitter-square"></i> Twitter</a>
+
+
+
+
+
+<a href="http://github.com/dgrtwo" class="author-social" target="_blank"><i class="fa fa-github"></i> Github</a>
+<a href="http://stackoverflow.com/users/712603" class="author-social" target="_blank"><i class="fa fa-stack-overflow"></i> Stack Overflow</a>
+
+
+
+
+
+
+<h4>Subscribe</h4>
+
+<form method="post" action="http://blogtrottr.com">
+    <input name="btr_email" placeholder="Your email" type="text"><br>
+    <input name="btr_url" value="http://varianceexplained.org/feed.xml" type="hidden">
+    <input name="schedule_type" value="0" type="hidden">
+    <input class="styled-button-4" value="Subscribe to this blog" type="submit">
+</form>
+
+<style type="text/css"> 
+.styled-button-4 {
+	-webkit-box-shadow:rgba(0,0,0,0.98) 0 1px 0 0;
+	-moz-box-shadow:rgba(0,0,0,0.98) 0 1px 0 0;
+	box-shadow:rgba(0,0,0,0.98) 0 1px 0 0;
+	background-color:#EEE;
+	border-radius:0;
+	-webkit-border-radius:0;
+	-moz-border-radius:0;
+	border:1px solid #999;
+	color:#666;
+	font-family:'Lucida Grande',Tahoma,Verdana,Arial,Sans-serif;
+	font-size:11px;
+	font-weight:700;
+	padding:2px 6px;
+	height:28px
+}
+</style>
+
+
+<h4>Recommended Blogs</h4>
+<ul>
+    <li><a href="https://www.datacamp.com/community/blog">DataCamp</a></li>
+    <li><a href="http://www.r-bloggers.com/">R Bloggers</a></li>
+    <li><a href="http://blog.rstudio.org/">RStudio Blog</a></li>
+    <li><a href="http://r4stats.com/">R4Stats</a></li>
+    <li><a href="http://simplystatistics.org/">Simply Statistics</a></li>
+</ul>
+
+  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      
+        <h1><a href="http://varianceexplained.org/r/credible_intervals_baseball/" rel="bookmark" title="Understanding credible intervals (using baseball statistics)">Understanding credible intervals (using baseball statistics)</a></h1>
+      
+    </div><!--/ .headline-wrap -->
+    <div class="article-wrap">
+      <p><strong>Previously in this series</strong></p>
+
+<ul>
+  <li><a href="http://varianceexplained.org/statistics/beta_distribution_and_baseball/">Understanding the beta distribution (using baseball statistics)</a></li>
+  <li><a href="http://varianceexplained.org/r/empirical_bayes_baseball/">Understanding empirical Bayes estimation (using baseball statistics)</a></li>
+</ul>
+
+<p>In my <a href="http://varianceexplained.org/r/empirical_bayes_baseball/">last post</a>,
+ I explained the method of empirical Bayes estimation, a way to 
+calculate useful proportions out of many pairs of success/total counts 
+(e.g. 0/1, 3/10, 235/1000). I used the example of estimating baseball 
+batting averages based on <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-1-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-1" style="width: 0.703em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.593em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.821em, 1000.54em, 2.597em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-2"><span class="mi" id="MathJax-Span-3" style="font-family: MathJax_Math; font-style: italic;">x</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.075em; border-left: 0px solid; width: 0px; height: 0.65em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>x</mi></math></span></span><script type="math/tex" id="MathJax-Element-1">x</script> hits in <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-2-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-4" style="width: 0.703em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.593em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.821em, 1000.57em, 2.597em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-5"><span class="mi" id="MathJax-Span-6" style="font-family: MathJax_Math; font-style: italic;">n</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.075em; border-left: 0px solid; width: 0px; height: 0.65em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math></span></span><script type="math/tex" id="MathJax-Element-2">n</script>
+ opportunities. If we run into a player with 0 hits in 2 chances, or 1 
+hit in 1 chance, we know we can’t trust it, and this method uses 
+information from the overall distribution to improve our guess. 
+Empirical Bayes gives a single value for each player that can be 
+reliably used as an estimate.</p>
+
+<p>But sometimes you want to know more than just our “best guess,” and 
+instead wish to know how much uncertainty is present in our point 
+estimate. We normally would use a <a href="https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval">binomial proportion confidence interval</a>
+ (like a margin of error in a political poll), but this does not bring 
+in information from our whole dataset. For example, the confidence 
+interval for someone who hits 1 time out of 3 chances is <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-3-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mn&gt;0.008&lt;/mn&gt;&lt;mo&gt;,&lt;/mo&gt;&lt;mn&gt;0.906&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-7" style="width: 6.684em; display: inline-block;"><span style="display: inline-block; position: relative; width: 5.765em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.513em, 1005.67em, 2.836em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-8"><span class="mo" id="MathJax-Span-9" style="font-family: MathJax_Main;">(</span><span class="mn" id="MathJax-Span-10" style="font-family: MathJax_Main;">0.008</span><span class="mo" id="MathJax-Span-11" style="font-family: MathJax_Main;">,</span><span class="mn" id="MathJax-Span-12" style="font-family: MathJax_Main; padding-left: 0.167em;">0.906</span><span class="mo" id="MathJax-Span-13" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.352em; border-left: 0px solid; width: 0px; height: 1.285em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo stretchy="false">(</mo><mn>0.008</mn><mo>,</mo><mn>0.906</mn><mo stretchy="false">)</mo></math></span></span><script type="math/tex" id="MathJax-Element-3">(0.008, 0.906)</script>.
+ We can indeed be quite confident that that interval contains the true 
+batting average… but from our knowledge of batting averages, we could 
+have drawn a much tighter interval than that! There’s no way that the 
+player’s real batting average is .1 or .8: it probably lies in the .2-.3
+ region that most other players’ do.</p>
+
+<p>Here I’ll show how to compute a <em>credible interval</em> using 
+empirical Bayes. This will have a similar improvement relative to 
+confidence intervals that the empirical Bayes estimate had to a raw 
+batting average.</p>
+
+<h3 id="setup">Setup</h3>
+
+<p>I’ll start with the same code from the last post, so that you can follow along in R if you like.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">dplyr</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">tidyr</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">Lahman</span><span class="p">)</span><span class="w">
+
+</span><span class="n">career</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">Batting</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">filter</span><span class="p">(</span><span class="n">AB</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">anti_join</span><span class="p">(</span><span class="n">Pitching</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"playerID"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">group_by</span><span class="p">(</span><span class="n">playerID</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">summarize</span><span class="p">(</span><span class="n">H</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">H</span><span class="p">),</span><span class="w"> </span><span class="n">AB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">AB</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">average</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">H</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">AB</span><span class="p">)</span><span class="w">
+
+</span><span class="n">career</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">Master</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">tbl_df</span><span class="p">()</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">select</span><span class="p">(</span><span class="n">playerID</span><span class="p">,</span><span class="w"> </span><span class="n">nameFirst</span><span class="p">,</span><span class="w"> </span><span class="n">nameLast</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">unite</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">nameFirst</span><span class="p">,</span><span class="w"> </span><span class="n">nameLast</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">" "</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">inner_join</span><span class="p">(</span><span class="n">career</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"playerID"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">career_filtered</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">career</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="n">AB</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="m">500</span><span class="p">)</span><span class="w">
+
+</span><span class="n">m</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">MASS</span><span class="o">::</span><span class="n">fitdistr</span><span class="p">(</span><span class="n">career_filtered</span><span class="o">$</span><span class="n">average</span><span class="p">,</span><span class="w"> </span><span class="n">dbeta</span><span class="p">,</span><span class="w">
+                    </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">shape1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">shape2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">))</span><span class="w">
+
+</span><span class="n">alpha0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">m</span><span class="o">$</span><span class="n">estimate</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w">
+</span><span class="n">beta0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">m</span><span class="o">$</span><span class="n">estimate</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="w">
+
+</span><span class="n">career_eb</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">career</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">mutate</span><span class="p">(</span><span class="n">eb_estimate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">H</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">alpha0</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">AB</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">alpha0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta0</span><span class="p">))</span></code></pre></figure>
+
+<p>The end result of this process is the <code class="highlighter-rouge">eb_estimate</code> variable. This gives us a new value for each proportion; what statisticians call a <em>point estimate</em>. Recall that these new values tend to be pushed towards the overall mean (giving this the name “shrinkage”):</p>
+
+<p><img src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/unnamed-chunk-11-1.png" alt="Empirical Bayes"></p>
+
+<p>This shrunken value is generally more useful than the raw estimate: 
+we can use it to sort our data, or feed it into another analysis, 
+without worrying too much about the noise introduced by low counts. But 
+there’s still uncertainty in the empirical Bayes estimate, and <em>the uncertainty is very different for different players.</em>
+ We may want not only a point estimate, but an interval of possible 
+batting averages: one that will be wide for players we know very little 
+about, and narrow for players with more information. Luckily, the 
+Bayesian approach has a method to handle this.</p>
+
+<h3 id="posterior-distribution">Posterior distribution</h3>
+
+<p>Consider that what we’re really doing with empirical Bayes estimation is computing two new values for each player: <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-4-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B1;&lt;/mi&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/msub&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-14" style="width: 1.242em; display: inline-block;"><span style="display: inline-block; position: relative; width: 1.078em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.821em, 1001.08em, 2.736em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-15"><span class="msubsup" id="MathJax-Span-16"><span style="display: inline-block; position: relative; width: 1.069em; height: 0px;"><span style="position: absolute; clip: rect(3.383em, 1000.6em, 4.16em, -1000em); top: -3.987em; left: 0em;"><span class="mi" id="MathJax-Span-17" style="font-family: MathJax_Math; font-style: italic;">α</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; top: -3.837em; left: 0.64em;"><span class="mn" id="MathJax-Span-18" style="font-size: 70.7%; font-family: MathJax_Main;">1</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.236em; border-left: 0px solid; width: 0px; height: 0.812em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>α</mi><mn>1</mn></msub></math></span></span><script type="math/tex" id="MathJax-Element-4">\alpha_1</script> and <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-5-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B2;&lt;/mi&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/msub&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-19" style="width: 1.134em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.97em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.558em, 1000.97em, 2.78em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-20"><span class="msubsup" id="MathJax-Span-21"><span style="display: inline-block; position: relative; width: 0.995em; height: 0px;"><span style="position: absolute; clip: rect(3.12em, 1000.57em, 4.343em, -1000em); top: -3.987em; left: 0em;"><span class="mi" id="MathJax-Span-22" style="font-family: MathJax_Math; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.007em;"></span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; top: -3.837em; left: 0.566em;"><span class="mn" id="MathJax-Span-23" style="font-size: 70.7%; font-family: MathJax_Main;">1</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.288em; border-left: 0px solid; width: 0px; height: 1.168em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>β</mi><mn>1</mn></msub></math></span></span><script type="math/tex" id="MathJax-Element-5">\beta_1</script>. These are the <em>posterior</em> shape parameters for each distribution, after the prior (estimated on the whole dataset) has been updated.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">career_eb</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">career_eb</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">mutate</span><span class="p">(</span><span class="n">alpha1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">H</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">alpha0</span><span class="p">,</span><span class="w">
+           </span><span class="n">beta1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AB</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">H</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta0</span><span class="p">)</span></code></pre></figure>
+
+<p>We can visualize this posterior distribution for each player. I’m 
+going to pick a few of my favorites from the 1998 Yankee lineup.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">yankee_1998</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"brosisc01"</span><span class="p">,</span><span class="w"> </span><span class="s2">"jeterde01"</span><span class="p">,</span><span class="w"> </span><span class="s2">"knoblch01"</span><span class="p">,</span><span class="w"> </span><span class="s2">"martiti02"</span><span class="p">,</span><span class="w"> </span><span class="s2">"posadjo01"</span><span class="p">,</span><span class="w"> </span><span class="s2">"strawda01"</span><span class="p">,</span><span class="w"> </span><span class="s2">"willibe02"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">yankee_1998_career</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">career_eb</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">filter</span><span class="p">(</span><span class="n">playerID</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">yankee_1998</span><span class="p">)</span><span class="w">
+
+</span><span class="n">library</span><span class="p">(</span><span class="n">broom</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+
+</span><span class="n">yankee_beta</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">yankee_1998_career</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">inflate</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">seq</span><span class="p">(</span><span class="m">.18</span><span class="p">,</span><span class="w"> </span><span class="m">.33</span><span class="p">,</span><span class="w"> </span><span class="m">.0002</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">ungroup</span><span class="p">()</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">mutate</span><span class="p">(</span><span class="n">density</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dbeta</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">alpha1</span><span class="p">,</span><span class="w"> </span><span class="n">beta1</span><span class="p">))</span><span class="w">
+
+</span><span class="n">ggplot</span><span class="p">(</span><span class="n">yankee_beta</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">density</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">geom_line</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">stat_function</span><span class="p">(</span><span class="n">fun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="n">dbeta</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">alpha0</span><span class="p">,</span><span class="w"> </span><span class="n">beta0</span><span class="p">),</span><span class="w">
+                  </span><span class="n">lty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"black"</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/yankee_beta-1.png" alt="center"></p>
+
+<p>The prior is shown as a dashed curve. Each of these curves is our 
+probability distribution of what the player’s batting average could be, 
+after updating based on that player’s performance. That’s what we’re 
+really estimating with this method: those posterior beta distributions.</p>
+
+<h3 id="credible-intervals">Credible intervals</h3>
+
+<p>These density curves are hard to interpret visually, especially as 
+the number of players increases, and it can’t be summarized into a table
+ or text. We’d instead prefer to create a <a href="https://en.wikipedia.org/wiki/Credible_interval">credible interval</a>,
+ which says that some percentage (e.g. 95%) of the posterior 
+distribution lies within an particular region. Here’s Derek Jeter’s 
+credible interval:</p>
+
+<p><img src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/jeter_plot-1.png" alt="center"></p>
+
+<p>You can compute the edges of the interval quite easily using the <a href="https://stat.ethz.ch/R-manual/R-patched/library/stats/html/Beta.html">qbeta</a> (quantile of beta) function in R. We just provide it the posterior <code class="highlighter-rouge">alpha1</code> and <code class="highlighter-rouge">beta1</code> parameters:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">yankee_1998_career</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">yankee_1998_career</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">mutate</span><span class="p">(</span><span class="n">low</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">qbeta</span><span class="p">(</span><span class="m">.025</span><span class="p">,</span><span class="w"> </span><span class="n">alpha1</span><span class="p">,</span><span class="w"> </span><span class="n">beta1</span><span class="p">),</span><span class="w">
+           </span><span class="n">high</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qbeta</span><span class="p">(</span><span class="m">.975</span><span class="p">,</span><span class="w"> </span><span class="n">alpha1</span><span class="p">,</span><span class="w"> </span><span class="n">beta1</span><span class="p">))</span></code></pre></figure>
+
+<p>This results in the table:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">yankee_1998_career</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">select</span><span class="p">(</span><span class="o">-</span><span class="n">alpha1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">beta1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">eb_estimate</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">knitr</span><span class="o">::</span><span class="n">kable</span><span class="p">()</span></code></pre></figure>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">playerID</th>
+      <th style="text-align: left">name</th>
+      <th style="text-align: right">H</th>
+      <th style="text-align: right">AB</th>
+      <th style="text-align: right">average</th>
+      <th style="text-align: right">low</th>
+      <th style="text-align: right">high</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">brosisc01</td>
+      <td style="text-align: left">Scott Brosius</td>
+      <td style="text-align: right">1001</td>
+      <td style="text-align: right">3889</td>
+      <td style="text-align: right">0.257</td>
+      <td style="text-align: right">0.244</td>
+      <td style="text-align: right">0.271</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">jeterde01</td>
+      <td style="text-align: left">Derek Jeter</td>
+      <td style="text-align: right">3316</td>
+      <td style="text-align: right">10614</td>
+      <td style="text-align: right">0.312</td>
+      <td style="text-align: right">0.302</td>
+      <td style="text-align: right">0.320</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">knoblch01</td>
+      <td style="text-align: left">Chuck Knoblauch</td>
+      <td style="text-align: right">1839</td>
+      <td style="text-align: right">6366</td>
+      <td style="text-align: right">0.289</td>
+      <td style="text-align: right">0.277</td>
+      <td style="text-align: right">0.298</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">martiti02</td>
+      <td style="text-align: left">Tino Martinez</td>
+      <td style="text-align: right">1925</td>
+      <td style="text-align: right">7111</td>
+      <td style="text-align: right">0.271</td>
+      <td style="text-align: right">0.260</td>
+      <td style="text-align: right">0.280</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">posadjo01</td>
+      <td style="text-align: left">Jorge Posada</td>
+      <td style="text-align: right">1664</td>
+      <td style="text-align: right">6092</td>
+      <td style="text-align: right">0.273</td>
+      <td style="text-align: right">0.262</td>
+      <td style="text-align: right">0.283</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">strawda01</td>
+      <td style="text-align: left">Darryl Strawberry</td>
+      <td style="text-align: right">1401</td>
+      <td style="text-align: right">5418</td>
+      <td style="text-align: right">0.259</td>
+      <td style="text-align: right">0.247</td>
+      <td style="text-align: right">0.270</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">willibe02</td>
+      <td style="text-align: left">Bernie Williams</td>
+      <td style="text-align: right">2336</td>
+      <td style="text-align: right">7869</td>
+      <td style="text-align: right">0.297</td>
+      <td style="text-align: right">0.286</td>
+      <td style="text-align: right">0.305</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>I usually like to view intervals in a plot like this:</p>
+
+<p><img src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/unnamed-chunk-4-1.png" alt="center"></p>
+
+<p>The vertical dashed red line is <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-6-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mfrac&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B1;&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;mrow&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B1;&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B2;&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-24" style="width: 2.751em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.371em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.422em, 1002.37em, 3.169em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-25"><span class="mfrac" id="MathJax-Span-26"><span style="display: inline-block; position: relative; width: 2.129em; height: 0px; margin-right: 0.12em; margin-left: 0.12em;"><span style="position: absolute; clip: rect(3.513em, 1000.76em, 4.266em, -1000em); top: -4.515em; left: 50%; margin-left: -0.378em;"><span class="msubsup" id="MathJax-Span-27"><span style="display: inline-block; position: relative; width: 0.756em; height: 0px;"><span style="position: absolute; clip: rect(3.513em, 1000.43em, 4.156em, -1000em); top: -3.987em; left: 0em;"><span class="mi" id="MathJax-Span-28" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">α</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; top: -3.881em; left: 0.453em;"><span class="mn" id="MathJax-Span-29" style="font-size: 50%; font-family: MathJax_Main;">0</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span></span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(3.327em, 1002.01em, 4.322em, -1000em); top: -3.578em; left: 50%; margin-left: -1.004em;"><span class="mrow" id="MathJax-Span-30"><span class="msubsup" id="MathJax-Span-31"><span style="display: inline-block; position: relative; width: 0.756em; height: 0px;"><span style="position: absolute; clip: rect(3.513em, 1000.43em, 4.156em, -1000em); top: -3.987em; left: 0em;"><span class="mi" id="MathJax-Span-32" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">α</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; top: -3.881em; left: 0.453em;"><span class="mn" id="MathJax-Span-33" style="font-size: 50%; font-family: MathJax_Main;">0</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span></span></span><span class="mo" id="MathJax-Span-34" style="font-size: 70.7%; font-family: MathJax_Main;">+</span><span class="msubsup" id="MathJax-Span-35"><span style="display: inline-block; position: relative; width: 0.703em; height: 0px;"><span style="position: absolute; clip: rect(3.327em, 1000.41em, 4.286em, -1000em); top: -3.987em; left: 0em;"><span class="mi" id="MathJax-Span-36" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.005em;"></span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; top: -3.825em; left: 0.4em;"><span class="mn" id="MathJax-Span-37" style="font-size: 50%; font-family: MathJax_Main;">0</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(0.849em, 1002.13em, 1.239em, -1000em); top: -1.298em; left: 0em;"><span style="display: inline-block; overflow: hidden; vertical-align: 0em; border-top: 1.3px solid; width: 2.129em; height: 0px;"></span><span style="display: inline-block; width: 0px; height: 1.078em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.738em; border-left: 0px solid; width: 0px; height: 1.776em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><msub><mi>α</mi><mn>0</mn></msub><mrow><msub><mi>α</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>0</mn></msub></mrow></mfrac></math></span></span><script type="math/tex" id="MathJax-Element-6">\frac{\alpha_0}{\alpha_0 + \beta_0}</script>:
+ the mean batting average across history (based on our beta fit). The 
+earlier plot showing each posterior beta distribution communicated more 
+information, but this is far more readable.</p>
+
+<h3 id="credible-intervals-versus-confidence-intervals">Credible intervals versus confidence intervals</h3>
+
+<p>Note that posterior credible intervals are similar to frequentist 
+confidence intervals, but they are not the same thing. There’s a 
+philosophical difference, in that frequentists treat the true parameter 
+as fixed while Bayesians treat it as a probability distribution. <a href="http://stats.stackexchange.com/questions/2272/whats-the-difference-between-a-confidence-interval-and-a-credible-interval">Here’s one great explanation of the distinction</a>.</p>
+
+<p>But there’s also a very practical difference, in that credible 
+intervals take prior information into account. If I take 20 random 
+players and construct both confidence intervals (specifically a <a href="https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval">binomial proportion confidence interval</a>) and posterior credible intervals for each, it could look something like this:</p>
+
+<p><img src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/unnamed-chunk-5-1.png" alt="center"></p>
+
+<p>These are sorted in order of how many times a player went up to bat 
+(thus, how much information we have about them). Notice that once 
+there’s enough information, the credible intervals and confidence 
+intervals are nearly identical. But for the 0/3 and 0/6 cases, the 
+credible interval is much narrower. This is because empirical Bayes 
+brings in our knowledge from the full data, just as it did for the point
+ estimate.</p>
+
+<p>Like most applied statisticians, I don’t consider myself too attached
+ to the Bayesian or frequentist philosophies, but rather use whatever 
+method is useful for a given situation. But while I’ve seen non-Bayesian
+ approaches to point estimate shrinkage (<a href="https://en.wikipedia.org/wiki/James%E2%80%93Stein_estimator">James-Stein estimation</a>
+ being the most famous example), I haven’t yet seen a principled way of 
+shrinking confidence intervals. This makes empirical Bayes posteriors 
+pretty useful!</p>
+
+<h3 id="whats-next-batting-hall-of-fame">What’s next: Batting Hall of Fame</h3>
+
+<p>We now have a credible interval for each player, including lower and 
+upper bounds for their batting average. What if you’re collecting 
+players for a “hall of fame”, and you want to find batters that have an 
+average greater than a particular threshold (e.g. greater than .3)? Or 
+forget about baseball: you could be working with genes to test if 
+they’re associated with a disease, and want to collect a set for further
+ study. Or you could be working with advertisements on your site, and 
+want to examine those that are performing especially well or poorly. 
+This is the problem of <em>hypothesis testing.</em></p>
+
+<p>In my next post in this series about empirical Bayes and baseball, 
+I’ll use the posterior distributions we’ve created to define Bayesian 
+classifiers (the (rough) equivalent to frequentist hypothesis testing), 
+and come up with a “hall of fame” of batters while managing the multiple
+ hypothesis testing problems. I’ll also show how you can compare two 
+batters to see if one is better than the other.</p>
+
+<h3 id="appendix-connection-between-confidence-and-credible-intervals">Appendix: Connection between confidence and credible intervals</h3>
+
+<p>(Note: This appendix is substantially more technical than the rest of
+ the post, and is not necessary for understanding and implementing the 
+method).</p>
+
+<p>Above I mention that credible intervals are not the same thing as 
+confidence intervals and do not necessarily provide the same 
+information.</p>
+
+<p>But in fact, two of the methods for constructing frequentist confidence intervals, Clopper-Pearson (the default in R’s <code class="highlighter-rouge">binom.test</code>
+ function, shown in the plot above) and Jeffreys, actually use the 
+quantiles of the Beta distribution in very similar ways, which is the 
+reason credible and confidence intervals start looking identical once 
+there’s enough information. You can <a href="https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Jeffreys_interval">find the formulae here</a>. Here they are for comparison, again using the <code class="highlighter-rouge">qbeta</code> function in R:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Method</th>
+      <th style="text-align: right">Low</th>
+      <th style="text-align: right">High</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Bayesian credible interval</td>
+      <td style="text-align: right"><code class="highlighter-rouge">qbeta(.025, alpha0 + x, beta0 + n - x)</code></td>
+      <td style="text-align: right"><code class="highlighter-rouge">qbeta(.975, alpha0 + x, beta0 + n - x)</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Jeffreys</td>
+      <td style="text-align: right"><code class="highlighter-rouge">qbeta(.025, 1 / 2 + x, 1 / 2 + n - x)</code></td>
+      <td style="text-align: right"><code class="highlighter-rouge">qbeta(.975, 1 / 2 + x, 1 / 2 + n - x)</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Clopper-Pearson</td>
+      <td style="text-align: right"><code class="highlighter-rouge">qbeta(.025, x, n - x + 1)</code></td>
+      <td style="text-align: right"><code class="highlighter-rouge">qbeta(.975, x + 1, n - x)</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Notice that the Jeffreys prior is identical to the Bayesian credible interval when <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-7-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B1;&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/mfrac&gt;&lt;mo&gt;;&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B2;&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/mfrac&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-38" style="width: 7.707em; display: inline-block;"><span style="display: inline-block; position: relative; width: 6.627em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.381em, 1006.63em, 2.968em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-39"><span class="msubsup" id="MathJax-Span-40"><span style="display: inline-block; position: relative; width: 1.069em; height: 0px;"><span style="position: absolute; clip: rect(3.383em, 1000.6em, 4.16em, -1000em); top: -3.987em; left: 0em;"><span class="mi" id="MathJax-Span-41" style="font-family: MathJax_Math; font-style: italic;">α</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; top: -3.837em; left: 0.64em;"><span class="mn" id="MathJax-Span-42" style="font-size: 70.7%; font-family: MathJax_Main;">0</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span></span></span><span class="mo" id="MathJax-Span-43" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mfrac" id="MathJax-Span-44" style="padding-left: 0.278em;"><span style="display: inline-block; position: relative; width: 0.474em; height: 0px; margin-right: 0.12em; margin-left: 0.12em;"><span style="position: absolute; clip: rect(3.354em, 1000.3em, 4.149em, -1000em); top: -4.398em; left: 50%; margin-left: -0.177em;"><span class="mn" id="MathJax-Span-45" style="font-size: 70.7%; font-family: MathJax_Main;">1</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(3.354em, 1000.32em, 4.149em, -1000em); top: -3.605em; left: 50%; margin-left: -0.177em;"><span class="mn" id="MathJax-Span-46" style="font-size: 70.7%; font-family: MathJax_Main;">2</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(0.849em, 1000.47em, 1.239em, -1000em); top: -1.298em; left: 0em;"><span style="display: inline-block; overflow: hidden; vertical-align: 0em; border-top: 1.3px solid; width: 0.474em; height: 0px;"></span><span style="display: inline-block; width: 0px; height: 1.078em;"></span></span></span></span><span class="mo" id="MathJax-Span-47" style="font-family: MathJax_Main;">;</span><span class="msubsup" id="MathJax-Span-48" style="padding-left: 0.167em;"><span style="display: inline-block; position: relative; width: 0.995em; height: 0px;"><span style="position: absolute; clip: rect(3.12em, 1000.57em, 4.343em, -1000em); top: -3.987em; left: 0em;"><span class="mi" id="MathJax-Span-49" style="font-family: MathJax_Math; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.007em;"></span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; top: -3.837em; left: 0.566em;"><span class="mn" id="MathJax-Span-50" style="font-size: 70.7%; font-family: MathJax_Main;">0</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span></span></span><span class="mo" id="MathJax-Span-51" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mfrac" id="MathJax-Span-52" style="padding-left: 0.278em;"><span style="display: inline-block; position: relative; width: 0.474em; height: 0px; margin-right: 0.12em; margin-left: 0.12em;"><span style="position: absolute; clip: rect(3.354em, 1000.3em, 4.149em, -1000em); top: -4.398em; left: 50%; margin-left: -0.177em;"><span class="mn" id="MathJax-Span-53" style="font-size: 70.7%; font-family: MathJax_Main;">1</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(3.354em, 1000.32em, 4.149em, -1000em); top: -3.605em; left: 50%; margin-left: -0.177em;"><span class="mn" id="MathJax-Span-54" style="font-size: 70.7%; font-family: MathJax_Main;">2</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; clip: rect(0.849em, 1000.47em, 1.239em, -1000em); top: -1.298em; left: 0em;"><span style="display: inline-block; overflow: hidden; vertical-align: 0em; border-top: 1.3px solid; width: 0.474em; height: 0px;"></span><span style="display: inline-block; width: 0px; height: 1.078em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.506em; border-left: 0px solid; width: 0px; height: 1.591em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>α</mi><mn>0</mn></msub><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>;</mo><msub><mi>β</mi><mn>0</mn></msub><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></math></span></span><script type="math/tex" id="MathJax-Element-7">\alpha_0=\frac{1}{2};\beta_0=\frac{1}{2}</script>. This is called an <em>uninformative prior</em> or a <a href="https://en.wikipedia.org/wiki/Jeffreys_prior">Jeffreys prior</a>, and is basically pretending that we know <em>nothing</em>
+ about batting averages. The Clopper-Pearson interval is a bit odder, 
+since its priors are different for the lower and upper bounds (and in 
+fact neither is a proper prior, since <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-8-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B1;&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-55" style="width: 3.397em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.909em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.597em, 1002.87em, 2.752em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-56"><span class="msubsup" id="MathJax-Span-57"><span style="display: inline-block; position: relative; width: 1.069em; height: 0px;"><span style="position: absolute; clip: rect(3.383em, 1000.6em, 4.16em, -1000em); top: -3.987em; left: 0em;"><span class="mi" id="MathJax-Span-58" style="font-family: MathJax_Math; font-style: italic;">α</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; top: -3.837em; left: 0.64em;"><span class="mn" id="MathJax-Span-59" style="font-size: 70.7%; font-family: MathJax_Main;">0</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span></span></span><span class="mo" id="MathJax-Span-60" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mn" id="MathJax-Span-61" style="font-family: MathJax_Main; padding-left: 0.278em;">0</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.255em; border-left: 0px solid; width: 0px; height: 1.09em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>α</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></math></span></span><script type="math/tex" id="MathJax-Element-8">\alpha_0=0</script> for the low bound and <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-9-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B2;&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-62" style="width: 3.343em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.856em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.558em, 1002.82em, 2.78em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-63"><span class="msubsup" id="MathJax-Span-64"><span style="display: inline-block; position: relative; width: 0.995em; height: 0px;"><span style="position: absolute; clip: rect(3.12em, 1000.57em, 4.343em, -1000em); top: -3.987em; left: 0em;"><span class="mi" id="MathJax-Span-65" style="font-family: MathJax_Math; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.007em;"></span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; top: -3.837em; left: 0.566em;"><span class="mn" id="MathJax-Span-66" style="font-size: 70.7%; font-family: MathJax_Main;">0</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span></span></span><span class="mo" id="MathJax-Span-67" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mn" id="MathJax-Span-68" style="font-family: MathJax_Main; padding-left: 0.278em;">0</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.288em; border-left: 0px solid; width: 0px; height: 1.168em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>β</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></math></span></span><script type="math/tex" id="MathJax-Element-9">\beta_0=0</script>
+ for the high bound, both illegal for the beta). This is because 
+Clopper-Pearson is actually derived from quantiles of the cumulative 
+binomial distribution (<a href="http://www.bios.unc.edu/~mhudgens/bios/662/2007fall/clopper.pdf">see here!</a>),
+ and is simply equivalent to beta through a neat mathematical trick. 
+What matters is this makes it more conservative (wider) than the 
+Jeffrey’s prior, with a lower lower bound and a higher upper bound.</p>
+
+<p>Most important is that the Bayesian credible interval, the 
+Clopper-Pearson interval, and the Jeffreys interval all start looking 
+more and more identical when:</p>
+
+<ul>
+  <li>the evidence is more informative (large <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-10-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-69" style="width: 0.703em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.593em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.821em, 1000.57em, 2.597em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-70"><span class="mi" id="MathJax-Span-71" style="font-family: MathJax_Math; font-style: italic;">n</span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.075em; border-left: 0px solid; width: 0px; height: 0.65em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math></span></span><script type="math/tex" id="MathJax-Element-10">n</script>), or</li>
+  <li>the prior is less informative (small <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-11-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B1;&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-72" style="width: 1.242em; display: inline-block;"><span style="display: inline-block; position: relative; width: 1.078em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.821em, 1001.08em, 2.752em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-73"><span class="msubsup" id="MathJax-Span-74"><span style="display: inline-block; position: relative; width: 1.069em; height: 0px;"><span style="position: absolute; clip: rect(3.383em, 1000.6em, 4.16em, -1000em); top: -3.987em; left: 0em;"><span class="mi" id="MathJax-Span-75" style="font-family: MathJax_Math; font-style: italic;">α</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; top: -3.837em; left: 0.64em;"><span class="mn" id="MathJax-Span-76" style="font-size: 70.7%; font-family: MathJax_Main;">0</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.255em; border-left: 0px solid; width: 0px; height: 0.83em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>α</mi><mn>0</mn></msub></math></span></span><script type="math/tex" id="MathJax-Element-11">\alpha_0</script>, small <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-12-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B2;&lt;/mi&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/msub&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-77" style="width: 1.134em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.97em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.558em, 1000.97em, 2.78em, -1000em); top: -2.425em; left: 0em;"><span class="mrow" id="MathJax-Span-78"><span class="msubsup" id="MathJax-Span-79"><span style="display: inline-block; position: relative; width: 0.995em; height: 0px;"><span style="position: absolute; clip: rect(3.12em, 1000.57em, 4.343em, -1000em); top: -3.987em; left: 0em;"><span class="mi" id="MathJax-Span-80" style="font-family: MathJax_Math; font-style: italic;">β<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.007em;"></span></span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span><span style="position: absolute; top: -3.837em; left: 0.566em;"><span class="mn" id="MathJax-Span-81" style="font-size: 70.7%; font-family: MathJax_Main;">0</span><span style="display: inline-block; width: 0px; height: 3.987em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.425em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.288em; border-left: 0px solid; width: 0px; height: 1.168em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>β</mi><mn>0</mn></msub></math></span></span><script type="math/tex" id="MathJax-Element-12">\beta_0</script>)</li>
+</ul>
+
+<p>This fits what we saw in the graph above. Bayesian methods are 
+especially helpful (relative to frequentist methods) when the prior 
+makes up a large share of the information.</p>
+
+<p>It is not necessarily the case for all methods that there is a close 
+equivalent between a confidence interval and a credible interval with an
+ uninformative prior. But it happens more often than you might think! As
+ <a href="https://github.com/rasmusab/bayesian_first_aid">Rasmuth Bååth puts it</a>, “Inside every classical test there is a Bayesian model trying to get out.”</p>
+
+      <hr>
+      <footer role="contentinfo">
+        <div class="article-author-bottom">
+          
+
+
+	<img src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/david_robinson_picture2.jpg" class="bio-photo" alt="David Robinson bio photo">
+
+<h3>David Robinson</h3>
+<p>Data Scientist at Stack Overflow, works in R and Python.</p>
+<a href="mailto:drobinson@stackoverflow.com" class="author-social" target="_blank"><i class="fa fa-envelope-square"></i> Email</a>
+<a href="http://twitter.com/drob" class="author-social" target="_blank"><i class="fa fa-twitter-square"></i> Twitter</a>
+
+
+
+
+
+<a href="http://github.com/dgrtwo" class="author-social" target="_blank"><i class="fa fa-github"></i> Github</a>
+<a href="http://stackoverflow.com/users/712603" class="author-social" target="_blank"><i class="fa fa-stack-overflow"></i> Stack Overflow</a>
+
+
+
+
+
+
+<h4>Subscribe</h4>
+
+<form method="post" action="http://blogtrottr.com">
+    <input name="btr_email" placeholder="Your email" type="text"><br>
+    <input name="btr_url" value="http://varianceexplained.org/feed.xml" type="hidden">
+    <input name="schedule_type" value="0" type="hidden">
+    <input class="styled-button-4" value="Subscribe to this blog" type="submit">
+</form>
+
+<style type="text/css"> 
+.styled-button-4 {
+	-webkit-box-shadow:rgba(0,0,0,0.98) 0 1px 0 0;
+	-moz-box-shadow:rgba(0,0,0,0.98) 0 1px 0 0;
+	box-shadow:rgba(0,0,0,0.98) 0 1px 0 0;
+	background-color:#EEE;
+	border-radius:0;
+	-webkit-border-radius:0;
+	-moz-border-radius:0;
+	border:1px solid #999;
+	color:#666;
+	font-family:'Lucida Grande',Tahoma,Verdana,Arial,Sans-serif;
+	font-size:11px;
+	font-weight:700;
+	padding:2px 6px;
+	height:28px
+}
+</style>
+
+
+<h4>Recommended Blogs</h4>
+<ul>
+    <li><a href="https://www.datacamp.com/community/blog">DataCamp</a></li>
+    <li><a href="http://www.r-bloggers.com/">R Bloggers</a></li>
+    <li><a href="http://blog.rstudio.org/">RStudio Blog</a></li>
+    <li><a href="http://r4stats.com/">R4Stats</a></li>
+    <li><a href="http://simplystatistics.org/">Simply Statistics</a></li>
+</ul>
+
+        </div>
+        <p class="byline"><strong>Understanding credible intervals (using baseball statistics)</strong> was published on <time datetime="2015-10-21T00:00:00+00:00">October 21, 2015</time>.</p>
+      </footer>
+    </div><!-- /.article-wrap -->
+  
+    <section id="disqus_thread"><iframe id="dsq-app3342" name="dsq-app3342" allowtransparency="true" scrolling="no" tabindex="0" title="Disqus" style="width: 1px !important; min-width: 100% !important; border: medium none !important; overflow: hidden !important; height: 1110px !important;" src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/a.html" horizontalscrolling="no" verticalscrolling="no" frameborder="0" width="100%"></iframe></section><!-- /#disqus_thread -->
+  
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrap">
+  <div class="related-articles">
+  <h4>You might also enjoy <small class="pull-right">(<a href="http://varianceexplained.org/posts/">View all posts</a>)</small></h4>
+    <ul>
+    
+    </ul>
+    <hr>
+  </div><!-- /.related-articles -->
+  <footer>
+    
+
+<span>© 2017 David Robinson. Powered by <a href="http://jekyllrb.com/">Jekyll</a> using the <a href="http://mademistakes.com/minimal-mistakes/">Minimal Mistakes</a> theme.</span>
+
+  </footer>
+</div><!-- /.footer-wrap -->
+
+<script src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/jquery.js"></script>
+<script>window.jQuery || document.write('<script src="http://varianceexplained.org/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="Understanding%20credible%20intervals%20(using%20baseball%20statistics)%20%E2%80%93%20Variance%20Explained-Dateien/scripts.js"></script>
+
+
+  
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'varianceexplained'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+	        
+
+
+<iframe style="display: none;"></iframe><div style="position: absolute; width: 0px; height: 0px; overflow: hidden; padding: 0px; border: 0px none; margin: 0px;"><div id="MathJax_Font_Test" style="position: absolute; visibility: hidden; top: 0px; left: 0px; width: auto; padding: 0px; border: 0px none; margin: 0px; white-space: nowrap; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; font-size: 40px; font-weight: normal; font-style: normal; font-size-adjust: none; font-family: MathJax_Main,sans-serif;"></div></div></body></html>

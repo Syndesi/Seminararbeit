@@ -11,7 +11,7 @@ class ComposerStaticInitf5aa8f721f7065e350ad9500f455591e
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
-        'ebaa7f3c8d5f5bc48d75274df8eaf9e2' => __DIR__ . '/../..' . '/api/orm/conf/config.php',
+        '0c544f17fdc1c0fe90721979c4eb1a97' => __DIR__ . '/../..' . '/api/orm/conf/config.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -154,8 +154,8 @@ class ComposerStaticInitf5aa8f721f7065e350ad9500f455591e
     public static $classMap = array (
         'Base\\DwdAirTemperature' => __DIR__ . '/../..' . '/api/orm/classes/Base/DwdAirTemperature.php',
         'Base\\DwdAirTemperatureQuery' => __DIR__ . '/../..' . '/api/orm/classes/Base/DwdAirTemperatureQuery.php',
-        'Base\\DwdCloudines' => __DIR__ . '/../..' . '/api/orm/classes/Base/DwdCloudines.php',
-        'Base\\DwdCloudinesQuery' => __DIR__ . '/../..' . '/api/orm/classes/Base/DwdCloudinesQuery.php',
+        'Base\\DwdCloudiness' => __DIR__ . '/../..' . '/api/orm/classes/Base/DwdCloudiness.php',
+        'Base\\DwdCloudinessQuery' => __DIR__ . '/../..' . '/api/orm/classes/Base/DwdCloudinessQuery.php',
         'Base\\DwdPrecipitation' => __DIR__ . '/../..' . '/api/orm/classes/Base/DwdPrecipitation.php',
         'Base\\DwdPrecipitationQuery' => __DIR__ . '/../..' . '/api/orm/classes/Base/DwdPrecipitationQuery.php',
         'Base\\DwdPressure' => __DIR__ . '/../..' . '/api/orm/classes/Base/DwdPressure.php',
@@ -184,8 +184,8 @@ class ComposerStaticInitf5aa8f721f7065e350ad9500f455591e
         'Base\\UbaStationQuery' => __DIR__ . '/../..' . '/api/orm/classes/Base/UbaStationQuery.php',
         'DwdAirTemperature' => __DIR__ . '/../..' . '/api/orm/classes/DwdAirTemperature.php',
         'DwdAirTemperatureQuery' => __DIR__ . '/../..' . '/api/orm/classes/DwdAirTemperatureQuery.php',
-        'DwdCloudines' => __DIR__ . '/../..' . '/api/orm/classes/DwdCloudines.php',
-        'DwdCloudinesQuery' => __DIR__ . '/../..' . '/api/orm/classes/DwdCloudinesQuery.php',
+        'DwdCloudiness' => __DIR__ . '/../..' . '/api/orm/classes/DwdCloudiness.php',
+        'DwdCloudinessQuery' => __DIR__ . '/../..' . '/api/orm/classes/DwdCloudinessQuery.php',
         'DwdPrecipitation' => __DIR__ . '/../..' . '/api/orm/classes/DwdPrecipitation.php',
         'DwdPrecipitationQuery' => __DIR__ . '/../..' . '/api/orm/classes/DwdPrecipitationQuery.php',
         'DwdPressure' => __DIR__ . '/../..' . '/api/orm/classes/DwdPressure.php',
@@ -201,7 +201,7 @@ class ComposerStaticInitf5aa8f721f7065e350ad9500f455591e
         'DwdWind' => __DIR__ . '/../..' . '/api/orm/classes/DwdWind.php',
         'DwdWindQuery' => __DIR__ . '/../..' . '/api/orm/classes/DwdWindQuery.php',
         'Map\\DwdAirTemperatureTableMap' => __DIR__ . '/../..' . '/api/orm/classes/Map/DwdAirTemperatureTableMap.php',
-        'Map\\DwdCloudinesTableMap' => __DIR__ . '/../..' . '/api/orm/classes/Map/DwdCloudinesTableMap.php',
+        'Map\\DwdCloudinessTableMap' => __DIR__ . '/../..' . '/api/orm/classes/Map/DwdCloudinessTableMap.php',
         'Map\\DwdPrecipitationTableMap' => __DIR__ . '/../..' . '/api/orm/classes/Map/DwdPrecipitationTableMap.php',
         'Map\\DwdPressureTableMap' => __DIR__ . '/../..' . '/api/orm/classes/Map/DwdPressureTableMap.php',
         'Map\\DwdSoilTemperatureTableMap' => __DIR__ . '/../..' . '/api/orm/classes/Map/DwdSoilTemperatureTableMap.php',

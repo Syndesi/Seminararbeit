@@ -1,0 +1,67 @@
+.mapLayerPopover {
+  max-width:500px;
+  .btn {
+    overflow:hidden;
+    > .img {
+      width:120px;
+      height:90px;
+      overflow:hidden;
+    }
+    > p {
+      margin:0px;
+      padding:$spacer/2 0px;
+      text-align:center;
+    }
+  }
+}
+
+.mapComponent {
+  float:left;
+  width:100%;
+  height:600px;
+  //width:200px;
+  //height:200px;
+  position:relative;
+  overflow:hidden;
+  &.fullscreen {
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100vw;
+    height:100vh;
+    z-index:1000;
+    > .map {
+      width:100vw;
+      height:100vh;
+    }
+  }
+  > .map {
+    position:absolute;
+    left:0px;
+    top:0px;
+    right:0px;
+    bottom:0px;
+    .mapboxgl-control-container {
+      display:none;
+    }
+  }
+  > .overlay {
+    position:absolute;
+    top:0px;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    pointer-events:none;
+    padding:$spacer;
+    > * {
+      pointer-events:auto;
+    }
+    .btn {
+      padding:$spacer/2;
+      > * {
+        font-size:20px;
+        text-align:center;
+      }
+    }
+  }
+}

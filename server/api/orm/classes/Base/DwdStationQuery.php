@@ -50,15 +50,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDwdStationQuery rightJoinWithDwdAirTemperature() Adds a RIGHT JOIN clause and with to the query using the DwdAirTemperature relation
  * @method     ChildDwdStationQuery innerJoinWithDwdAirTemperature() Adds a INNER JOIN clause and with to the query using the DwdAirTemperature relation
  *
- * @method     ChildDwdStationQuery leftJoinDwdCloudines($relationAlias = null) Adds a LEFT JOIN clause to the query using the DwdCloudines relation
- * @method     ChildDwdStationQuery rightJoinDwdCloudines($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DwdCloudines relation
- * @method     ChildDwdStationQuery innerJoinDwdCloudines($relationAlias = null) Adds a INNER JOIN clause to the query using the DwdCloudines relation
+ * @method     ChildDwdStationQuery leftJoinDwdCloudiness($relationAlias = null) Adds a LEFT JOIN clause to the query using the DwdCloudiness relation
+ * @method     ChildDwdStationQuery rightJoinDwdCloudiness($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DwdCloudiness relation
+ * @method     ChildDwdStationQuery innerJoinDwdCloudiness($relationAlias = null) Adds a INNER JOIN clause to the query using the DwdCloudiness relation
  *
- * @method     ChildDwdStationQuery joinWithDwdCloudines($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DwdCloudines relation
+ * @method     ChildDwdStationQuery joinWithDwdCloudiness($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DwdCloudiness relation
  *
- * @method     ChildDwdStationQuery leftJoinWithDwdCloudines() Adds a LEFT JOIN clause and with to the query using the DwdCloudines relation
- * @method     ChildDwdStationQuery rightJoinWithDwdCloudines() Adds a RIGHT JOIN clause and with to the query using the DwdCloudines relation
- * @method     ChildDwdStationQuery innerJoinWithDwdCloudines() Adds a INNER JOIN clause and with to the query using the DwdCloudines relation
+ * @method     ChildDwdStationQuery leftJoinWithDwdCloudiness() Adds a LEFT JOIN clause and with to the query using the DwdCloudiness relation
+ * @method     ChildDwdStationQuery rightJoinWithDwdCloudiness() Adds a RIGHT JOIN clause and with to the query using the DwdCloudiness relation
+ * @method     ChildDwdStationQuery innerJoinWithDwdCloudiness() Adds a INNER JOIN clause and with to the query using the DwdCloudiness relation
  *
  * @method     ChildDwdStationQuery leftJoinDwdPrecipitation($relationAlias = null) Adds a LEFT JOIN clause to the query using the DwdPrecipitation relation
  * @method     ChildDwdStationQuery rightJoinDwdPrecipitation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DwdPrecipitation relation
@@ -120,7 +120,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDwdStationQuery rightJoinWithDwdWind() Adds a RIGHT JOIN clause and with to the query using the DwdWind relation
  * @method     ChildDwdStationQuery innerJoinWithDwdWind() Adds a INNER JOIN clause and with to the query using the DwdWind relation
  *
- * @method     \DwdAirTemperatureQuery|\DwdCloudinesQuery|\DwdPrecipitationQuery|\DwdPressureQuery|\DwdSoilTemperatureQuery|\DwdSolarQuery|\DwdSunQuery|\DwdWindQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \DwdAirTemperatureQuery|\DwdCloudinessQuery|\DwdPrecipitationQuery|\DwdPressureQuery|\DwdSoilTemperatureQuery|\DwdSolarQuery|\DwdSunQuery|\DwdWindQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildDwdStation findOne(ConnectionInterface $con = null) Return the first ChildDwdStation matching the query
  * @method     ChildDwdStation findOneOrCreate(ConnectionInterface $con = null) Return the first ChildDwdStation matching the query, or a new ChildDwdStation object populated from the query conditions when no match is found
@@ -597,40 +597,40 @@ abstract class DwdStationQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \DwdCloudines object
+     * Filter the query by a related \DwdCloudiness object
      *
-     * @param \DwdCloudines|ObjectCollection $dwdCloudines the related object to use as filter
+     * @param \DwdCloudiness|ObjectCollection $dwdCloudiness the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildDwdStationQuery The current query, for fluid interface
      */
-    public function filterByDwdCloudines($dwdCloudines, $comparison = null)
+    public function filterByDwdCloudiness($dwdCloudiness, $comparison = null)
     {
-        if ($dwdCloudines instanceof \DwdCloudines) {
+        if ($dwdCloudiness instanceof \DwdCloudiness) {
             return $this
-                ->addUsingAlias(DwdStationTableMap::COL_ID, $dwdCloudines->getStationId(), $comparison);
-        } elseif ($dwdCloudines instanceof ObjectCollection) {
+                ->addUsingAlias(DwdStationTableMap::COL_ID, $dwdCloudiness->getStationId(), $comparison);
+        } elseif ($dwdCloudiness instanceof ObjectCollection) {
             return $this
-                ->useDwdCloudinesQuery()
-                ->filterByPrimaryKeys($dwdCloudines->getPrimaryKeys())
+                ->useDwdCloudinessQuery()
+                ->filterByPrimaryKeys($dwdCloudiness->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByDwdCloudines() only accepts arguments of type \DwdCloudines or Collection');
+            throw new PropelException('filterByDwdCloudiness() only accepts arguments of type \DwdCloudiness or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the DwdCloudines relation
+     * Adds a JOIN clause to the query using the DwdCloudiness relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildDwdStationQuery The current query, for fluid interface
      */
-    public function joinDwdCloudines($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinDwdCloudiness($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('DwdCloudines');
+        $relationMap = $tableMap->getRelation('DwdCloudiness');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -645,14 +645,14 @@ abstract class DwdStationQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'DwdCloudines');
+            $this->addJoinObject($join, 'DwdCloudiness');
         }
 
         return $this;
     }
 
     /**
-     * Use the DwdCloudines relation DwdCloudines object
+     * Use the DwdCloudiness relation DwdCloudiness object
      *
      * @see useQuery()
      *
@@ -660,13 +660,13 @@ abstract class DwdStationQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \DwdCloudinesQuery A secondary query class using the current class as primary query
+     * @return \DwdCloudinessQuery A secondary query class using the current class as primary query
      */
-    public function useDwdCloudinesQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useDwdCloudinessQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinDwdCloudines($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'DwdCloudines', '\DwdCloudinesQuery');
+            ->joinDwdCloudiness($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'DwdCloudiness', '\DwdCloudinessQuery');
     }
 
     /**

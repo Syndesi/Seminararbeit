@@ -4,8 +4,8 @@ namespace Base;
 
 use \DwdAirTemperature as ChildDwdAirTemperature;
 use \DwdAirTemperatureQuery as ChildDwdAirTemperatureQuery;
-use \DwdCloudines as ChildDwdCloudines;
-use \DwdCloudinesQuery as ChildDwdCloudinesQuery;
+use \DwdCloudiness as ChildDwdCloudiness;
+use \DwdCloudinessQuery as ChildDwdCloudinessQuery;
 use \DwdPrecipitation as ChildDwdPrecipitation;
 use \DwdPrecipitationQuery as ChildDwdPrecipitationQuery;
 use \DwdPressure as ChildDwdPressure;
@@ -23,7 +23,7 @@ use \DwdWindQuery as ChildDwdWindQuery;
 use \Exception;
 use \PDO;
 use Map\DwdAirTemperatureTableMap;
-use Map\DwdCloudinesTableMap;
+use Map\DwdCloudinessTableMap;
 use Map\DwdPrecipitationTableMap;
 use Map\DwdPressureTableMap;
 use Map\DwdSoilTemperatureTableMap;
@@ -127,10 +127,10 @@ abstract class DwdStation implements ActiveRecordInterface
     protected $collDwdAirTemperaturesPartial;
 
     /**
-     * @var        ObjectCollection|ChildDwdCloudines[] Collection to store aggregation of ChildDwdCloudines objects.
+     * @var        ObjectCollection|ChildDwdCloudiness[] Collection to store aggregation of ChildDwdCloudiness objects.
      */
-    protected $collDwdCloudiness;
-    protected $collDwdCloudinessPartial;
+    protected $collDwdCloudinesses;
+    protected $collDwdCloudinessesPartial;
 
     /**
      * @var        ObjectCollection|ChildDwdPrecipitation[] Collection to store aggregation of ChildDwdPrecipitation objects.
@@ -184,9 +184,9 @@ abstract class DwdStation implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildDwdCloudines[]
+     * @var ObjectCollection|ChildDwdCloudiness[]
      */
-    protected $dwdCloudinessScheduledForDeletion = null;
+    protected $dwdCloudinessesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -720,7 +720,7 @@ abstract class DwdStation implements ActiveRecordInterface
 
             $this->collDwdAirTemperatures = null;
 
-            $this->collDwdCloudiness = null;
+            $this->collDwdCloudinesses = null;
 
             $this->collDwdPrecipitations = null;
 
@@ -865,17 +865,17 @@ abstract class DwdStation implements ActiveRecordInterface
                 }
             }
 
-            if ($this->dwdCloudinessScheduledForDeletion !== null) {
-                if (!$this->dwdCloudinessScheduledForDeletion->isEmpty()) {
-                    \DwdCloudinesQuery::create()
-                        ->filterByPrimaryKeys($this->dwdCloudinessScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->dwdCloudinessesScheduledForDeletion !== null) {
+                if (!$this->dwdCloudinessesScheduledForDeletion->isEmpty()) {
+                    \DwdCloudinessQuery::create()
+                        ->filterByPrimaryKeys($this->dwdCloudinessesScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->dwdCloudinessScheduledForDeletion = null;
+                    $this->dwdCloudinessesScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collDwdCloudiness !== null) {
-                foreach ($this->collDwdCloudiness as $referrerFK) {
+            if ($this->collDwdCloudinesses !== null) {
+                foreach ($this->collDwdCloudinesses as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1004,10 +1004,6 @@ abstract class DwdStation implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[DwdStationTableMap::COL_ID] = true;
-        if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . DwdStationTableMap::COL_ID . ')');
-        }
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(DwdStationTableMap::COL_ID)) {
@@ -1058,13 +1054,6 @@ abstract class DwdStation implements ActiveRecordInterface
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), 0, $e);
         }
-
-        try {
-            $pk = $con->lastInsertId();
-        } catch (Exception $e) {
-            throw new PropelException('Unable to get autoincrement id.', 0, $e);
-        }
-        $this->setId($pk);
 
         $this->setNew(false);
     }
@@ -1185,20 +1174,20 @@ abstract class DwdStation implements ActiveRecordInterface
 
                 $result[$key] = $this->collDwdAirTemperatures->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collDwdCloudiness) {
+            if (null !== $this->collDwdCloudinesses) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'dwdCloudiness';
+                        $key = 'dwdCloudinesses';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'dwd_cloudiness';
+                        $key = 'dwd_cloudinesses';
                         break;
                     default:
-                        $key = 'DwdCloudiness';
+                        $key = 'DwdCloudinesses';
                 }
 
-                $result[$key] = $this->collDwdCloudiness->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collDwdCloudinesses->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collDwdPrecipitations) {
 
@@ -1522,6 +1511,7 @@ abstract class DwdStation implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setId($this->getId());
         $copyObj->setName($this->getName());
         $copyObj->setLat($this->getLat());
         $copyObj->setLng($this->getLng());
@@ -1538,9 +1528,9 @@ abstract class DwdStation implements ActiveRecordInterface
                 }
             }
 
-            foreach ($this->getDwdCloudiness() as $relObj) {
+            foreach ($this->getDwdCloudinesses() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addDwdCloudines($relObj->copy($deepCopy));
+                    $copyObj->addDwdCloudiness($relObj->copy($deepCopy));
                 }
             }
 
@@ -1584,7 +1574,6 @@ abstract class DwdStation implements ActiveRecordInterface
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1625,8 +1614,8 @@ abstract class DwdStation implements ActiveRecordInterface
             $this->initDwdAirTemperatures();
             return;
         }
-        if ('DwdCloudines' == $relationName) {
-            $this->initDwdCloudiness();
+        if ('DwdCloudiness' == $relationName) {
+            $this->initDwdCloudinesses();
             return;
         }
         if ('DwdPrecipitation' == $relationName) {
@@ -1881,31 +1870,31 @@ abstract class DwdStation implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collDwdCloudiness collection
+     * Clears out the collDwdCloudinesses collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addDwdCloudiness()
+     * @see        addDwdCloudinesses()
      */
-    public function clearDwdCloudiness()
+    public function clearDwdCloudinesses()
     {
-        $this->collDwdCloudiness = null; // important to set this to NULL since that means it is uninitialized
+        $this->collDwdCloudinesses = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collDwdCloudiness collection loaded partially.
+     * Reset is the collDwdCloudinesses collection loaded partially.
      */
-    public function resetPartialDwdCloudiness($v = true)
+    public function resetPartialDwdCloudinesses($v = true)
     {
-        $this->collDwdCloudinessPartial = $v;
+        $this->collDwdCloudinessesPartial = $v;
     }
 
     /**
-     * Initializes the collDwdCloudiness collection.
+     * Initializes the collDwdCloudinesses collection.
      *
-     * By default this just sets the collDwdCloudiness collection to an empty array (like clearcollDwdCloudiness());
+     * By default this just sets the collDwdCloudinesses collection to an empty array (like clearcollDwdCloudinesses());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1914,20 +1903,20 @@ abstract class DwdStation implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initDwdCloudiness($overrideExisting = true)
+    public function initDwdCloudinesses($overrideExisting = true)
     {
-        if (null !== $this->collDwdCloudiness && !$overrideExisting) {
+        if (null !== $this->collDwdCloudinesses && !$overrideExisting) {
             return;
         }
 
-        $collectionClassName = DwdCloudinesTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = DwdCloudinessTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collDwdCloudiness = new $collectionClassName;
-        $this->collDwdCloudiness->setModel('\DwdCloudines');
+        $this->collDwdCloudinesses = new $collectionClassName;
+        $this->collDwdCloudinesses->setModel('\DwdCloudiness');
     }
 
     /**
-     * Gets an array of ChildDwdCloudines objects which contain a foreign key that references this object.
+     * Gets an array of ChildDwdCloudiness objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -1937,108 +1926,108 @@ abstract class DwdStation implements ActiveRecordInterface
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildDwdCloudines[] List of ChildDwdCloudines objects
+     * @return ObjectCollection|ChildDwdCloudiness[] List of ChildDwdCloudiness objects
      * @throws PropelException
      */
-    public function getDwdCloudiness(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getDwdCloudinesses(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collDwdCloudinessPartial && !$this->isNew();
-        if (null === $this->collDwdCloudiness || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collDwdCloudiness) {
+        $partial = $this->collDwdCloudinessesPartial && !$this->isNew();
+        if (null === $this->collDwdCloudinesses || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collDwdCloudinesses) {
                 // return empty collection
-                $this->initDwdCloudiness();
+                $this->initDwdCloudinesses();
             } else {
-                $collDwdCloudiness = ChildDwdCloudinesQuery::create(null, $criteria)
+                $collDwdCloudinesses = ChildDwdCloudinessQuery::create(null, $criteria)
                     ->filterByDwdStation($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collDwdCloudinessPartial && count($collDwdCloudiness)) {
-                        $this->initDwdCloudiness(false);
+                    if (false !== $this->collDwdCloudinessesPartial && count($collDwdCloudinesses)) {
+                        $this->initDwdCloudinesses(false);
 
-                        foreach ($collDwdCloudiness as $obj) {
-                            if (false == $this->collDwdCloudiness->contains($obj)) {
-                                $this->collDwdCloudiness->append($obj);
+                        foreach ($collDwdCloudinesses as $obj) {
+                            if (false == $this->collDwdCloudinesses->contains($obj)) {
+                                $this->collDwdCloudinesses->append($obj);
                             }
                         }
 
-                        $this->collDwdCloudinessPartial = true;
+                        $this->collDwdCloudinessesPartial = true;
                     }
 
-                    return $collDwdCloudiness;
+                    return $collDwdCloudinesses;
                 }
 
-                if ($partial && $this->collDwdCloudiness) {
-                    foreach ($this->collDwdCloudiness as $obj) {
+                if ($partial && $this->collDwdCloudinesses) {
+                    foreach ($this->collDwdCloudinesses as $obj) {
                         if ($obj->isNew()) {
-                            $collDwdCloudiness[] = $obj;
+                            $collDwdCloudinesses[] = $obj;
                         }
                     }
                 }
 
-                $this->collDwdCloudiness = $collDwdCloudiness;
-                $this->collDwdCloudinessPartial = false;
+                $this->collDwdCloudinesses = $collDwdCloudinesses;
+                $this->collDwdCloudinessesPartial = false;
             }
         }
 
-        return $this->collDwdCloudiness;
+        return $this->collDwdCloudinesses;
     }
 
     /**
-     * Sets a collection of ChildDwdCloudines objects related by a one-to-many relationship
+     * Sets a collection of ChildDwdCloudiness objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $dwdCloudiness A Propel collection.
+     * @param      Collection $dwdCloudinesses A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildDwdStation The current object (for fluent API support)
      */
-    public function setDwdCloudiness(Collection $dwdCloudiness, ConnectionInterface $con = null)
+    public function setDwdCloudinesses(Collection $dwdCloudinesses, ConnectionInterface $con = null)
     {
-        /** @var ChildDwdCloudines[] $dwdCloudinessToDelete */
-        $dwdCloudinessToDelete = $this->getDwdCloudiness(new Criteria(), $con)->diff($dwdCloudiness);
+        /** @var ChildDwdCloudiness[] $dwdCloudinessesToDelete */
+        $dwdCloudinessesToDelete = $this->getDwdCloudinesses(new Criteria(), $con)->diff($dwdCloudinesses);
 
 
-        $this->dwdCloudinessScheduledForDeletion = $dwdCloudinessToDelete;
+        $this->dwdCloudinessesScheduledForDeletion = $dwdCloudinessesToDelete;
 
-        foreach ($dwdCloudinessToDelete as $dwdCloudinesRemoved) {
-            $dwdCloudinesRemoved->setDwdStation(null);
+        foreach ($dwdCloudinessesToDelete as $dwdCloudinessRemoved) {
+            $dwdCloudinessRemoved->setDwdStation(null);
         }
 
-        $this->collDwdCloudiness = null;
-        foreach ($dwdCloudiness as $dwdCloudines) {
-            $this->addDwdCloudines($dwdCloudines);
+        $this->collDwdCloudinesses = null;
+        foreach ($dwdCloudinesses as $dwdCloudiness) {
+            $this->addDwdCloudiness($dwdCloudiness);
         }
 
-        $this->collDwdCloudiness = $dwdCloudiness;
-        $this->collDwdCloudinessPartial = false;
+        $this->collDwdCloudinesses = $dwdCloudinesses;
+        $this->collDwdCloudinessesPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related DwdCloudines objects.
+     * Returns the number of related DwdCloudiness objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related DwdCloudines objects.
+     * @return int             Count of related DwdCloudiness objects.
      * @throws PropelException
      */
-    public function countDwdCloudiness(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countDwdCloudinesses(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collDwdCloudinessPartial && !$this->isNew();
-        if (null === $this->collDwdCloudiness || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collDwdCloudiness) {
+        $partial = $this->collDwdCloudinessesPartial && !$this->isNew();
+        if (null === $this->collDwdCloudinesses || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collDwdCloudinesses) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getDwdCloudiness());
+                return count($this->getDwdCloudinesses());
             }
 
-            $query = ChildDwdCloudinesQuery::create(null, $criteria);
+            $query = ChildDwdCloudinessQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -2048,28 +2037,28 @@ abstract class DwdStation implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collDwdCloudiness);
+        return count($this->collDwdCloudinesses);
     }
 
     /**
-     * Method called to associate a ChildDwdCloudines object to this object
-     * through the ChildDwdCloudines foreign key attribute.
+     * Method called to associate a ChildDwdCloudiness object to this object
+     * through the ChildDwdCloudiness foreign key attribute.
      *
-     * @param  ChildDwdCloudines $l ChildDwdCloudines
+     * @param  ChildDwdCloudiness $l ChildDwdCloudiness
      * @return $this|\DwdStation The current object (for fluent API support)
      */
-    public function addDwdCloudines(ChildDwdCloudines $l)
+    public function addDwdCloudiness(ChildDwdCloudiness $l)
     {
-        if ($this->collDwdCloudiness === null) {
-            $this->initDwdCloudiness();
-            $this->collDwdCloudinessPartial = true;
+        if ($this->collDwdCloudinesses === null) {
+            $this->initDwdCloudinesses();
+            $this->collDwdCloudinessesPartial = true;
         }
 
-        if (!$this->collDwdCloudiness->contains($l)) {
-            $this->doAddDwdCloudines($l);
+        if (!$this->collDwdCloudinesses->contains($l)) {
+            $this->doAddDwdCloudiness($l);
 
-            if ($this->dwdCloudinessScheduledForDeletion and $this->dwdCloudinessScheduledForDeletion->contains($l)) {
-                $this->dwdCloudinessScheduledForDeletion->remove($this->dwdCloudinessScheduledForDeletion->search($l));
+            if ($this->dwdCloudinessesScheduledForDeletion and $this->dwdCloudinessesScheduledForDeletion->contains($l)) {
+                $this->dwdCloudinessesScheduledForDeletion->remove($this->dwdCloudinessesScheduledForDeletion->search($l));
             }
         }
 
@@ -2077,29 +2066,29 @@ abstract class DwdStation implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildDwdCloudines $dwdCloudines The ChildDwdCloudines object to add.
+     * @param ChildDwdCloudiness $dwdCloudiness The ChildDwdCloudiness object to add.
      */
-    protected function doAddDwdCloudines(ChildDwdCloudines $dwdCloudines)
+    protected function doAddDwdCloudiness(ChildDwdCloudiness $dwdCloudiness)
     {
-        $this->collDwdCloudiness[]= $dwdCloudines;
-        $dwdCloudines->setDwdStation($this);
+        $this->collDwdCloudinesses[]= $dwdCloudiness;
+        $dwdCloudiness->setDwdStation($this);
     }
 
     /**
-     * @param  ChildDwdCloudines $dwdCloudines The ChildDwdCloudines object to remove.
+     * @param  ChildDwdCloudiness $dwdCloudiness The ChildDwdCloudiness object to remove.
      * @return $this|ChildDwdStation The current object (for fluent API support)
      */
-    public function removeDwdCloudines(ChildDwdCloudines $dwdCloudines)
+    public function removeDwdCloudiness(ChildDwdCloudiness $dwdCloudiness)
     {
-        if ($this->getDwdCloudiness()->contains($dwdCloudines)) {
-            $pos = $this->collDwdCloudiness->search($dwdCloudines);
-            $this->collDwdCloudiness->remove($pos);
-            if (null === $this->dwdCloudinessScheduledForDeletion) {
-                $this->dwdCloudinessScheduledForDeletion = clone $this->collDwdCloudiness;
-                $this->dwdCloudinessScheduledForDeletion->clear();
+        if ($this->getDwdCloudinesses()->contains($dwdCloudiness)) {
+            $pos = $this->collDwdCloudinesses->search($dwdCloudiness);
+            $this->collDwdCloudinesses->remove($pos);
+            if (null === $this->dwdCloudinessesScheduledForDeletion) {
+                $this->dwdCloudinessesScheduledForDeletion = clone $this->collDwdCloudinesses;
+                $this->dwdCloudinessesScheduledForDeletion->clear();
             }
-            $this->dwdCloudinessScheduledForDeletion[]= clone $dwdCloudines;
-            $dwdCloudines->setDwdStation(null);
+            $this->dwdCloudinessesScheduledForDeletion[]= clone $dwdCloudiness;
+            $dwdCloudiness->setDwdStation(null);
         }
 
         return $this;
@@ -3490,8 +3479,8 @@ abstract class DwdStation implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collDwdCloudiness) {
-                foreach ($this->collDwdCloudiness as $o) {
+            if ($this->collDwdCloudinesses) {
+                foreach ($this->collDwdCloudinesses as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -3528,7 +3517,7 @@ abstract class DwdStation implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collDwdAirTemperatures = null;
-        $this->collDwdCloudiness = null;
+        $this->collDwdCloudinesses = null;
         $this->collDwdPrecipitations = null;
         $this->collDwdPressures = null;
         $this->collDwdSoilTemperatures = null;

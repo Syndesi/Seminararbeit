@@ -124,7 +124,7 @@ DROP TABLE IF EXISTS `dwd_station`;
 
 CREATE TABLE `dwd_station`
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id` INTEGER NOT NULL,
     `name` VARCHAR(256) NOT NULL,
     `lat` FLOAT,
     `lng` FLOAT,
@@ -154,12 +154,12 @@ CREATE TABLE `dwd_air_temperature`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- dwd_cloudines
+-- dwd_cloudiness
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `dwd_cloudines`;
+DROP TABLE IF EXISTS `dwd_cloudiness`;
 
-CREATE TABLE `dwd_cloudines`
+CREATE TABLE `dwd_cloudiness`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `station_id` INTEGER NOT NULL,
@@ -168,8 +168,8 @@ CREATE TABLE `dwd_cloudines`
     `v_n_i` VARCHAR(1),
     `v_n` INTEGER,
     PRIMARY KEY (`id`),
-    INDEX `dwd_cloudines_fi_924087` (`station_id`),
-    CONSTRAINT `dwd_cloudines_fk_924087`
+    INDEX `dwd_cloudiness_fi_924087` (`station_id`),
+    CONSTRAINT `dwd_cloudiness_fk_924087`
         FOREIGN KEY (`station_id`)
         REFERENCES `dwd_station` (`id`)
 ) ENGINE=InnoDB;

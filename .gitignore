@@ -1,2 +1,5 @@
 **/node_modules/
 **.sublime-workspace
+**/Download/
+**/tmp/
+**.CR2
