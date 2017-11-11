@@ -22,6 +22,7 @@ module.exports = {
         test: /\.scss$/,
         loaders: ["style-loader", "css-loader", "sass-loader"]
       },
+      { test: /\.md$/, loader: 'raw-loader' },
       { test: /\.svg$/, loader: 'url-loader?limit=16000&mimetype=image/svg+xml&name=public/fonts/[name].[ext]' },
       { test: /\.woff$/, loader: 'url-loader?limit=16000&mimetype=application/font-woff&name=public/fonts/[name].[ext]' },
       { test: /\.woff2$/, loader: 'url-loader?limit=16000&mimetype=application/font-woff2&name=public/fonts/[name].[ext]' },

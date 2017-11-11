@@ -1,0 +1,159 @@
+@import "../../node_modules/prismjs/themes/prism-okaidia.css";
+
+
+
+code[class*="language-"],
+pre[class*="language-"] {
+  font-family: robotoMono, Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 2;
+  -o-tab-size: 2;
+  tab-size: 2;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+    background: rgba(255,255,255, 0.2);
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+    background: rgba(255,255,255, 0.2);
+}
+
+// Code blocks
+pre[class*="language-"] {
+  padding: 1em;
+  margin: .5em 0;
+  overflow: auto;
+  border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+  background: #263238;
+}
+
+
+// Inline code
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: slategray;
+}
+
+.namespace {
+  opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.keyword.keyword-extends + .token.class-name,
+.token.deleted {
+  color: #F07178;
+}
+
+.token.boolean,
+.token.number {
+  color: #F78C6C;
+}
+
+.token.selector,
+.token.string,
+.token.char,
+.token.builtin,
+.token.attr-value,
+.token.inserted {
+  color: #C3E88D;
+}
+
+.token.attr-name {
+  color: #C792EA;
+}
+
+.token.keyword.keyword-throw,
+.token.keyword.keyword-yield,
+.token.keyword.keyword-return,
+.token.keyword.keyword-break,
+.token.keyword.keyword-continue,
+.token.keyword.keyword-goto,
+.token.keyword.keyword-await,
+.token.keyword.keyword-const,
+.token.keyword.keyword-let,
+.token.keyword.keyword-var,
+.token.keyword.keyword-for,
+.token.keyword.keyword-while,
+.token.keyword.keyword-if,
+.token.keyword.keyword-else,
+.token.keyword.keyword-switch,
+.token.keyword.keyword-do,
+.token.keyword.keyword-throw,
+.token.keyword.keyword-try,
+.token.keyword.keyword-catch,
+.token.keyword.keyword-default,
+.token.keyword.keyword-class,
+.token.keyword.keyword-extends {
+  color: #C792EA;
+  font-style:italic;
+}
+
+.token.class-name {
+  color: #FFCB6B;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+  color: #f8f8f2;
+}
+
+.token.atrule,
+.token.function {
+  color: #82AAFF;
+}
+
+.token.operator,
+.token.punctuation,
+.token.keyword {
+  color: #89DDFF;
+}
+
+.token.regex,
+.token.important {
+  color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  cursor: help;
+}
