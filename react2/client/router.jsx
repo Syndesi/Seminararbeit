@@ -5,10 +5,11 @@ import Header from './component/header.jsx';
 
 
 import Index from './site/index.jsx';
-import Demo from './site/demo.jsx';
 import Map from './site/map.jsx';
 import Icon from './site/icon.jsx';
 import Mk from './site/mk.jsx';
+
+import Kriging from './site/md/kriging.jsx';
 
 
 export default class Router extends React.Component {
@@ -20,10 +21,10 @@ export default class Router extends React.Component {
         <Header store={store} />
         <Switch>
           <Route exact path='/' render={(route)=><Index route={route} store={store} />}/>
-          <Route path='/demo/:id' render={(route)=><Demo route={route} store={store} />}/>
           <Route path='/map' render={(route)=><Map route={route} store={store} />}/>
           <Route path='/icon' render={(route)=><Icon route={route} store={store} />}/>
-          <Route path='/mk' render={(route)=><Mk route={route} />}/>
+          <Route path='/wiki/demo' render={(route)=><Mk route={route} />}/>
+          <Route path='/wiki/kriging' render={(route)=><Kriging route={route} />}/>
         </Switch>
       </div>
     );

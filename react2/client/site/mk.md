@@ -2,15 +2,15 @@
 
 Betaverteilung:
 
-<Math>f(x) = (1)/(B(p, q))x^(p - 1)(1 - x)^(q - 1)</Math>
+$f(x) = \frac{1}{B(p, q)}x^{p-1}(1-x)^{q-1}$
 
 Normalisierung:
 
-<Math>f(x) = (x - min)/(max - min)</Math>
+$f(x) = \frac{x - min}{max - min}$
 
 mit
 
-<Math>\W \in [0, 1]</Math>
+$\W \in [0, 1]$
 
 and some text with [links](http://www.syndesi.de)
 

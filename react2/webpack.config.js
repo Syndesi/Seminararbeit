@@ -10,9 +10,9 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 module.exports = {
   entry: './client/index.jsx',
   output: {
-    path: path.resolve('dist'),
+    path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: ''
+    publicPath: '/'
   },
   devtool: 'source-map',
   module: {
@@ -22,6 +22,7 @@ module.exports = {
         test: /\.scss$/,
         loaders: ["style-loader", "css-loader", "sass-loader"]
       },
+      { test: /\.css$/, loaders: "css-loader" },
       { test: /\.md$/, loader: 'raw-loader' },
       { test: /\.svg$/, loader: 'url-loader?limit=16000&mimetype=image/svg+xml&name=public/fonts/[name].[ext]' },
       { test: /\.woff$/, loader: 'url-loader?limit=16000&mimetype=application/font-woff&name=public/fonts/[name].[ext]' },

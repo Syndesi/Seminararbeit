@@ -1,9 +1,11 @@
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";
 @import "../../node_modules/mapbox-gl/dist/mapbox-gl.css";
+@import "../../node_modules/katex/dist/katex.min.css";
 
 @import "./header.scss";
 @import "./map.scss";
 @import "./code.scss";
+@import "./markdown.scss";
 
 body {
   font-family:'roboto';

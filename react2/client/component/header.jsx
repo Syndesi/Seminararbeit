@@ -1,7 +1,7 @@
 import React from 'react';
 import {observer} from 'mobx-react';
 import {Link} from 'react-router-dom';
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
+import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 
 @observer
@@ -10,13 +10,20 @@ export default class Header extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      isOpen: false
+      isOpen: false,
+      wikiDropdownOpen: false
     };
   }
 
   toggle(){
     this.setState({
       isOpen: !this.state.isOpen
+    });
+  }
+
+  toggleWikiDropdown(){
+    this.setState({
+      wikiDropdownOpen: !this.state.wikiDropdownOpen
     });
   }
 
@@ -34,10 +41,14 @@ export default class Header extends React.Component {
               <Link to="/icon" className="nav-item nav-link">Icons</Link>
             </NavItem>
             <NavItem>
-              <Link to="/demo/id" className="nav-item nav-link">Demo</Link>
-            </NavItem>
-            <NavItem>
-              <Link to="/mk" className="nav-item nav-link">Markdown</Link>
+              <Dropdown nav isOpen={this.state.wikiDropdownOpen} toggle={this.toggleWikiDropdown.bind(this)}>
+                <DropdownToggle nav caret>Wiki</DropdownToggle>
+                <DropdownMenu>
+                  <Link to="/wiki/kriging" onClick={this.toggleWikiDropdown.bind(this)} className="dropdown-item">Kriging</Link>
+                  <DropdownItem divider />
+                  <Link to="/wiki/demo" onClick={this.toggleWikiDropdown.bind(this)} className="dropdown-item">Demo</Link>
+                </DropdownMenu>
+              </Dropdown>
             </NavItem>
             <NavItem>
               <a className="nav-link" target="_blank" href="https://github.com/Syndesi/Seminararbeit">Github</a>

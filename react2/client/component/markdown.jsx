@@ -1,38 +1,22 @@
 import React, {createElement} from 'react';
-import marksy from 'marksy/components';
-import MathJax from 'react-mathjax-preview';
+import ReactDOM from 'react-dom';
+const md = require('markdown-it')();
+const katex = require('markdown-it-katex');
+const prism = require('markdown-it-prism');
+const HtmlToReactParser = require('html-to-react').Parser;
 
-import Code from './code.jsx';
 
 export default class Markdown extends React.Component {
 
-  compile(string){
-    var compiler = marksy({
-      createElement,
-      elements: {
-        code({ language, children, code }) {
-          return (
-            children ? // render inline code:
-              <code>{children}</code> : // render block code:
-            <div>
-              <Code code={code} language={language} />
-            </div>
-          );
-        }
-      },
-      components: {
-        Math (props){
-          return <MathJax math={'`'+props.children[0]+'`'} />
-        }
-      }
-    });
-    return compiler(string, {}).tree;
-  }
-
   render(){
-    var content = this.compile(this.props.text);
+    md.use(katex);
+    md.use(prism, {
+      plugins: ['highlight-keywords']
+    });
+    var html = md.render(this.props.text);
+    var parser = new HtmlToReactParser();
     return (
-      <div className="markdown">{content}</div>
+      <div className="markdown">{parser.parse(html)}</div>
     );
   }
 }
