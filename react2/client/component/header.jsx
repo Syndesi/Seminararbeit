@@ -45,6 +45,7 @@ export default class Header extends React.Component {
                 <DropdownToggle nav caret>Wiki</DropdownToggle>
                 <DropdownMenu>
                   <Link to="/wiki/kriging" onClick={this.toggleWikiDropdown.bind(this)} className="dropdown-item">Kriging</Link>
+                  <Link to="/wiki/beta" onClick={this.toggleWikiDropdown.bind(this)} className="dropdown-item">Betaverteilung</Link>
                   <DropdownItem divider />
                   <Link to="/wiki/demo" onClick={this.toggleWikiDropdown.bind(this)} className="dropdown-item">Demo</Link>
                 </DropdownMenu>
