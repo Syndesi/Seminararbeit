@@ -1,12 +1,21 @@
 # Markdown example
 
-<Math>y = ln(x^2 - 1) / (x + 1)^2</Math>
+Betaverteilung:
+
+<Math>f(x) = (1)/(B(p, q))x^(p - 1)(1 - x)^(q - 1)</Math>
+
+Normalisierung:
+
+<Math>f(x) = (x - min)/(max - min)</Math>
+
+mit
+
+<Math>\W \in [0, 1]</Math>
 
 and some text with [links](http://www.syndesi.de)
 
 inline `some code` just as it can be.
 
-$\lim_{x \to \infty} \exp(-x) = 0$
 
 
 ```jsx

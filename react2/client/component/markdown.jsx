@@ -15,9 +15,6 @@ export default class Markdown extends React.Component {
             children ? // render inline code:
               <code>{children}</code> : // render block code:
             <div>
-              <span>
-              language: {language}
-              </span>
               <Code code={code} language={language} />
             </div>
           );
