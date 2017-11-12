@@ -13,6 +13,9 @@ export default class Markdown extends React.Component {
     md.use(prism, {
       plugins: ['highlight-keywords']
     });
+    md.renderer.rules.table_open = function(tokens, idx){
+      return '<table class="table">';
+    };
     var html = md.render(this.props.text);
     var parser = new HtmlToReactParser();
     return (

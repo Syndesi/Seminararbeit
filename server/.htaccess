@@ -23,3 +23,11 @@ RewriteRule ^api/(.*)$ api/api.php?_PATH=$1 [QSA,NC,L]
 
 # rewrites normal calls to the web directory
 RewriteRule ^((?!web/).*)$ web/$1 [L,NC]
+
+
+
+Header add Access-Control-Allow-Origin "*"
+Header add Access-Control-Allow-Credentials "true"
+Header add Access-Control-Allow-Methods "GET, POST, PUT, DELETE"
+Header add Access-Control-Max-Age "1000"
+Header add Access-Control-Allow-Headers "Origin, Content-Type, X-Auth-Token , Authorization"
