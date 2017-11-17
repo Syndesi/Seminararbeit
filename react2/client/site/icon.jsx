@@ -1,15 +1,12 @@
 import React from 'react';
 
 
-import Geogebra from '../component/geogebra.jsx';
-
 export default class Icon extends React.Component {
 
   render() {
     return (
       <div className="container">
         <h2>Material Icons</h2>
-        <Geogebra />
         <p className="icon material">
           lock
         </p>

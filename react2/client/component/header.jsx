@@ -52,6 +52,9 @@ export default class Header extends React.Component {
               </Dropdown>
             </NavItem>
             <NavItem>
+              <Link to="/setup" className="nav-item nav-link">Setup</Link>
+            </NavItem>
+            <NavItem>
               <a className="nav-link" target="_blank" href="https://github.com/Syndesi/Seminararbeit">Github</a>
             </NavItem>
           </Nav>

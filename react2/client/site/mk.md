@@ -10,7 +10,7 @@ $f(x) = \frac{x - min}{max - min}$
 
 mit
 
-$\W \in [0, 1]$
+$W \in [0, 1]$
 
 and some text with [links](http://www.syndesi.de)
 

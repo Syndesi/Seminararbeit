@@ -157,4 +157,31 @@
       <reference local="station_id" foreign="id"/>
     </foreign-key>
   </table>
+
+  <table name="user" phpName="User">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="forename" type="varchar" size="64" required="true" />
+    <column name="surname" type="varchar" size="64" required="true" />
+    <column name="email" type="varchar" size="256" required="true" />
+    <column name="email_verified" type="boolean" required="true" />
+    <column name="hash" type="varchar" size="256" required="true" />
+    <behavior name="timestampable" />
+  </table>
+  <table name="authorized" phpName="Authorized">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="user_id" type="integer" required="true" />
+    <column name="is_authorized" type="boolean" required="true" />
+    <foreign-key foreignTable="user">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="email_verify_link" phpName="EmailVerifyLink">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="user_id" type="integer" required="true" />
+    <column name="link" type="varchar" size="256" required="true" />
+    <behavior name="timestampable" />
+    <foreign-key foreignTable="user">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
+  </table>
 </database>

@@ -1,5 +1,11 @@
 # Betaverteilung
 
+api.github.com/repos/Syndesi/Seminararbeit/releases
+
+
+api.github.com/repos/Syndesi/Seminararbeit/tags
+
+
 $f(x) = \dfrac{1}{B(p, q)}x^{p - 1}(1-x)^{q - 1}$
 
 $B(p, q) = \dfrac{\Gamma(p)\Gamma(q)}{\Gamma(p + q)} = \displaystyle\int_{0}^{1}\textstyle u^{p-1}(1-u)^{q-1}du$

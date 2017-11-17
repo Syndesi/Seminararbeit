@@ -307,5 +307,42 @@ CREATE TABLE `dwd_wind`
         REFERENCES `dwd_station` (`id`)
 ) ENGINE=InnoDB;
 
+-- ---------------------------------------------------------------------
+-- user
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `forename` VARCHAR(64) NOT NULL,
+    `surname` VARCHAR(64) NOT NULL,
+    `email` VARCHAR(256) NOT NULL,
+    `email_verified` TINYINT(1) NOT NULL,
+    `hash` VARCHAR(256) NOT NULL,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- authorized
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `authorized`;
+
+CREATE TABLE `authorized`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `user_id` INTEGER NOT NULL,
+    `is_authorized` TINYINT(1) NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `authorized_fi_29554a` (`user_id`),
+    CONSTRAINT `authorized_fk_29554a`
+        FOREIGN KEY (`user_id`)
+        REFERENCES `user` (`id`)
+) ENGINE=InnoDB;
+
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

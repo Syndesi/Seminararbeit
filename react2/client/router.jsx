@@ -4,6 +4,8 @@ import {Switch, Route} from 'react-router-dom';
 import Header from './component/header.jsx';
 
 
+import SetupRouter from './site/setup/setupRouter.jsx';
+
 import Index from './site/index.jsx';
 import Map from './site/map.jsx';
 import Icon from './site/icon.jsx';
@@ -27,6 +29,7 @@ export default class Router extends React.Component {
           <Route path='/wiki/demo' render={(route)=><Mk route={route} />}/>
           <Route path='/wiki/kriging' render={(route)=><Kriging route={route} />}/>
           <Route path='/wiki/beta' render={(route)=><Beta route={route} />}/>
+          <Route path='/setup' render={(route)=><SetupRouter route={route} store={store} />}/>
         </Switch>
       </div>
     );
