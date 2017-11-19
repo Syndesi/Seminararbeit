@@ -1,0 +1,74 @@
+{
+  "language": "de",
+  "error_codes": {
+    "Network Error":    "Netzwerkfehler",
+    "emailAlreadyUsed": "Diese Email wird bereits genutzt.",
+    "notLogedIn":       "Du bist nicht angemeldet.",
+    "passwordIsWrong":  "Das angegebene Passwort ist falsch.",
+    "userDoesNotExist": "Dieser Benutzer existiert nicht."
+  },
+  "components": {
+    "diagram": {},
+    "geogebra": {},
+    "header": {
+      "title":       "Seminararbeit",
+      "map":         "Karte",
+      "icons":       "Icons",
+      "wiki":        "Wiki",
+      "kriging":     "Kriging",
+      "beta":        "Betaverteilung",
+      "demo":        "Demo",
+      "setup":       "Setup",
+      "github":      "Github",
+      "login":       "Login",
+      "register":    "Registrieren",
+      "account":     "Account",
+      "logout":      "Abmelden",
+      "adminUpdate": "Update",
+      "adminUser":   "Benutzer"
+    },
+    "mapbox": {},
+    "markdown": {},
+    "marker": {}
+  },
+  "site": {
+    "index": {},
+    "map": {},
+    "mk": {},
+    "account": {
+      "login": {
+        "title":                      "Login",
+        "email":                      "Email:",
+        "emailPlaceholder":           "Email eingeben",
+        "password":                   "Passwort:",
+        "passwordPlaceholder":        "Passwort eingeben",
+        "login":                      "Login",
+        "warningEmailEmpty":          "Die E-Mail Adresse muss angegeben werden.",
+        "warningPasswordEmpty":       "Das Passwort muss angegeben werden.",
+        "logedIn":                    "Du bist nun angemeldet."
+      },
+      "register": {
+        "title":                      "Registrieren",
+        "forename":                   "Vorname:",
+        "forenamePlaceholder":        "Vorname eingeben",
+        "surname":                    "Nachname:",
+        "surnamePlaceholder":         "Nachname eingeben",
+        "email":                      "E-mail:",
+        "emailPlaceholder":           "E-mail eingeben",
+        "password":                   "Passwort:",
+        "passwordPlaceholder":        "Nicht 1234",
+        "password2":                  "Passwort wiederholen:",
+        "passwordPlaceholder2":       "Ernsthaft, benutze nicht 1234",
+        "register":                   "Registrieren",
+        "warningMismatchingPassword": "Diese Passwörter stimmen nicht überein.",
+        "warningShortPassword":       "Das Passwort muss mindestenst 8 Zeichen lang sein.",
+        "warningForenameEmpty":       "Der Vorname muss angegeben werden.",
+        "warningSurnameEmpty":        "Der Nachname muss angegeben werden.",
+        "warningEmailEmpty":          "Die E-Mail Adresse muss angegeben werden.",
+        "warningPasswordEmpty":       "Ein Passwort muss angegeben werden.",
+        "warningPasswordEmpty2":      "Das zweite Passwort muss zur Überprüfung ebenfalls angegeben werden.",
+        "registered":                 "Du bist nun registriert."
+      }
+    }
+  }
+}

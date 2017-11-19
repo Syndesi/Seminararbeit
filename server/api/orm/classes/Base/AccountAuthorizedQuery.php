@@ -2,11 +2,11 @@
 
 namespace Base;
 
-use \Authorized as ChildAuthorized;
-use \AuthorizedQuery as ChildAuthorizedQuery;
+use \AccountAuthorized as ChildAccountAuthorized;
+use \AccountAuthorizedQuery as ChildAccountAuthorizedQuery;
 use \Exception;
 use \PDO;
-use Map\AuthorizedTableMap;
+use Map\AccountAuthorizedTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -16,89 +16,89 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'authorized' table.
+ * Base class that represents a query for the 'account_authorized' table.
  *
  *
  *
- * @method     ChildAuthorizedQuery orderById($order = Criteria::ASC) Order by the id column
- * @method     ChildAuthorizedQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
- * @method     ChildAuthorizedQuery orderByIsAuthorized($order = Criteria::ASC) Order by the is_authorized column
+ * @method     ChildAccountAuthorizedQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method     ChildAccountAuthorizedQuery orderByAccountId($order = Criteria::ASC) Order by the account_id column
+ * @method     ChildAccountAuthorizedQuery orderByIsAuthorized($order = Criteria::ASC) Order by the is_authorized column
  *
- * @method     ChildAuthorizedQuery groupById() Group by the id column
- * @method     ChildAuthorizedQuery groupByUserId() Group by the user_id column
- * @method     ChildAuthorizedQuery groupByIsAuthorized() Group by the is_authorized column
+ * @method     ChildAccountAuthorizedQuery groupById() Group by the id column
+ * @method     ChildAccountAuthorizedQuery groupByAccountId() Group by the account_id column
+ * @method     ChildAccountAuthorizedQuery groupByIsAuthorized() Group by the is_authorized column
  *
- * @method     ChildAuthorizedQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildAuthorizedQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildAuthorizedQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildAccountAuthorizedQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildAccountAuthorizedQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildAccountAuthorizedQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildAuthorizedQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildAuthorizedQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildAuthorizedQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method     ChildAccountAuthorizedQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method     ChildAccountAuthorizedQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method     ChildAccountAuthorizedQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildAuthorizedQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
- * @method     ChildAuthorizedQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
- * @method     ChildAuthorizedQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
+ * @method     ChildAccountAuthorizedQuery leftJoinAccount($relationAlias = null) Adds a LEFT JOIN clause to the query using the Account relation
+ * @method     ChildAccountAuthorizedQuery rightJoinAccount($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Account relation
+ * @method     ChildAccountAuthorizedQuery innerJoinAccount($relationAlias = null) Adds a INNER JOIN clause to the query using the Account relation
  *
- * @method     ChildAuthorizedQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
+ * @method     ChildAccountAuthorizedQuery joinWithAccount($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Account relation
  *
- * @method     ChildAuthorizedQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
- * @method     ChildAuthorizedQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
- * @method     ChildAuthorizedQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
+ * @method     ChildAccountAuthorizedQuery leftJoinWithAccount() Adds a LEFT JOIN clause and with to the query using the Account relation
+ * @method     ChildAccountAuthorizedQuery rightJoinWithAccount() Adds a RIGHT JOIN clause and with to the query using the Account relation
+ * @method     ChildAccountAuthorizedQuery innerJoinWithAccount() Adds a INNER JOIN clause and with to the query using the Account relation
  *
- * @method     \UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \AccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildAuthorized findOne(ConnectionInterface $con = null) Return the first ChildAuthorized matching the query
- * @method     ChildAuthorized findOneOrCreate(ConnectionInterface $con = null) Return the first ChildAuthorized matching the query, or a new ChildAuthorized object populated from the query conditions when no match is found
+ * @method     ChildAccountAuthorized findOne(ConnectionInterface $con = null) Return the first ChildAccountAuthorized matching the query
+ * @method     ChildAccountAuthorized findOneOrCreate(ConnectionInterface $con = null) Return the first ChildAccountAuthorized matching the query, or a new ChildAccountAuthorized object populated from the query conditions when no match is found
  *
- * @method     ChildAuthorized findOneById(int $id) Return the first ChildAuthorized filtered by the id column
- * @method     ChildAuthorized findOneByUserId(int $user_id) Return the first ChildAuthorized filtered by the user_id column
- * @method     ChildAuthorized findOneByIsAuthorized(boolean $is_authorized) Return the first ChildAuthorized filtered by the is_authorized column *
+ * @method     ChildAccountAuthorized findOneById(int $id) Return the first ChildAccountAuthorized filtered by the id column
+ * @method     ChildAccountAuthorized findOneByAccountId(int $account_id) Return the first ChildAccountAuthorized filtered by the account_id column
+ * @method     ChildAccountAuthorized findOneByIsAuthorized(boolean $is_authorized) Return the first ChildAccountAuthorized filtered by the is_authorized column *
 
- * @method     ChildAuthorized requirePk($key, ConnectionInterface $con = null) Return the ChildAuthorized by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAuthorized requireOne(ConnectionInterface $con = null) Return the first ChildAuthorized matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAccountAuthorized requirePk($key, ConnectionInterface $con = null) Return the ChildAccountAuthorized by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAccountAuthorized requireOne(ConnectionInterface $con = null) Return the first ChildAccountAuthorized matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildAuthorized requireOneById(int $id) Return the first ChildAuthorized filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAuthorized requireOneByUserId(int $user_id) Return the first ChildAuthorized filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAuthorized requireOneByIsAuthorized(boolean $is_authorized) Return the first ChildAuthorized filtered by the is_authorized column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAccountAuthorized requireOneById(int $id) Return the first ChildAccountAuthorized filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAccountAuthorized requireOneByAccountId(int $account_id) Return the first ChildAccountAuthorized filtered by the account_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAccountAuthorized requireOneByIsAuthorized(boolean $is_authorized) Return the first ChildAccountAuthorized filtered by the is_authorized column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildAuthorized[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildAuthorized objects based on current ModelCriteria
- * @method     ChildAuthorized[]|ObjectCollection findById(int $id) Return ChildAuthorized objects filtered by the id column
- * @method     ChildAuthorized[]|ObjectCollection findByUserId(int $user_id) Return ChildAuthorized objects filtered by the user_id column
- * @method     ChildAuthorized[]|ObjectCollection findByIsAuthorized(boolean $is_authorized) Return ChildAuthorized objects filtered by the is_authorized column
- * @method     ChildAuthorized[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildAccountAuthorized[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildAccountAuthorized objects based on current ModelCriteria
+ * @method     ChildAccountAuthorized[]|ObjectCollection findById(int $id) Return ChildAccountAuthorized objects filtered by the id column
+ * @method     ChildAccountAuthorized[]|ObjectCollection findByAccountId(int $account_id) Return ChildAccountAuthorized objects filtered by the account_id column
+ * @method     ChildAccountAuthorized[]|ObjectCollection findByIsAuthorized(boolean $is_authorized) Return ChildAccountAuthorized objects filtered by the is_authorized column
+ * @method     ChildAccountAuthorized[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
-abstract class AuthorizedQuery extends ModelCriteria
+abstract class AccountAuthorizedQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Base\AuthorizedQuery object.
+     * Initializes internal state of \Base\AccountAuthorizedQuery object.
      *
      * @param     string $dbName The database name
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\Authorized', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\AccountAuthorized', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildAuthorizedQuery object.
+     * Returns a new ChildAccountAuthorizedQuery object.
      *
      * @param     string $modelAlias The alias of a model in the query
      * @param     Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildAuthorizedQuery
+     * @return ChildAccountAuthorizedQuery
      */
     public static function create($modelAlias = null, Criteria $criteria = null)
     {
-        if ($criteria instanceof ChildAuthorizedQuery) {
+        if ($criteria instanceof ChildAccountAuthorizedQuery) {
             return $criteria;
         }
-        $query = new ChildAuthorizedQuery();
+        $query = new ChildAccountAuthorizedQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -121,7 +121,7 @@ abstract class AuthorizedQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildAuthorized|array|mixed the result, formatted by the current formatter
+     * @return ChildAccountAuthorized|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ConnectionInterface $con = null)
     {
@@ -130,7 +130,7 @@ abstract class AuthorizedQuery extends ModelCriteria
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(AuthorizedTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(AccountAuthorizedTableMap::DATABASE_NAME);
         }
 
         $this->basePreSelect($con);
@@ -143,7 +143,7 @@ abstract class AuthorizedQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = AuthorizedTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
+        if ((null !== ($obj = AccountAuthorizedTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -160,11 +160,11 @@ abstract class AuthorizedQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildAuthorized A model object, or null if the key is not found
+     * @return ChildAccountAuthorized A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, user_id, is_authorized FROM authorized WHERE id = :p0';
+        $sql = 'SELECT id, account_id, is_authorized FROM account_authorized WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -175,10 +175,10 @@ abstract class AuthorizedQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildAuthorized $obj */
-            $obj = new ChildAuthorized();
+            /** @var ChildAccountAuthorized $obj */
+            $obj = new ChildAccountAuthorized();
             $obj->hydrate($row);
-            AuthorizedTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
+            AccountAuthorizedTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -191,7 +191,7 @@ abstract class AuthorizedQuery extends ModelCriteria
      * @param     mixed $key Primary key to use for the query
      * @param     ConnectionInterface $con A connection object
      *
-     * @return ChildAuthorized|array|mixed the result, formatted by the current formatter
+     * @return ChildAccountAuthorized|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -233,12 +233,12 @@ abstract class AuthorizedQuery extends ModelCriteria
      *
      * @param     mixed $key Primary key to use for the query
      *
-     * @return $this|ChildAuthorizedQuery The current query, for fluid interface
+     * @return $this|ChildAccountAuthorizedQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(AuthorizedTableMap::COL_ID, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(AccountAuthorizedTableMap::COL_ID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -246,12 +246,12 @@ abstract class AuthorizedQuery extends ModelCriteria
      *
      * @param     array $keys The list of primary key to use for the query
      *
-     * @return $this|ChildAuthorizedQuery The current query, for fluid interface
+     * @return $this|ChildAccountAuthorizedQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(AuthorizedTableMap::COL_ID, $keys, Criteria::IN);
+        return $this->addUsingAlias(AccountAuthorizedTableMap::COL_ID, $keys, Criteria::IN);
     }
 
     /**
@@ -270,18 +270,18 @@ abstract class AuthorizedQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAuthorizedQuery The current query, for fluid interface
+     * @return $this|ChildAccountAuthorizedQuery The current query, for fluid interface
      */
     public function filterById($id = null, $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
             if (isset($id['min'])) {
-                $this->addUsingAlias(AuthorizedTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AccountAuthorizedTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($id['max'])) {
-                $this->addUsingAlias(AuthorizedTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AccountAuthorizedTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -292,39 +292,39 @@ abstract class AuthorizedQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AuthorizedTableMap::COL_ID, $id, $comparison);
+        return $this->addUsingAlias(AccountAuthorizedTableMap::COL_ID, $id, $comparison);
     }
 
     /**
-     * Filter the query on the user_id column
+     * Filter the query on the account_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByUserId(1234); // WHERE user_id = 1234
-     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
-     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+     * $query->filterByAccountId(1234); // WHERE account_id = 1234
+     * $query->filterByAccountId(array(12, 34)); // WHERE account_id IN (12, 34)
+     * $query->filterByAccountId(array('min' => 12)); // WHERE account_id > 12
      * </code>
      *
-     * @see       filterByUser()
+     * @see       filterByAccount()
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param     mixed $accountId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAuthorizedQuery The current query, for fluid interface
+     * @return $this|ChildAccountAuthorizedQuery The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByAccountId($accountId = null, $comparison = null)
     {
-        if (is_array($userId)) {
+        if (is_array($accountId)) {
             $useMinMax = false;
-            if (isset($userId['min'])) {
-                $this->addUsingAlias(AuthorizedTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+            if (isset($accountId['min'])) {
+                $this->addUsingAlias(AccountAuthorizedTableMap::COL_ACCOUNT_ID, $accountId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($userId['max'])) {
-                $this->addUsingAlias(AuthorizedTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+            if (isset($accountId['max'])) {
+                $this->addUsingAlias(AccountAuthorizedTableMap::COL_ACCOUNT_ID, $accountId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -335,7 +335,7 @@ abstract class AuthorizedQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AuthorizedTableMap::COL_USER_ID, $userId, $comparison);
+        return $this->addUsingAlias(AccountAuthorizedTableMap::COL_ACCOUNT_ID, $accountId, $comparison);
     }
 
     /**
@@ -354,7 +354,7 @@ abstract class AuthorizedQuery extends ModelCriteria
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAuthorizedQuery The current query, for fluid interface
+     * @return $this|ChildAccountAuthorizedQuery The current query, for fluid interface
      */
     public function filterByIsAuthorized($isAuthorized = null, $comparison = null)
     {
@@ -362,48 +362,48 @@ abstract class AuthorizedQuery extends ModelCriteria
             $isAuthorized = in_array(strtolower($isAuthorized), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(AuthorizedTableMap::COL_IS_AUTHORIZED, $isAuthorized, $comparison);
+        return $this->addUsingAlias(AccountAuthorizedTableMap::COL_IS_AUTHORIZED, $isAuthorized, $comparison);
     }
 
     /**
-     * Filter the query by a related \User object
+     * Filter the query by a related \Account object
      *
-     * @param \User|ObjectCollection $user The related object(s) to use as filter
+     * @param \Account|ObjectCollection $account The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildAuthorizedQuery The current query, for fluid interface
+     * @return ChildAccountAuthorizedQuery The current query, for fluid interface
      */
-    public function filterByUser($user, $comparison = null)
+    public function filterByAccount($account, $comparison = null)
     {
-        if ($user instanceof \User) {
+        if ($account instanceof \Account) {
             return $this
-                ->addUsingAlias(AuthorizedTableMap::COL_USER_ID, $user->getId(), $comparison);
-        } elseif ($user instanceof ObjectCollection) {
+                ->addUsingAlias(AccountAuthorizedTableMap::COL_ACCOUNT_ID, $account->getId(), $comparison);
+        } elseif ($account instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(AuthorizedTableMap::COL_USER_ID, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(AccountAuthorizedTableMap::COL_ACCOUNT_ID, $account->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByUser() only accepts arguments of type \User or Collection');
+            throw new PropelException('filterByAccount() only accepts arguments of type \Account or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the User relation
+     * Adds a JOIN clause to the query using the Account relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildAuthorizedQuery The current query, for fluid interface
+     * @return $this|ChildAccountAuthorizedQuery The current query, for fluid interface
      */
-    public function joinUser($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinAccount($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('User');
+        $relationMap = $tableMap->getRelation('Account');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -418,14 +418,14 @@ abstract class AuthorizedQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'User');
+            $this->addJoinObject($join, 'Account');
         }
 
         return $this;
     }
 
     /**
-     * Use the User relation User object
+     * Use the Account relation Account object
      *
      * @see useQuery()
      *
@@ -433,33 +433,33 @@ abstract class AuthorizedQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \UserQuery A secondary query class using the current class as primary query
+     * @return \AccountQuery A secondary query class using the current class as primary query
      */
-    public function useUserQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useAccountQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinUser($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'User', '\UserQuery');
+            ->joinAccount($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Account', '\AccountQuery');
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildAuthorized $authorized Object to remove from the list of results
+     * @param   ChildAccountAuthorized $accountAuthorized Object to remove from the list of results
      *
-     * @return $this|ChildAuthorizedQuery The current query, for fluid interface
+     * @return $this|ChildAccountAuthorizedQuery The current query, for fluid interface
      */
-    public function prune($authorized = null)
+    public function prune($accountAuthorized = null)
     {
-        if ($authorized) {
-            $this->addUsingAlias(AuthorizedTableMap::COL_ID, $authorized->getId(), Criteria::NOT_EQUAL);
+        if ($accountAuthorized) {
+            $this->addUsingAlias(AccountAuthorizedTableMap::COL_ID, $accountAuthorized->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
     }
 
     /**
-     * Deletes all rows from the authorized table.
+     * Deletes all rows from the account_authorized table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
@@ -467,7 +467,7 @@ abstract class AuthorizedQuery extends ModelCriteria
     public function doDeleteAll(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AuthorizedTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AccountAuthorizedTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -478,8 +478,8 @@ abstract class AuthorizedQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            AuthorizedTableMap::clearInstancePool();
-            AuthorizedTableMap::clearRelatedInstancePool();
+            AccountAuthorizedTableMap::clearInstancePool();
+            AccountAuthorizedTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -497,26 +497,26 @@ abstract class AuthorizedQuery extends ModelCriteria
     public function delete(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AuthorizedTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AccountAuthorizedTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(AuthorizedTableMap::DATABASE_NAME);
+        $criteria->setDbName(AccountAuthorizedTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
 
-            AuthorizedTableMap::removeInstanceFromPool($criteria);
+            AccountAuthorizedTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
-            AuthorizedTableMap::clearRelatedInstancePool();
+            AccountAuthorizedTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
     }
 
-} // AuthorizedQuery
+} // AccountAuthorizedQuery

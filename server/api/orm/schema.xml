@@ -158,7 +158,7 @@
     </foreign-key>
   </table>
 
-  <table name="user" phpName="User">
+  <table name="account" phpName="Account">
     <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
     <column name="forename" type="varchar" size="64" required="true" />
     <column name="surname" type="varchar" size="64" required="true" />
@@ -167,21 +167,21 @@
     <column name="hash" type="varchar" size="256" required="true" />
     <behavior name="timestampable" />
   </table>
-  <table name="authorized" phpName="Authorized">
+  <table name="account_authorized" phpName="AccountAuthorized">
     <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-    <column name="user_id" type="integer" required="true" />
+    <column name="account_id" type="integer" required="true" />
     <column name="is_authorized" type="boolean" required="true" />
-    <foreign-key foreignTable="user">
-      <reference local="user_id" foreign="id"/>
+    <foreign-key foreignTable="account">
+      <reference local="account_id" foreign="id"/>
     </foreign-key>
   </table>
-  <table name="email_verify_link" phpName="EmailVerifyLink">
+  <table name="account_verification" phpName="AccountVerification">
     <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-    <column name="user_id" type="integer" required="true" />
+    <column name="account_id" type="integer" required="true" />
     <column name="link" type="varchar" size="256" required="true" />
     <behavior name="timestampable" />
-    <foreign-key foreignTable="user">
-      <reference local="user_id" foreign="id"/>
+    <foreign-key foreignTable="account">
+      <reference local="account_id" foreign="id"/>
     </foreign-key>
   </table>
 </database>

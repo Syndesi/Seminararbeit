@@ -6,6 +6,18 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Account' => $baseDir . '/api/orm/classes/Account.php',
+    'AccountAuthorized' => $baseDir . '/api/orm/classes/AccountAuthorized.php',
+    'AccountAuthorizedQuery' => $baseDir . '/api/orm/classes/AccountAuthorizedQuery.php',
+    'AccountQuery' => $baseDir . '/api/orm/classes/AccountQuery.php',
+    'AccountVerification' => $baseDir . '/api/orm/classes/AccountVerification.php',
+    'AccountVerificationQuery' => $baseDir . '/api/orm/classes/AccountVerificationQuery.php',
+    'Base\\Account' => $baseDir . '/api/orm/classes/Base/Account.php',
+    'Base\\AccountAuthorized' => $baseDir . '/api/orm/classes/Base/AccountAuthorized.php',
+    'Base\\AccountAuthorizedQuery' => $baseDir . '/api/orm/classes/Base/AccountAuthorizedQuery.php',
+    'Base\\AccountQuery' => $baseDir . '/api/orm/classes/Base/AccountQuery.php',
+    'Base\\AccountVerification' => $baseDir . '/api/orm/classes/Base/AccountVerification.php',
+    'Base\\AccountVerificationQuery' => $baseDir . '/api/orm/classes/Base/AccountVerificationQuery.php',
     'Base\\DwdAirTemperature' => $baseDir . '/api/orm/classes/Base/DwdAirTemperature.php',
     'Base\\DwdAirTemperatureQuery' => $baseDir . '/api/orm/classes/Base/DwdAirTemperatureQuery.php',
     'Base\\DwdCloudiness' => $baseDir . '/api/orm/classes/Base/DwdCloudiness.php',
@@ -54,6 +66,9 @@ return array(
     'DwdSunQuery' => $baseDir . '/api/orm/classes/DwdSunQuery.php',
     'DwdWind' => $baseDir . '/api/orm/classes/DwdWind.php',
     'DwdWindQuery' => $baseDir . '/api/orm/classes/DwdWindQuery.php',
+    'Map\\AccountAuthorizedTableMap' => $baseDir . '/api/orm/classes/Map/AccountAuthorizedTableMap.php',
+    'Map\\AccountTableMap' => $baseDir . '/api/orm/classes/Map/AccountTableMap.php',
+    'Map\\AccountVerificationTableMap' => $baseDir . '/api/orm/classes/Map/AccountVerificationTableMap.php',
     'Map\\DwdAirTemperatureTableMap' => $baseDir . '/api/orm/classes/Map/DwdAirTemperatureTableMap.php',
     'Map\\DwdCloudinessTableMap' => $baseDir . '/api/orm/classes/Map/DwdCloudinessTableMap.php',
     'Map\\DwdPrecipitationTableMap' => $baseDir . '/api/orm/classes/Map/DwdPrecipitationTableMap.php',

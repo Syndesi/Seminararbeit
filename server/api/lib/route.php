@@ -67,7 +67,7 @@ class Route {
    * @param  string $route the route with no matches
    */
   public function defaultRoute($route = ''){
-    throw new \Exception('This Route does not exist. You can get a list of all available routes under /api/'.$this->r->api.'/');
+    $this->r->abort('unknownRoute', 'This Route does not exist. You can get a list of all available routes under /api/'.$this->r->api.'/');
   }
 
   /**

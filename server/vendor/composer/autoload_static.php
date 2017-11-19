@@ -152,6 +152,18 @@ class ComposerStaticInitf5aa8f721f7065e350ad9500f455591e
     );
 
     public static $classMap = array (
+        'Account' => __DIR__ . '/../..' . '/api/orm/classes/Account.php',
+        'AccountAuthorized' => __DIR__ . '/../..' . '/api/orm/classes/AccountAuthorized.php',
+        'AccountAuthorizedQuery' => __DIR__ . '/../..' . '/api/orm/classes/AccountAuthorizedQuery.php',
+        'AccountQuery' => __DIR__ . '/../..' . '/api/orm/classes/AccountQuery.php',
+        'AccountVerification' => __DIR__ . '/../..' . '/api/orm/classes/AccountVerification.php',
+        'AccountVerificationQuery' => __DIR__ . '/../..' . '/api/orm/classes/AccountVerificationQuery.php',
+        'Base\\Account' => __DIR__ . '/../..' . '/api/orm/classes/Base/Account.php',
+        'Base\\AccountAuthorized' => __DIR__ . '/../..' . '/api/orm/classes/Base/AccountAuthorized.php',
+        'Base\\AccountAuthorizedQuery' => __DIR__ . '/../..' . '/api/orm/classes/Base/AccountAuthorizedQuery.php',
+        'Base\\AccountQuery' => __DIR__ . '/../..' . '/api/orm/classes/Base/AccountQuery.php',
+        'Base\\AccountVerification' => __DIR__ . '/../..' . '/api/orm/classes/Base/AccountVerification.php',
+        'Base\\AccountVerificationQuery' => __DIR__ . '/../..' . '/api/orm/classes/Base/AccountVerificationQuery.php',
         'Base\\DwdAirTemperature' => __DIR__ . '/../..' . '/api/orm/classes/Base/DwdAirTemperature.php',
         'Base\\DwdAirTemperatureQuery' => __DIR__ . '/../..' . '/api/orm/classes/Base/DwdAirTemperatureQuery.php',
         'Base\\DwdCloudiness' => __DIR__ . '/../..' . '/api/orm/classes/Base/DwdCloudiness.php',
@@ -200,6 +212,9 @@ class ComposerStaticInitf5aa8f721f7065e350ad9500f455591e
         'DwdSunQuery' => __DIR__ . '/../..' . '/api/orm/classes/DwdSunQuery.php',
         'DwdWind' => __DIR__ . '/../..' . '/api/orm/classes/DwdWind.php',
         'DwdWindQuery' => __DIR__ . '/../..' . '/api/orm/classes/DwdWindQuery.php',
+        'Map\\AccountAuthorizedTableMap' => __DIR__ . '/../..' . '/api/orm/classes/Map/AccountAuthorizedTableMap.php',
+        'Map\\AccountTableMap' => __DIR__ . '/../..' . '/api/orm/classes/Map/AccountTableMap.php',
+        'Map\\AccountVerificationTableMap' => __DIR__ . '/../..' . '/api/orm/classes/Map/AccountVerificationTableMap.php',
         'Map\\DwdAirTemperatureTableMap' => __DIR__ . '/../..' . '/api/orm/classes/Map/DwdAirTemperatureTableMap.php',
         'Map\\DwdCloudinessTableMap' => __DIR__ . '/../..' . '/api/orm/classes/Map/DwdCloudinessTableMap.php',
         'Map\\DwdPrecipitationTableMap' => __DIR__ . '/../..' . '/api/orm/classes/Map/DwdPrecipitationTableMap.php',

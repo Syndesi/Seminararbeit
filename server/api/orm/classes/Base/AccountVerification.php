@@ -2,12 +2,14 @@
 
 namespace Base;
 
-use \AuthorizedQuery as ChildAuthorizedQuery;
-use \User as ChildUser;
-use \UserQuery as ChildUserQuery;
+use \Account as ChildAccount;
+use \AccountQuery as ChildAccountQuery;
+use \AccountVerification as ChildAccountVerification;
+use \AccountVerificationQuery as ChildAccountVerificationQuery;
+use \DateTime;
 use \Exception;
 use \PDO;
-use Map\AuthorizedTableMap;
+use Map\AccountVerificationTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -19,20 +21,21 @@ use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
+use Propel\Runtime\Util\PropelDateTime;
 
 /**
- * Base class that represents a row from the 'authorized' table.
+ * Base class that represents a row from the 'account_verification' table.
  *
  *
  *
  * @package    propel.generator..Base
  */
-abstract class Authorized implements ActiveRecordInterface
+abstract class AccountVerification implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Map\\AuthorizedTableMap';
+    const TABLE_MAP = '\\Map\\AccountVerificationTableMap';
 
 
     /**
@@ -69,23 +72,37 @@ abstract class Authorized implements ActiveRecordInterface
     protected $id;
 
     /**
-     * The value for the user_id field.
+     * The value for the account_id field.
      *
      * @var        int
      */
-    protected $user_id;
+    protected $account_id;
 
     /**
-     * The value for the is_authorized field.
+     * The value for the link field.
      *
-     * @var        boolean
+     * @var        string
      */
-    protected $is_authorized;
+    protected $link;
 
     /**
-     * @var        ChildUser
+     * The value for the created_at field.
+     *
+     * @var        DateTime
      */
-    protected $aUser;
+    protected $created_at;
+
+    /**
+     * The value for the updated_at field.
+     *
+     * @var        DateTime
+     */
+    protected $updated_at;
+
+    /**
+     * @var        ChildAccount
+     */
+    protected $aAccount;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -96,7 +113,7 @@ abstract class Authorized implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Initializes internal state of Base\Authorized object.
+     * Initializes internal state of Base\AccountVerification object.
      */
     public function __construct()
     {
@@ -191,9 +208,9 @@ abstract class Authorized implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Authorized</code> instance.  If
-     * <code>obj</code> is an instance of <code>Authorized</code>, delegates to
-     * <code>equals(Authorized)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>AccountVerification</code> instance.  If
+     * <code>obj</code> is an instance of <code>AccountVerification</code>, delegates to
+     * <code>equals(AccountVerification)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -259,7 +276,7 @@ abstract class Authorized implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|Authorized The current object, for fluid interface
+     * @return $this|AccountVerification The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -331,40 +348,70 @@ abstract class Authorized implements ActiveRecordInterface
     }
 
     /**
-     * Get the [user_id] column value.
+     * Get the [account_id] column value.
      *
      * @return int
      */
-    public function getUserId()
+    public function getAccountId()
     {
-        return $this->user_id;
+        return $this->account_id;
     }
 
     /**
-     * Get the [is_authorized] column value.
+     * Get the [link] column value.
      *
-     * @return boolean
+     * @return string
      */
-    public function getIsAuthorized()
+    public function getLink()
     {
-        return $this->is_authorized;
+        return $this->link;
     }
 
     /**
-     * Get the [is_authorized] column value.
+     * Get the [optionally formatted] temporal [created_at] column value.
      *
-     * @return boolean
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function isAuthorized()
+    public function getCreatedAt($format = NULL)
     {
-        return $this->getIsAuthorized();
+        if ($format === null) {
+            return $this->created_at;
+        } else {
+            return $this->created_at instanceof \DateTimeInterface ? $this->created_at->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [updated_at] column value.
+     *
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getUpdatedAt($format = NULL)
+    {
+        if ($format === null) {
+            return $this->updated_at;
+        } else {
+            return $this->updated_at instanceof \DateTimeInterface ? $this->updated_at->format($format) : null;
+        }
     }
 
     /**
      * Set the value of [id] column.
      *
      * @param int $v new value
-     * @return $this|\Authorized The current object (for fluent API support)
+     * @return $this|\AccountVerification The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -374,63 +421,95 @@ abstract class Authorized implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[AuthorizedTableMap::COL_ID] = true;
+            $this->modifiedColumns[AccountVerificationTableMap::COL_ID] = true;
         }
 
         return $this;
     } // setId()
 
     /**
-     * Set the value of [user_id] column.
+     * Set the value of [account_id] column.
      *
      * @param int $v new value
-     * @return $this|\Authorized The current object (for fluent API support)
+     * @return $this|\AccountVerification The current object (for fluent API support)
      */
-    public function setUserId($v)
+    public function setAccountId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->user_id !== $v) {
-            $this->user_id = $v;
-            $this->modifiedColumns[AuthorizedTableMap::COL_USER_ID] = true;
+        if ($this->account_id !== $v) {
+            $this->account_id = $v;
+            $this->modifiedColumns[AccountVerificationTableMap::COL_ACCOUNT_ID] = true;
         }
 
-        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
-            $this->aUser = null;
+        if ($this->aAccount !== null && $this->aAccount->getId() !== $v) {
+            $this->aAccount = null;
         }
 
         return $this;
-    } // setUserId()
+    } // setAccountId()
 
     /**
-     * Sets the value of the [is_authorized] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * Set the value of [link] column.
      *
-     * @param  boolean|integer|string $v The new value
-     * @return $this|\Authorized The current object (for fluent API support)
+     * @param string $v new value
+     * @return $this|\AccountVerification The current object (for fluent API support)
      */
-    public function setIsAuthorized($v)
+    public function setLink($v)
     {
         if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
+            $v = (string) $v;
         }
 
-        if ($this->is_authorized !== $v) {
-            $this->is_authorized = $v;
-            $this->modifiedColumns[AuthorizedTableMap::COL_IS_AUTHORIZED] = true;
+        if ($this->link !== $v) {
+            $this->link = $v;
+            $this->modifiedColumns[AccountVerificationTableMap::COL_LINK] = true;
         }
 
         return $this;
-    } // setIsAuthorized()
+    } // setLink()
+
+    /**
+     * Sets the value of [created_at] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\AccountVerification The current object (for fluent API support)
+     */
+    public function setCreatedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->created_at !== null || $dt !== null) {
+            if ($this->created_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->created_at->format("Y-m-d H:i:s.u")) {
+                $this->created_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[AccountVerificationTableMap::COL_CREATED_AT] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setCreatedAt()
+
+    /**
+     * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\AccountVerification The current object (for fluent API support)
+     */
+    public function setUpdatedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->updated_at !== null || $dt !== null) {
+            if ($this->updated_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->updated_at->format("Y-m-d H:i:s.u")) {
+                $this->updated_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[AccountVerificationTableMap::COL_UPDATED_AT] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setUpdatedAt()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -468,14 +547,26 @@ abstract class Authorized implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : AuthorizedTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : AccountVerificationTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AuthorizedTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AccountVerificationTableMap::translateFieldName('AccountId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->account_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AuthorizedTableMap::translateFieldName('IsAuthorized', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->is_authorized = (null !== $col) ? (boolean) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AccountVerificationTableMap::translateFieldName('Link', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->link = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : AccountVerificationTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : AccountVerificationTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->updated_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -484,10 +575,10 @@ abstract class Authorized implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 3; // 3 = AuthorizedTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = AccountVerificationTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Authorized'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\AccountVerification'), 0, $e);
         }
     }
 
@@ -506,8 +597,8 @@ abstract class Authorized implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
-            $this->aUser = null;
+        if ($this->aAccount !== null && $this->account_id !== $this->aAccount->getId()) {
+            $this->aAccount = null;
         }
     } // ensureConsistency
 
@@ -532,13 +623,13 @@ abstract class Authorized implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(AuthorizedTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(AccountVerificationTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildAuthorizedQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildAccountVerificationQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -548,7 +639,7 @@ abstract class Authorized implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aUser = null;
+            $this->aAccount = null;
         } // if (deep)
     }
 
@@ -558,8 +649,8 @@ abstract class Authorized implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Authorized::setDeleted()
-     * @see Authorized::isDeleted()
+     * @see AccountVerification::setDeleted()
+     * @see AccountVerification::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -568,11 +659,11 @@ abstract class Authorized implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AuthorizedTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AccountVerificationTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildAuthorizedQuery::create()
+            $deleteQuery = ChildAccountVerificationQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -607,7 +698,7 @@ abstract class Authorized implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AuthorizedTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AccountVerificationTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -615,8 +706,20 @@ abstract class Authorized implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // timestampable behavior
+
+                if (!$this->isColumnModified(AccountVerificationTableMap::COL_CREATED_AT)) {
+                    $this->setCreatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
+                if (!$this->isColumnModified(AccountVerificationTableMap::COL_UPDATED_AT)) {
+                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // timestampable behavior
+                if ($this->isModified() && !$this->isColumnModified(AccountVerificationTableMap::COL_UPDATED_AT)) {
+                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -626,7 +729,7 @@ abstract class Authorized implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                AuthorizedTableMap::addInstanceToPool($this);
+                AccountVerificationTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -657,11 +760,11 @@ abstract class Authorized implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aUser !== null) {
-                if ($this->aUser->isModified() || $this->aUser->isNew()) {
-                    $affectedRows += $this->aUser->save($con);
+            if ($this->aAccount !== null) {
+                if ($this->aAccount->isModified() || $this->aAccount->isNew()) {
+                    $affectedRows += $this->aAccount->save($con);
                 }
-                $this->setUser($this->aUser);
+                $this->setAccount($this->aAccount);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -695,24 +798,30 @@ abstract class Authorized implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[AuthorizedTableMap::COL_ID] = true;
+        $this->modifiedColumns[AccountVerificationTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . AuthorizedTableMap::COL_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . AccountVerificationTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(AuthorizedTableMap::COL_ID)) {
+        if ($this->isColumnModified(AccountVerificationTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(AuthorizedTableMap::COL_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_id';
+        if ($this->isColumnModified(AccountVerificationTableMap::COL_ACCOUNT_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'account_id';
         }
-        if ($this->isColumnModified(AuthorizedTableMap::COL_IS_AUTHORIZED)) {
-            $modifiedColumns[':p' . $index++]  = 'is_authorized';
+        if ($this->isColumnModified(AccountVerificationTableMap::COL_LINK)) {
+            $modifiedColumns[':p' . $index++]  = 'link';
+        }
+        if ($this->isColumnModified(AccountVerificationTableMap::COL_CREATED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'created_at';
+        }
+        if ($this->isColumnModified(AccountVerificationTableMap::COL_UPDATED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'updated_at';
         }
 
         $sql = sprintf(
-            'INSERT INTO authorized (%s) VALUES (%s)',
+            'INSERT INTO account_verification (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -724,11 +833,17 @@ abstract class Authorized implements ActiveRecordInterface
                     case 'id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'user_id':
-                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+                    case 'account_id':
+                        $stmt->bindValue($identifier, $this->account_id, PDO::PARAM_INT);
                         break;
-                    case 'is_authorized':
-                        $stmt->bindValue($identifier, (int) $this->is_authorized, PDO::PARAM_INT);
+                    case 'link':
+                        $stmt->bindValue($identifier, $this->link, PDO::PARAM_STR);
+                        break;
+                    case 'created_at':
+                        $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case 'updated_at':
+                        $stmt->bindValue($identifier, $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -776,7 +891,7 @@ abstract class Authorized implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = AuthorizedTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = AccountVerificationTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -796,10 +911,16 @@ abstract class Authorized implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 1:
-                return $this->getUserId();
+                return $this->getAccountId();
                 break;
             case 2:
-                return $this->getIsAuthorized();
+                return $this->getLink();
+                break;
+            case 3:
+                return $this->getCreatedAt();
+                break;
+            case 4:
+                return $this->getUpdatedAt();
                 break;
             default:
                 return null;
@@ -825,36 +946,46 @@ abstract class Authorized implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['Authorized'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['AccountVerification'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Authorized'][$this->hashCode()] = true;
-        $keys = AuthorizedTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['AccountVerification'][$this->hashCode()] = true;
+        $keys = AccountVerificationTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getUserId(),
-            $keys[2] => $this->getIsAuthorized(),
+            $keys[1] => $this->getAccountId(),
+            $keys[2] => $this->getLink(),
+            $keys[3] => $this->getCreatedAt(),
+            $keys[4] => $this->getUpdatedAt(),
         );
+        if ($result[$keys[3]] instanceof \DateTimeInterface) {
+            $result[$keys[3]] = $result[$keys[3]]->format('c');
+        }
+
+        if ($result[$keys[4]] instanceof \DateTimeInterface) {
+            $result[$keys[4]] = $result[$keys[4]]->format('c');
+        }
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aUser) {
+            if (null !== $this->aAccount) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'user';
+                        $key = 'account';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'user';
+                        $key = 'account';
                         break;
                     default:
-                        $key = 'User';
+                        $key = 'Account';
                 }
 
-                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aAccount->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -870,11 +1001,11 @@ abstract class Authorized implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\Authorized
+     * @return $this|\AccountVerification
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = AuthorizedTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = AccountVerificationTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -885,7 +1016,7 @@ abstract class Authorized implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\Authorized
+     * @return $this|\AccountVerification
      */
     public function setByPosition($pos, $value)
     {
@@ -894,10 +1025,16 @@ abstract class Authorized implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setUserId($value);
+                $this->setAccountId($value);
                 break;
             case 2:
-                $this->setIsAuthorized($value);
+                $this->setLink($value);
+                break;
+            case 3:
+                $this->setCreatedAt($value);
+                break;
+            case 4:
+                $this->setUpdatedAt($value);
                 break;
         } // switch()
 
@@ -923,16 +1060,22 @@ abstract class Authorized implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = AuthorizedTableMap::getFieldNames($keyType);
+        $keys = AccountVerificationTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setUserId($arr[$keys[1]]);
+            $this->setAccountId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setIsAuthorized($arr[$keys[2]]);
+            $this->setLink($arr[$keys[2]]);
+        }
+        if (array_key_exists($keys[3], $arr)) {
+            $this->setCreatedAt($arr[$keys[3]]);
+        }
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setUpdatedAt($arr[$keys[4]]);
         }
     }
 
@@ -953,7 +1096,7 @@ abstract class Authorized implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\Authorized The current object, for fluid interface
+     * @return $this|\AccountVerification The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -973,16 +1116,22 @@ abstract class Authorized implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(AuthorizedTableMap::DATABASE_NAME);
+        $criteria = new Criteria(AccountVerificationTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(AuthorizedTableMap::COL_ID)) {
-            $criteria->add(AuthorizedTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(AccountVerificationTableMap::COL_ID)) {
+            $criteria->add(AccountVerificationTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(AuthorizedTableMap::COL_USER_ID)) {
-            $criteria->add(AuthorizedTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(AccountVerificationTableMap::COL_ACCOUNT_ID)) {
+            $criteria->add(AccountVerificationTableMap::COL_ACCOUNT_ID, $this->account_id);
         }
-        if ($this->isColumnModified(AuthorizedTableMap::COL_IS_AUTHORIZED)) {
-            $criteria->add(AuthorizedTableMap::COL_IS_AUTHORIZED, $this->is_authorized);
+        if ($this->isColumnModified(AccountVerificationTableMap::COL_LINK)) {
+            $criteria->add(AccountVerificationTableMap::COL_LINK, $this->link);
+        }
+        if ($this->isColumnModified(AccountVerificationTableMap::COL_CREATED_AT)) {
+            $criteria->add(AccountVerificationTableMap::COL_CREATED_AT, $this->created_at);
+        }
+        if ($this->isColumnModified(AccountVerificationTableMap::COL_UPDATED_AT)) {
+            $criteria->add(AccountVerificationTableMap::COL_UPDATED_AT, $this->updated_at);
         }
 
         return $criteria;
@@ -1000,8 +1149,8 @@ abstract class Authorized implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildAuthorizedQuery::create();
-        $criteria->add(AuthorizedTableMap::COL_ID, $this->id);
+        $criteria = ChildAccountVerificationQuery::create();
+        $criteria->add(AccountVerificationTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1063,15 +1212,17 @@ abstract class Authorized implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \Authorized (or compatible) type.
+     * @param      object $copyObj An object of \AccountVerification (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setUserId($this->getUserId());
-        $copyObj->setIsAuthorized($this->getIsAuthorized());
+        $copyObj->setAccountId($this->getAccountId());
+        $copyObj->setLink($this->getLink());
+        $copyObj->setCreatedAt($this->getCreatedAt());
+        $copyObj->setUpdatedAt($this->getUpdatedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1087,7 +1238,7 @@ abstract class Authorized implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Authorized Clone of current object.
+     * @return \AccountVerification Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1101,26 +1252,26 @@ abstract class Authorized implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildUser object.
+     * Declares an association between this object and a ChildAccount object.
      *
-     * @param  ChildUser $v
-     * @return $this|\Authorized The current object (for fluent API support)
+     * @param  ChildAccount $v
+     * @return $this|\AccountVerification The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setUser(ChildUser $v = null)
+    public function setAccount(ChildAccount $v = null)
     {
         if ($v === null) {
-            $this->setUserId(NULL);
+            $this->setAccountId(NULL);
         } else {
-            $this->setUserId($v->getId());
+            $this->setAccountId($v->getId());
         }
 
-        $this->aUser = $v;
+        $this->aAccount = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildUser object, it will not be re-added.
+        // If this object has already been added to the ChildAccount object, it will not be re-added.
         if ($v !== null) {
-            $v->addAuthorized($this);
+            $v->addAccountVerification($this);
         }
 
 
@@ -1129,26 +1280,26 @@ abstract class Authorized implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildUser object
+     * Get the associated ChildAccount object
      *
      * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildUser The associated ChildUser object.
+     * @return ChildAccount The associated ChildAccount object.
      * @throws PropelException
      */
-    public function getUser(ConnectionInterface $con = null)
+    public function getAccount(ConnectionInterface $con = null)
     {
-        if ($this->aUser === null && ($this->user_id != 0)) {
-            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+        if ($this->aAccount === null && ($this->account_id != 0)) {
+            $this->aAccount = ChildAccountQuery::create()->findPk($this->account_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aUser->addAuthorizeds($this);
+                $this->aAccount->addAccountVerifications($this);
              */
         }
 
-        return $this->aUser;
+        return $this->aAccount;
     }
 
     /**
@@ -1158,12 +1309,14 @@ abstract class Authorized implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aUser) {
-            $this->aUser->removeAuthorized($this);
+        if (null !== $this->aAccount) {
+            $this->aAccount->removeAccountVerification($this);
         }
         $this->id = null;
-        $this->user_id = null;
-        $this->is_authorized = null;
+        $this->account_id = null;
+        $this->link = null;
+        $this->created_at = null;
+        $this->updated_at = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1184,7 +1337,7 @@ abstract class Authorized implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aUser = null;
+        $this->aAccount = null;
     }
 
     /**
@@ -1194,7 +1347,21 @@ abstract class Authorized implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(AuthorizedTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(AccountVerificationTableMap::DEFAULT_STRING_FORMAT);
+    }
+
+    // timestampable behavior
+
+    /**
+     * Mark the current object so that the update date doesn't get updated during next save
+     *
+     * @return     $this|ChildAccountVerification The current object (for fluent API support)
+     */
+    public function keepUpdateDateUnchanged()
+    {
+        $this->modifiedColumns[AccountVerificationTableMap::COL_UPDATED_AT] = true;
+
+        return $this;
     }
 
     /**

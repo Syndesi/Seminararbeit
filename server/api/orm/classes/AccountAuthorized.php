@@ -1,9 +1,9 @@
 <?php
 
-use Base\Authorized as BaseAuthorized;
+use Base\AccountAuthorized as BaseAccountAuthorized;
 
 /**
- * Skeleton subclass for representing a row from the 'authorized' table.
+ * Skeleton subclass for representing a row from the 'account_authorized' table.
  *
  *
  *
@@ -12,7 +12,7 @@ use Base\Authorized as BaseAuthorized;
  * long as it does not already exist in the output directory.
  *
  */
-class Authorized extends BaseAuthorized
+class AccountAuthorized extends BaseAccountAuthorized
 {
 
 }

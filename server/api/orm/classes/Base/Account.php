@@ -2,15 +2,18 @@
 
 namespace Base;
 
-use \Authorized as ChildAuthorized;
-use \AuthorizedQuery as ChildAuthorizedQuery;
-use \User as ChildUser;
-use \UserQuery as ChildUserQuery;
+use \Account as ChildAccount;
+use \AccountAuthorized as ChildAccountAuthorized;
+use \AccountAuthorizedQuery as ChildAccountAuthorizedQuery;
+use \AccountQuery as ChildAccountQuery;
+use \AccountVerification as ChildAccountVerification;
+use \AccountVerificationQuery as ChildAccountVerificationQuery;
 use \DateTime;
 use \Exception;
 use \PDO;
-use Map\AuthorizedTableMap;
-use Map\UserTableMap;
+use Map\AccountAuthorizedTableMap;
+use Map\AccountTableMap;
+use Map\AccountVerificationTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -26,18 +29,18 @@ use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
 
 /**
- * Base class that represents a row from the 'user' table.
+ * Base class that represents a row from the 'account' table.
  *
  *
  *
  * @package    propel.generator..Base
  */
-abstract class User implements ActiveRecordInterface
+abstract class Account implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Map\\UserTableMap';
+    const TABLE_MAP = '\\Map\\AccountTableMap';
 
 
     /**
@@ -123,10 +126,16 @@ abstract class User implements ActiveRecordInterface
     protected $updated_at;
 
     /**
-     * @var        ObjectCollection|ChildAuthorized[] Collection to store aggregation of ChildAuthorized objects.
+     * @var        ObjectCollection|ChildAccountAuthorized[] Collection to store aggregation of ChildAccountAuthorized objects.
      */
-    protected $collAuthorizeds;
-    protected $collAuthorizedsPartial;
+    protected $collAccountAuthorizeds;
+    protected $collAccountAuthorizedsPartial;
+
+    /**
+     * @var        ObjectCollection|ChildAccountVerification[] Collection to store aggregation of ChildAccountVerification objects.
+     */
+    protected $collAccountVerifications;
+    protected $collAccountVerificationsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -138,12 +147,18 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildAuthorized[]
+     * @var ObjectCollection|ChildAccountAuthorized[]
      */
-    protected $authorizedsScheduledForDeletion = null;
+    protected $accountAuthorizedsScheduledForDeletion = null;
 
     /**
-     * Initializes internal state of Base\User object.
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildAccountVerification[]
+     */
+    protected $accountVerificationsScheduledForDeletion = null;
+
+    /**
+     * Initializes internal state of Base\Account object.
      */
     public function __construct()
     {
@@ -238,9 +253,9 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>User</code> instance.  If
-     * <code>obj</code> is an instance of <code>User</code>, delegates to
-     * <code>equals(User)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>Account</code> instance.  If
+     * <code>obj</code> is an instance of <code>Account</code>, delegates to
+     * <code>equals(Account)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -306,7 +321,7 @@ abstract class User implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|User The current object, for fluid interface
+     * @return $this|Account The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -481,7 +496,7 @@ abstract class User implements ActiveRecordInterface
      * Set the value of [id] column.
      *
      * @param int $v new value
-     * @return $this|\User The current object (for fluent API support)
+     * @return $this|\Account The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -491,7 +506,7 @@ abstract class User implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[UserTableMap::COL_ID] = true;
+            $this->modifiedColumns[AccountTableMap::COL_ID] = true;
         }
 
         return $this;
@@ -501,7 +516,7 @@ abstract class User implements ActiveRecordInterface
      * Set the value of [forename] column.
      *
      * @param string $v new value
-     * @return $this|\User The current object (for fluent API support)
+     * @return $this|\Account The current object (for fluent API support)
      */
     public function setForename($v)
     {
@@ -511,7 +526,7 @@ abstract class User implements ActiveRecordInterface
 
         if ($this->forename !== $v) {
             $this->forename = $v;
-            $this->modifiedColumns[UserTableMap::COL_FORENAME] = true;
+            $this->modifiedColumns[AccountTableMap::COL_FORENAME] = true;
         }
 
         return $this;
@@ -521,7 +536,7 @@ abstract class User implements ActiveRecordInterface
      * Set the value of [surname] column.
      *
      * @param string $v new value
-     * @return $this|\User The current object (for fluent API support)
+     * @return $this|\Account The current object (for fluent API support)
      */
     public function setSurname($v)
     {
@@ -531,7 +546,7 @@ abstract class User implements ActiveRecordInterface
 
         if ($this->surname !== $v) {
             $this->surname = $v;
-            $this->modifiedColumns[UserTableMap::COL_SURNAME] = true;
+            $this->modifiedColumns[AccountTableMap::COL_SURNAME] = true;
         }
 
         return $this;
@@ -541,7 +556,7 @@ abstract class User implements ActiveRecordInterface
      * Set the value of [email] column.
      *
      * @param string $v new value
-     * @return $this|\User The current object (for fluent API support)
+     * @return $this|\Account The current object (for fluent API support)
      */
     public function setEmail($v)
     {
@@ -551,7 +566,7 @@ abstract class User implements ActiveRecordInterface
 
         if ($this->email !== $v) {
             $this->email = $v;
-            $this->modifiedColumns[UserTableMap::COL_EMAIL] = true;
+            $this->modifiedColumns[AccountTableMap::COL_EMAIL] = true;
         }
 
         return $this;
@@ -565,7 +580,7 @@ abstract class User implements ActiveRecordInterface
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
      *
      * @param  boolean|integer|string $v The new value
-     * @return $this|\User The current object (for fluent API support)
+     * @return $this|\Account The current object (for fluent API support)
      */
     public function setEmailVerified($v)
     {
@@ -579,7 +594,7 @@ abstract class User implements ActiveRecordInterface
 
         if ($this->email_verified !== $v) {
             $this->email_verified = $v;
-            $this->modifiedColumns[UserTableMap::COL_EMAIL_VERIFIED] = true;
+            $this->modifiedColumns[AccountTableMap::COL_EMAIL_VERIFIED] = true;
         }
 
         return $this;
@@ -589,7 +604,7 @@ abstract class User implements ActiveRecordInterface
      * Set the value of [hash] column.
      *
      * @param string $v new value
-     * @return $this|\User The current object (for fluent API support)
+     * @return $this|\Account The current object (for fluent API support)
      */
     public function setHash($v)
     {
@@ -599,7 +614,7 @@ abstract class User implements ActiveRecordInterface
 
         if ($this->hash !== $v) {
             $this->hash = $v;
-            $this->modifiedColumns[UserTableMap::COL_HASH] = true;
+            $this->modifiedColumns[AccountTableMap::COL_HASH] = true;
         }
 
         return $this;
@@ -610,7 +625,7 @@ abstract class User implements ActiveRecordInterface
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\User The current object (for fluent API support)
+     * @return $this|\Account The current object (for fluent API support)
      */
     public function setCreatedAt($v)
     {
@@ -618,7 +633,7 @@ abstract class User implements ActiveRecordInterface
         if ($this->created_at !== null || $dt !== null) {
             if ($this->created_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->created_at->format("Y-m-d H:i:s.u")) {
                 $this->created_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[UserTableMap::COL_CREATED_AT] = true;
+                $this->modifiedColumns[AccountTableMap::COL_CREATED_AT] = true;
             }
         } // if either are not null
 
@@ -630,7 +645,7 @@ abstract class User implements ActiveRecordInterface
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\User The current object (for fluent API support)
+     * @return $this|\Account The current object (for fluent API support)
      */
     public function setUpdatedAt($v)
     {
@@ -638,7 +653,7 @@ abstract class User implements ActiveRecordInterface
         if ($this->updated_at !== null || $dt !== null) {
             if ($this->updated_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->updated_at->format("Y-m-d H:i:s.u")) {
                 $this->updated_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[UserTableMap::COL_UPDATED_AT] = true;
+                $this->modifiedColumns[AccountTableMap::COL_UPDATED_AT] = true;
             }
         } // if either are not null
 
@@ -681,31 +696,31 @@ abstract class User implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : UserTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : AccountTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : UserTableMap::translateFieldName('Forename', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AccountTableMap::translateFieldName('Forename', TableMap::TYPE_PHPNAME, $indexType)];
             $this->forename = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : UserTableMap::translateFieldName('Surname', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AccountTableMap::translateFieldName('Surname', TableMap::TYPE_PHPNAME, $indexType)];
             $this->surname = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : UserTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : AccountTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
             $this->email = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : UserTableMap::translateFieldName('EmailVerified', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : AccountTableMap::translateFieldName('EmailVerified', TableMap::TYPE_PHPNAME, $indexType)];
             $this->email_verified = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : UserTableMap::translateFieldName('Hash', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : AccountTableMap::translateFieldName('Hash', TableMap::TYPE_PHPNAME, $indexType)];
             $this->hash = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : AccountTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : UserTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : AccountTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -718,10 +733,10 @@ abstract class User implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = UserTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = AccountTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\User'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Account'), 0, $e);
         }
     }
 
@@ -763,13 +778,13 @@ abstract class User implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(UserTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(AccountTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildUserQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildAccountQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -779,7 +794,9 @@ abstract class User implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collAuthorizeds = null;
+            $this->collAccountAuthorizeds = null;
+
+            $this->collAccountVerifications = null;
 
         } // if (deep)
     }
@@ -790,8 +807,8 @@ abstract class User implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see User::setDeleted()
-     * @see User::isDeleted()
+     * @see Account::setDeleted()
+     * @see Account::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -800,11 +817,11 @@ abstract class User implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AccountTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildUserQuery::create()
+            $deleteQuery = ChildAccountQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -839,7 +856,7 @@ abstract class User implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AccountTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -849,16 +866,16 @@ abstract class User implements ActiveRecordInterface
                 $ret = $ret && $this->preInsert($con);
                 // timestampable behavior
 
-                if (!$this->isColumnModified(UserTableMap::COL_CREATED_AT)) {
+                if (!$this->isColumnModified(AccountTableMap::COL_CREATED_AT)) {
                     $this->setCreatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
-                if (!$this->isColumnModified(UserTableMap::COL_UPDATED_AT)) {
+                if (!$this->isColumnModified(AccountTableMap::COL_UPDATED_AT)) {
                     $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(UserTableMap::COL_UPDATED_AT)) {
+                if ($this->isModified() && !$this->isColumnModified(AccountTableMap::COL_UPDATED_AT)) {
                     $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
             }
@@ -870,7 +887,7 @@ abstract class User implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                UserTableMap::addInstanceToPool($this);
+                AccountTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -907,17 +924,34 @@ abstract class User implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->authorizedsScheduledForDeletion !== null) {
-                if (!$this->authorizedsScheduledForDeletion->isEmpty()) {
-                    \AuthorizedQuery::create()
-                        ->filterByPrimaryKeys($this->authorizedsScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->accountAuthorizedsScheduledForDeletion !== null) {
+                if (!$this->accountAuthorizedsScheduledForDeletion->isEmpty()) {
+                    \AccountAuthorizedQuery::create()
+                        ->filterByPrimaryKeys($this->accountAuthorizedsScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->authorizedsScheduledForDeletion = null;
+                    $this->accountAuthorizedsScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collAuthorizeds !== null) {
-                foreach ($this->collAuthorizeds as $referrerFK) {
+            if ($this->collAccountAuthorizeds !== null) {
+                foreach ($this->collAccountAuthorizeds as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->accountVerificationsScheduledForDeletion !== null) {
+                if (!$this->accountVerificationsScheduledForDeletion->isEmpty()) {
+                    \AccountVerificationQuery::create()
+                        ->filterByPrimaryKeys($this->accountVerificationsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->accountVerificationsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collAccountVerifications !== null) {
+                foreach ($this->collAccountVerifications as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -944,39 +978,39 @@ abstract class User implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[UserTableMap::COL_ID] = true;
+        $this->modifiedColumns[AccountTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . UserTableMap::COL_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . AccountTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(UserTableMap::COL_ID)) {
+        if ($this->isColumnModified(AccountTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(UserTableMap::COL_FORENAME)) {
+        if ($this->isColumnModified(AccountTableMap::COL_FORENAME)) {
             $modifiedColumns[':p' . $index++]  = 'forename';
         }
-        if ($this->isColumnModified(UserTableMap::COL_SURNAME)) {
+        if ($this->isColumnModified(AccountTableMap::COL_SURNAME)) {
             $modifiedColumns[':p' . $index++]  = 'surname';
         }
-        if ($this->isColumnModified(UserTableMap::COL_EMAIL)) {
+        if ($this->isColumnModified(AccountTableMap::COL_EMAIL)) {
             $modifiedColumns[':p' . $index++]  = 'email';
         }
-        if ($this->isColumnModified(UserTableMap::COL_EMAIL_VERIFIED)) {
+        if ($this->isColumnModified(AccountTableMap::COL_EMAIL_VERIFIED)) {
             $modifiedColumns[':p' . $index++]  = 'email_verified';
         }
-        if ($this->isColumnModified(UserTableMap::COL_HASH)) {
+        if ($this->isColumnModified(AccountTableMap::COL_HASH)) {
             $modifiedColumns[':p' . $index++]  = 'hash';
         }
-        if ($this->isColumnModified(UserTableMap::COL_CREATED_AT)) {
+        if ($this->isColumnModified(AccountTableMap::COL_CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'created_at';
         }
-        if ($this->isColumnModified(UserTableMap::COL_UPDATED_AT)) {
+        if ($this->isColumnModified(AccountTableMap::COL_UPDATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'updated_at';
         }
 
         $sql = sprintf(
-            'INSERT INTO user (%s) VALUES (%s)',
+            'INSERT INTO account (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -1055,7 +1089,7 @@ abstract class User implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = UserTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = AccountTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1119,11 +1153,11 @@ abstract class User implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['User'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['Account'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['User'][$this->hashCode()] = true;
-        $keys = UserTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['Account'][$this->hashCode()] = true;
+        $keys = AccountTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getForename(),
@@ -1148,20 +1182,35 @@ abstract class User implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->collAuthorizeds) {
+            if (null !== $this->collAccountAuthorizeds) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'authorizeds';
+                        $key = 'accountAuthorizeds';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'authorizeds';
+                        $key = 'account_authorizeds';
                         break;
                     default:
-                        $key = 'Authorizeds';
+                        $key = 'AccountAuthorizeds';
                 }
 
-                $result[$key] = $this->collAuthorizeds->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collAccountAuthorizeds->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collAccountVerifications) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'accountVerifications';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'account_verifications';
+                        break;
+                    default:
+                        $key = 'AccountVerifications';
+                }
+
+                $result[$key] = $this->collAccountVerifications->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1177,11 +1226,11 @@ abstract class User implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\User
+     * @return $this|\Account
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = UserTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = AccountTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1192,7 +1241,7 @@ abstract class User implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\User
+     * @return $this|\Account
      */
     public function setByPosition($pos, $value)
     {
@@ -1245,7 +1294,7 @@ abstract class User implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = UserTableMap::getFieldNames($keyType);
+        $keys = AccountTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
@@ -1290,7 +1339,7 @@ abstract class User implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\User The current object, for fluid interface
+     * @return $this|\Account The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1310,31 +1359,31 @@ abstract class User implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(UserTableMap::DATABASE_NAME);
+        $criteria = new Criteria(AccountTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(UserTableMap::COL_ID)) {
-            $criteria->add(UserTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(AccountTableMap::COL_ID)) {
+            $criteria->add(AccountTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(UserTableMap::COL_FORENAME)) {
-            $criteria->add(UserTableMap::COL_FORENAME, $this->forename);
+        if ($this->isColumnModified(AccountTableMap::COL_FORENAME)) {
+            $criteria->add(AccountTableMap::COL_FORENAME, $this->forename);
         }
-        if ($this->isColumnModified(UserTableMap::COL_SURNAME)) {
-            $criteria->add(UserTableMap::COL_SURNAME, $this->surname);
+        if ($this->isColumnModified(AccountTableMap::COL_SURNAME)) {
+            $criteria->add(AccountTableMap::COL_SURNAME, $this->surname);
         }
-        if ($this->isColumnModified(UserTableMap::COL_EMAIL)) {
-            $criteria->add(UserTableMap::COL_EMAIL, $this->email);
+        if ($this->isColumnModified(AccountTableMap::COL_EMAIL)) {
+            $criteria->add(AccountTableMap::COL_EMAIL, $this->email);
         }
-        if ($this->isColumnModified(UserTableMap::COL_EMAIL_VERIFIED)) {
-            $criteria->add(UserTableMap::COL_EMAIL_VERIFIED, $this->email_verified);
+        if ($this->isColumnModified(AccountTableMap::COL_EMAIL_VERIFIED)) {
+            $criteria->add(AccountTableMap::COL_EMAIL_VERIFIED, $this->email_verified);
         }
-        if ($this->isColumnModified(UserTableMap::COL_HASH)) {
-            $criteria->add(UserTableMap::COL_HASH, $this->hash);
+        if ($this->isColumnModified(AccountTableMap::COL_HASH)) {
+            $criteria->add(AccountTableMap::COL_HASH, $this->hash);
         }
-        if ($this->isColumnModified(UserTableMap::COL_CREATED_AT)) {
-            $criteria->add(UserTableMap::COL_CREATED_AT, $this->created_at);
+        if ($this->isColumnModified(AccountTableMap::COL_CREATED_AT)) {
+            $criteria->add(AccountTableMap::COL_CREATED_AT, $this->created_at);
         }
-        if ($this->isColumnModified(UserTableMap::COL_UPDATED_AT)) {
-            $criteria->add(UserTableMap::COL_UPDATED_AT, $this->updated_at);
+        if ($this->isColumnModified(AccountTableMap::COL_UPDATED_AT)) {
+            $criteria->add(AccountTableMap::COL_UPDATED_AT, $this->updated_at);
         }
 
         return $criteria;
@@ -1352,8 +1401,8 @@ abstract class User implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildUserQuery::create();
-        $criteria->add(UserTableMap::COL_ID, $this->id);
+        $criteria = ChildAccountQuery::create();
+        $criteria->add(AccountTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1415,7 +1464,7 @@ abstract class User implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \User (or compatible) type.
+     * @param      object $copyObj An object of \Account (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
@@ -1435,9 +1484,15 @@ abstract class User implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getAuthorizeds() as $relObj) {
+            foreach ($this->getAccountAuthorizeds() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addAuthorized($relObj->copy($deepCopy));
+                    $copyObj->addAccountAuthorized($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getAccountVerifications() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addAccountVerification($relObj->copy($deepCopy));
                 }
             }
 
@@ -1458,7 +1513,7 @@ abstract class User implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \User Clone of current object.
+     * @return \Account Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1482,38 +1537,42 @@ abstract class User implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
-        if ('Authorized' == $relationName) {
-            $this->initAuthorizeds();
+        if ('AccountAuthorized' == $relationName) {
+            $this->initAccountAuthorizeds();
+            return;
+        }
+        if ('AccountVerification' == $relationName) {
+            $this->initAccountVerifications();
             return;
         }
     }
 
     /**
-     * Clears out the collAuthorizeds collection
+     * Clears out the collAccountAuthorizeds collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addAuthorizeds()
+     * @see        addAccountAuthorizeds()
      */
-    public function clearAuthorizeds()
+    public function clearAccountAuthorizeds()
     {
-        $this->collAuthorizeds = null; // important to set this to NULL since that means it is uninitialized
+        $this->collAccountAuthorizeds = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collAuthorizeds collection loaded partially.
+     * Reset is the collAccountAuthorizeds collection loaded partially.
      */
-    public function resetPartialAuthorizeds($v = true)
+    public function resetPartialAccountAuthorizeds($v = true)
     {
-        $this->collAuthorizedsPartial = $v;
+        $this->collAccountAuthorizedsPartial = $v;
     }
 
     /**
-     * Initializes the collAuthorizeds collection.
+     * Initializes the collAccountAuthorizeds collection.
      *
-     * By default this just sets the collAuthorizeds collection to an empty array (like clearcollAuthorizeds());
+     * By default this just sets the collAccountAuthorizeds collection to an empty array (like clearcollAccountAuthorizeds());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1522,162 +1581,162 @@ abstract class User implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initAuthorizeds($overrideExisting = true)
+    public function initAccountAuthorizeds($overrideExisting = true)
     {
-        if (null !== $this->collAuthorizeds && !$overrideExisting) {
+        if (null !== $this->collAccountAuthorizeds && !$overrideExisting) {
             return;
         }
 
-        $collectionClassName = AuthorizedTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = AccountAuthorizedTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collAuthorizeds = new $collectionClassName;
-        $this->collAuthorizeds->setModel('\Authorized');
+        $this->collAccountAuthorizeds = new $collectionClassName;
+        $this->collAccountAuthorizeds->setModel('\AccountAuthorized');
     }
 
     /**
-     * Gets an array of ChildAuthorized objects which contain a foreign key that references this object.
+     * Gets an array of ChildAccountAuthorized objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildUser is new, it will return
+     * If this ChildAccount is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildAuthorized[] List of ChildAuthorized objects
+     * @return ObjectCollection|ChildAccountAuthorized[] List of ChildAccountAuthorized objects
      * @throws PropelException
      */
-    public function getAuthorizeds(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getAccountAuthorizeds(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collAuthorizedsPartial && !$this->isNew();
-        if (null === $this->collAuthorizeds || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collAuthorizeds) {
+        $partial = $this->collAccountAuthorizedsPartial && !$this->isNew();
+        if (null === $this->collAccountAuthorizeds || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collAccountAuthorizeds) {
                 // return empty collection
-                $this->initAuthorizeds();
+                $this->initAccountAuthorizeds();
             } else {
-                $collAuthorizeds = ChildAuthorizedQuery::create(null, $criteria)
-                    ->filterByUser($this)
+                $collAccountAuthorizeds = ChildAccountAuthorizedQuery::create(null, $criteria)
+                    ->filterByAccount($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collAuthorizedsPartial && count($collAuthorizeds)) {
-                        $this->initAuthorizeds(false);
+                    if (false !== $this->collAccountAuthorizedsPartial && count($collAccountAuthorizeds)) {
+                        $this->initAccountAuthorizeds(false);
 
-                        foreach ($collAuthorizeds as $obj) {
-                            if (false == $this->collAuthorizeds->contains($obj)) {
-                                $this->collAuthorizeds->append($obj);
+                        foreach ($collAccountAuthorizeds as $obj) {
+                            if (false == $this->collAccountAuthorizeds->contains($obj)) {
+                                $this->collAccountAuthorizeds->append($obj);
                             }
                         }
 
-                        $this->collAuthorizedsPartial = true;
+                        $this->collAccountAuthorizedsPartial = true;
                     }
 
-                    return $collAuthorizeds;
+                    return $collAccountAuthorizeds;
                 }
 
-                if ($partial && $this->collAuthorizeds) {
-                    foreach ($this->collAuthorizeds as $obj) {
+                if ($partial && $this->collAccountAuthorizeds) {
+                    foreach ($this->collAccountAuthorizeds as $obj) {
                         if ($obj->isNew()) {
-                            $collAuthorizeds[] = $obj;
+                            $collAccountAuthorizeds[] = $obj;
                         }
                     }
                 }
 
-                $this->collAuthorizeds = $collAuthorizeds;
-                $this->collAuthorizedsPartial = false;
+                $this->collAccountAuthorizeds = $collAccountAuthorizeds;
+                $this->collAccountAuthorizedsPartial = false;
             }
         }
 
-        return $this->collAuthorizeds;
+        return $this->collAccountAuthorizeds;
     }
 
     /**
-     * Sets a collection of ChildAuthorized objects related by a one-to-many relationship
+     * Sets a collection of ChildAccountAuthorized objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $authorizeds A Propel collection.
+     * @param      Collection $accountAuthorizeds A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildUser The current object (for fluent API support)
+     * @return $this|ChildAccount The current object (for fluent API support)
      */
-    public function setAuthorizeds(Collection $authorizeds, ConnectionInterface $con = null)
+    public function setAccountAuthorizeds(Collection $accountAuthorizeds, ConnectionInterface $con = null)
     {
-        /** @var ChildAuthorized[] $authorizedsToDelete */
-        $authorizedsToDelete = $this->getAuthorizeds(new Criteria(), $con)->diff($authorizeds);
+        /** @var ChildAccountAuthorized[] $accountAuthorizedsToDelete */
+        $accountAuthorizedsToDelete = $this->getAccountAuthorizeds(new Criteria(), $con)->diff($accountAuthorizeds);
 
 
-        $this->authorizedsScheduledForDeletion = $authorizedsToDelete;
+        $this->accountAuthorizedsScheduledForDeletion = $accountAuthorizedsToDelete;
 
-        foreach ($authorizedsToDelete as $authorizedRemoved) {
-            $authorizedRemoved->setUser(null);
+        foreach ($accountAuthorizedsToDelete as $accountAuthorizedRemoved) {
+            $accountAuthorizedRemoved->setAccount(null);
         }
 
-        $this->collAuthorizeds = null;
-        foreach ($authorizeds as $authorized) {
-            $this->addAuthorized($authorized);
+        $this->collAccountAuthorizeds = null;
+        foreach ($accountAuthorizeds as $accountAuthorized) {
+            $this->addAccountAuthorized($accountAuthorized);
         }
 
-        $this->collAuthorizeds = $authorizeds;
-        $this->collAuthorizedsPartial = false;
+        $this->collAccountAuthorizeds = $accountAuthorizeds;
+        $this->collAccountAuthorizedsPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related Authorized objects.
+     * Returns the number of related AccountAuthorized objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related Authorized objects.
+     * @return int             Count of related AccountAuthorized objects.
      * @throws PropelException
      */
-    public function countAuthorizeds(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countAccountAuthorizeds(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collAuthorizedsPartial && !$this->isNew();
-        if (null === $this->collAuthorizeds || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collAuthorizeds) {
+        $partial = $this->collAccountAuthorizedsPartial && !$this->isNew();
+        if (null === $this->collAccountAuthorizeds || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAccountAuthorizeds) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getAuthorizeds());
+                return count($this->getAccountAuthorizeds());
             }
 
-            $query = ChildAuthorizedQuery::create(null, $criteria);
+            $query = ChildAccountAuthorizedQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
 
             return $query
-                ->filterByUser($this)
+                ->filterByAccount($this)
                 ->count($con);
         }
 
-        return count($this->collAuthorizeds);
+        return count($this->collAccountAuthorizeds);
     }
 
     /**
-     * Method called to associate a ChildAuthorized object to this object
-     * through the ChildAuthorized foreign key attribute.
+     * Method called to associate a ChildAccountAuthorized object to this object
+     * through the ChildAccountAuthorized foreign key attribute.
      *
-     * @param  ChildAuthorized $l ChildAuthorized
-     * @return $this|\User The current object (for fluent API support)
+     * @param  ChildAccountAuthorized $l ChildAccountAuthorized
+     * @return $this|\Account The current object (for fluent API support)
      */
-    public function addAuthorized(ChildAuthorized $l)
+    public function addAccountAuthorized(ChildAccountAuthorized $l)
     {
-        if ($this->collAuthorizeds === null) {
-            $this->initAuthorizeds();
-            $this->collAuthorizedsPartial = true;
+        if ($this->collAccountAuthorizeds === null) {
+            $this->initAccountAuthorizeds();
+            $this->collAccountAuthorizedsPartial = true;
         }
 
-        if (!$this->collAuthorizeds->contains($l)) {
-            $this->doAddAuthorized($l);
+        if (!$this->collAccountAuthorizeds->contains($l)) {
+            $this->doAddAccountAuthorized($l);
 
-            if ($this->authorizedsScheduledForDeletion and $this->authorizedsScheduledForDeletion->contains($l)) {
-                $this->authorizedsScheduledForDeletion->remove($this->authorizedsScheduledForDeletion->search($l));
+            if ($this->accountAuthorizedsScheduledForDeletion and $this->accountAuthorizedsScheduledForDeletion->contains($l)) {
+                $this->accountAuthorizedsScheduledForDeletion->remove($this->accountAuthorizedsScheduledForDeletion->search($l));
             }
         }
 
@@ -1685,29 +1744,254 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildAuthorized $authorized The ChildAuthorized object to add.
+     * @param ChildAccountAuthorized $accountAuthorized The ChildAccountAuthorized object to add.
      */
-    protected function doAddAuthorized(ChildAuthorized $authorized)
+    protected function doAddAccountAuthorized(ChildAccountAuthorized $accountAuthorized)
     {
-        $this->collAuthorizeds[]= $authorized;
-        $authorized->setUser($this);
+        $this->collAccountAuthorizeds[]= $accountAuthorized;
+        $accountAuthorized->setAccount($this);
     }
 
     /**
-     * @param  ChildAuthorized $authorized The ChildAuthorized object to remove.
-     * @return $this|ChildUser The current object (for fluent API support)
+     * @param  ChildAccountAuthorized $accountAuthorized The ChildAccountAuthorized object to remove.
+     * @return $this|ChildAccount The current object (for fluent API support)
      */
-    public function removeAuthorized(ChildAuthorized $authorized)
+    public function removeAccountAuthorized(ChildAccountAuthorized $accountAuthorized)
     {
-        if ($this->getAuthorizeds()->contains($authorized)) {
-            $pos = $this->collAuthorizeds->search($authorized);
-            $this->collAuthorizeds->remove($pos);
-            if (null === $this->authorizedsScheduledForDeletion) {
-                $this->authorizedsScheduledForDeletion = clone $this->collAuthorizeds;
-                $this->authorizedsScheduledForDeletion->clear();
+        if ($this->getAccountAuthorizeds()->contains($accountAuthorized)) {
+            $pos = $this->collAccountAuthorizeds->search($accountAuthorized);
+            $this->collAccountAuthorizeds->remove($pos);
+            if (null === $this->accountAuthorizedsScheduledForDeletion) {
+                $this->accountAuthorizedsScheduledForDeletion = clone $this->collAccountAuthorizeds;
+                $this->accountAuthorizedsScheduledForDeletion->clear();
             }
-            $this->authorizedsScheduledForDeletion[]= clone $authorized;
-            $authorized->setUser(null);
+            $this->accountAuthorizedsScheduledForDeletion[]= clone $accountAuthorized;
+            $accountAuthorized->setAccount(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collAccountVerifications collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addAccountVerifications()
+     */
+    public function clearAccountVerifications()
+    {
+        $this->collAccountVerifications = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collAccountVerifications collection loaded partially.
+     */
+    public function resetPartialAccountVerifications($v = true)
+    {
+        $this->collAccountVerificationsPartial = $v;
+    }
+
+    /**
+     * Initializes the collAccountVerifications collection.
+     *
+     * By default this just sets the collAccountVerifications collection to an empty array (like clearcollAccountVerifications());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initAccountVerifications($overrideExisting = true)
+    {
+        if (null !== $this->collAccountVerifications && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = AccountVerificationTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collAccountVerifications = new $collectionClassName;
+        $this->collAccountVerifications->setModel('\AccountVerification');
+    }
+
+    /**
+     * Gets an array of ChildAccountVerification objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildAccount is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildAccountVerification[] List of ChildAccountVerification objects
+     * @throws PropelException
+     */
+    public function getAccountVerifications(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collAccountVerificationsPartial && !$this->isNew();
+        if (null === $this->collAccountVerifications || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collAccountVerifications) {
+                // return empty collection
+                $this->initAccountVerifications();
+            } else {
+                $collAccountVerifications = ChildAccountVerificationQuery::create(null, $criteria)
+                    ->filterByAccount($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collAccountVerificationsPartial && count($collAccountVerifications)) {
+                        $this->initAccountVerifications(false);
+
+                        foreach ($collAccountVerifications as $obj) {
+                            if (false == $this->collAccountVerifications->contains($obj)) {
+                                $this->collAccountVerifications->append($obj);
+                            }
+                        }
+
+                        $this->collAccountVerificationsPartial = true;
+                    }
+
+                    return $collAccountVerifications;
+                }
+
+                if ($partial && $this->collAccountVerifications) {
+                    foreach ($this->collAccountVerifications as $obj) {
+                        if ($obj->isNew()) {
+                            $collAccountVerifications[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collAccountVerifications = $collAccountVerifications;
+                $this->collAccountVerificationsPartial = false;
+            }
+        }
+
+        return $this->collAccountVerifications;
+    }
+
+    /**
+     * Sets a collection of ChildAccountVerification objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $accountVerifications A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildAccount The current object (for fluent API support)
+     */
+    public function setAccountVerifications(Collection $accountVerifications, ConnectionInterface $con = null)
+    {
+        /** @var ChildAccountVerification[] $accountVerificationsToDelete */
+        $accountVerificationsToDelete = $this->getAccountVerifications(new Criteria(), $con)->diff($accountVerifications);
+
+
+        $this->accountVerificationsScheduledForDeletion = $accountVerificationsToDelete;
+
+        foreach ($accountVerificationsToDelete as $accountVerificationRemoved) {
+            $accountVerificationRemoved->setAccount(null);
+        }
+
+        $this->collAccountVerifications = null;
+        foreach ($accountVerifications as $accountVerification) {
+            $this->addAccountVerification($accountVerification);
+        }
+
+        $this->collAccountVerifications = $accountVerifications;
+        $this->collAccountVerificationsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related AccountVerification objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related AccountVerification objects.
+     * @throws PropelException
+     */
+    public function countAccountVerifications(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collAccountVerificationsPartial && !$this->isNew();
+        if (null === $this->collAccountVerifications || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAccountVerifications) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getAccountVerifications());
+            }
+
+            $query = ChildAccountVerificationQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAccount($this)
+                ->count($con);
+        }
+
+        return count($this->collAccountVerifications);
+    }
+
+    /**
+     * Method called to associate a ChildAccountVerification object to this object
+     * through the ChildAccountVerification foreign key attribute.
+     *
+     * @param  ChildAccountVerification $l ChildAccountVerification
+     * @return $this|\Account The current object (for fluent API support)
+     */
+    public function addAccountVerification(ChildAccountVerification $l)
+    {
+        if ($this->collAccountVerifications === null) {
+            $this->initAccountVerifications();
+            $this->collAccountVerificationsPartial = true;
+        }
+
+        if (!$this->collAccountVerifications->contains($l)) {
+            $this->doAddAccountVerification($l);
+
+            if ($this->accountVerificationsScheduledForDeletion and $this->accountVerificationsScheduledForDeletion->contains($l)) {
+                $this->accountVerificationsScheduledForDeletion->remove($this->accountVerificationsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildAccountVerification $accountVerification The ChildAccountVerification object to add.
+     */
+    protected function doAddAccountVerification(ChildAccountVerification $accountVerification)
+    {
+        $this->collAccountVerifications[]= $accountVerification;
+        $accountVerification->setAccount($this);
+    }
+
+    /**
+     * @param  ChildAccountVerification $accountVerification The ChildAccountVerification object to remove.
+     * @return $this|ChildAccount The current object (for fluent API support)
+     */
+    public function removeAccountVerification(ChildAccountVerification $accountVerification)
+    {
+        if ($this->getAccountVerifications()->contains($accountVerification)) {
+            $pos = $this->collAccountVerifications->search($accountVerification);
+            $this->collAccountVerifications->remove($pos);
+            if (null === $this->accountVerificationsScheduledForDeletion) {
+                $this->accountVerificationsScheduledForDeletion = clone $this->collAccountVerifications;
+                $this->accountVerificationsScheduledForDeletion->clear();
+            }
+            $this->accountVerificationsScheduledForDeletion[]= clone $accountVerification;
+            $accountVerification->setAccount(null);
         }
 
         return $this;
@@ -1746,14 +2030,20 @@ abstract class User implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collAuthorizeds) {
-                foreach ($this->collAuthorizeds as $o) {
+            if ($this->collAccountAuthorizeds) {
+                foreach ($this->collAccountAuthorizeds as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collAccountVerifications) {
+                foreach ($this->collAccountVerifications as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
         } // if ($deep)
 
-        $this->collAuthorizeds = null;
+        $this->collAccountAuthorizeds = null;
+        $this->collAccountVerifications = null;
     }
 
     /**
@@ -1763,7 +2053,7 @@ abstract class User implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(UserTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(AccountTableMap::DEFAULT_STRING_FORMAT);
     }
 
     // timestampable behavior
@@ -1771,11 +2061,11 @@ abstract class User implements ActiveRecordInterface
     /**
      * Mark the current object so that the update date doesn't get updated during next save
      *
-     * @return     $this|ChildUser The current object (for fluent API support)
+     * @return     $this|ChildAccount The current object (for fluent API support)
      */
     public function keepUpdateDateUnchanged()
     {
-        $this->modifiedColumns[UserTableMap::COL_UPDATED_AT] = true;
+        $this->modifiedColumns[AccountTableMap::COL_UPDATED_AT] = true;
 
         return $this;
     }

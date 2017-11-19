@@ -1,0 +1,6 @@
+emailAlreadyUsed  This e-mail is already in use.
+notLogedIn        You are not logged in.
+passwordIsWrong   The password is wrong.
+userDoesNotExist  There is no account with this ID.
+unknownRoute      This Route does not exist. You can get a list of all available routes under /api/{API_NAME}/
+unknownAPI        This API does not exist.

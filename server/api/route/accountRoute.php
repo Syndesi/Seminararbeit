@@ -24,13 +24,13 @@ class AccountRoute extends \lib\Route {
     $this->addRoute('DELETE:/',     function($p){$this->deleteOwnAccount();});   // /api/account
     $this->addRoute('POST:/login',  function($p){$this->login();});              // /api/account/login
     $this->addRoute('GET:/logout',  function($p){$this->logout();});             // /api/account/logout
-    $this->addRoute('GET:/logedIn', function($p){$this->isLoggedIn();});         // /api/account/loggedIn
+    $this->addRoute('GET:/status',  function($p){$this->isLoggedIn();});         // /api/account/loggedIn
   }
 
   private function getOwnAccount(){
     $account = $this->r->session->get('account');
     if(!$account){
-      throw new Exception('You are not logged in.');
+      $this->r->abort('notLogedIn', 'You are not logged in.');
     }
     $this->r->finish($account);
   }
@@ -38,7 +38,7 @@ class AccountRoute extends \lib\Route {
   private function getAccount($id){
     $account = AccountQuery::create()->findPK($id);
     if(!$account){
-      throw new Exception('No account found.');
+      $this->r->abort('userDoesNotExist', 'There is no account with this ID.');
     }
     $this->r->finish([
       'id'       => $account->getId(),
@@ -62,7 +62,7 @@ class AccountRoute extends \lib\Route {
     $v->assert($data);
     $account = AccountQuery::create()->findOneByEmail($data['email']);
     if($account !== null){
-      throw new Exception('This e-mail is already in use.');
+      $this->r->abort('emailAlreadyUsed', 'This e-mail is already in use.');
     }
     $account = new Account();
     $account->setForename($data['forename']);
@@ -85,7 +85,7 @@ class AccountRoute extends \lib\Route {
 
   private function updateOwnAccount(){
     if(!$this->r->session->get('account')){
-      throw new Exception('You are not logged in.');
+      $this->r->abort('notLogedIn', 'You are not logged in.');
     }
     $data = [
       'forename' => $this->r->getData('forename', true),
@@ -97,7 +97,8 @@ class AccountRoute extends \lib\Route {
           ->key('password', v::stringType()->length(8, NULL));
     $v->assert($data);
     $account = AccountQuery::create()->findPK($this->r->session->get('account')['id']);
-    $account->setName($data['name']);
+    $account->setForename($data['forename']);
+    $account->setSurname($data['surname']);
     $account->setHash($this->getHash($data['password']));
     $account->save();
     $this->r->session->restart();
@@ -107,7 +108,7 @@ class AccountRoute extends \lib\Route {
 
   private function deleteOwnAccount(){
     if(!$this->r->session->get('account')){
-      throw new Exception('You are not logged in.');
+      $this->r->abort('notLogedIn', 'You are not logged in.');
     }
     $data = [
       'password' => $this->r->getData('password', true)
@@ -117,7 +118,7 @@ class AccountRoute extends \lib\Route {
     $account = AccountQuery::create()->findPK($this->r->session->get('account')['id']);
     $hash = $account->getHash();
     if(!password_verify($data['password'], $hash)){
-      throw new Exception('The password is wrong.');
+      $this->r->abort('passwordIsWrong', 'The password is wrong.');
     }
     $account->delete();
     $this->r->session->destroy();
@@ -135,11 +136,11 @@ class AccountRoute extends \lib\Route {
     $v->assert($data);
     $account = AccountQuery::create()->findOneByEmail($data['email']);
     if($account === null){
-      throw new Exception('There is no account with this e-mail.');
+      $this->r->abort('userDoesNotExist', 'There is no account with this e-mail.');
     }
     $hash = $account->getHash();
     if(!password_verify($data['password'], $hash)){
-      throw new Exception('The password is wrong.');
+      $this->r->abort('passwordIsWrong', 'The password is wrong.');
     }
     if(password_needs_rehash($hash, $this->hash['algo'], $this->hash['options'])){
       $newHash = $this->getHash($data['password']);
@@ -163,8 +164,10 @@ class AccountRoute extends \lib\Route {
   }
 
   private function isLoggedIn(){
-    $loggedIn = ($this->r->session->get('account') ? true : false);
-    $this->r->finish(['loggedIn' => $loggedIn]);
+    if($account = $this->r->session->get('account')){
+      $this->r->finish($account);
+    }
+    $this->r->abort('notLogedIn', 'You are not logged in.');
   }
 
   private function logout(){

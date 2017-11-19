@@ -6224,7 +6224,14 @@ react-router@^4.2.0:
     prop-types "^15.5.4"
     warning "^3.0.0"
 
-react-transition-group@^2.2.0:
+react-toastify@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-2.2.0.tgz#eff7b598f94e50167912afcd878d38e56b9e8292"
+  dependencies:
+    prop-types "^15.6.0"
+    react-transition-group "^2.2.1"
+
+react-transition-group@^2.2.0, react-transition-group@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.2.1.tgz#e9fb677b79e6455fd391b03823afe84849df4a10"
   dependencies:

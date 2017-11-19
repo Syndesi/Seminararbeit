@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \Authorized;
-use \AuthorizedQuery;
+use \AccountAuthorized;
+use \AccountAuthorizedQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'authorized' table.
+ * This class defines the structure of the 'account_authorized' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class AuthorizedTableMap extends TableMap
+class AccountAuthorizedTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class AuthorizedTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.AuthorizedTableMap';
+    const CLASS_NAME = '.Map.AccountAuthorizedTableMap';
 
     /**
      * The default database name for this class
@@ -44,17 +44,17 @@ class AuthorizedTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'authorized';
+    const TABLE_NAME = 'account_authorized';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Authorized';
+    const OM_CLASS = '\\AccountAuthorized';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Authorized';
+    const CLASS_DEFAULT = 'AccountAuthorized';
 
     /**
      * The total number of columns
@@ -74,17 +74,17 @@ class AuthorizedTableMap extends TableMap
     /**
      * the column name for the id field
      */
-    const COL_ID = 'authorized.id';
+    const COL_ID = 'account_authorized.id';
 
     /**
-     * the column name for the user_id field
+     * the column name for the account_id field
      */
-    const COL_USER_ID = 'authorized.user_id';
+    const COL_ACCOUNT_ID = 'account_authorized.account_id';
 
     /**
      * the column name for the is_authorized field
      */
-    const COL_IS_AUTHORIZED = 'authorized.is_authorized';
+    const COL_IS_AUTHORIZED = 'account_authorized.is_authorized';
 
     /**
      * The default string format for model objects of the related table
@@ -98,10 +98,10 @@ class AuthorizedTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'UserId', 'IsAuthorized', ),
-        self::TYPE_CAMELNAME     => array('id', 'userId', 'isAuthorized', ),
-        self::TYPE_COLNAME       => array(AuthorizedTableMap::COL_ID, AuthorizedTableMap::COL_USER_ID, AuthorizedTableMap::COL_IS_AUTHORIZED, ),
-        self::TYPE_FIELDNAME     => array('id', 'user_id', 'is_authorized', ),
+        self::TYPE_PHPNAME       => array('Id', 'AccountId', 'IsAuthorized', ),
+        self::TYPE_CAMELNAME     => array('id', 'accountId', 'isAuthorized', ),
+        self::TYPE_COLNAME       => array(AccountAuthorizedTableMap::COL_ID, AccountAuthorizedTableMap::COL_ACCOUNT_ID, AccountAuthorizedTableMap::COL_IS_AUTHORIZED, ),
+        self::TYPE_FIELDNAME     => array('id', 'account_id', 'is_authorized', ),
         self::TYPE_NUM           => array(0, 1, 2, )
     );
 
@@ -112,10 +112,10 @@ class AuthorizedTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'IsAuthorized' => 2, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'isAuthorized' => 2, ),
-        self::TYPE_COLNAME       => array(AuthorizedTableMap::COL_ID => 0, AuthorizedTableMap::COL_USER_ID => 1, AuthorizedTableMap::COL_IS_AUTHORIZED => 2, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'user_id' => 1, 'is_authorized' => 2, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'AccountId' => 1, 'IsAuthorized' => 2, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'accountId' => 1, 'isAuthorized' => 2, ),
+        self::TYPE_COLNAME       => array(AccountAuthorizedTableMap::COL_ID => 0, AccountAuthorizedTableMap::COL_ACCOUNT_ID => 1, AccountAuthorizedTableMap::COL_IS_AUTHORIZED => 2, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'account_id' => 1, 'is_authorized' => 2, ),
         self::TYPE_NUM           => array(0, 1, 2, )
     );
 
@@ -129,15 +129,15 @@ class AuthorizedTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('authorized');
-        $this->setPhpName('Authorized');
+        $this->setName('account_authorized');
+        $this->setPhpName('AccountAuthorized');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\Authorized');
+        $this->setClassName('\\AccountAuthorized');
         $this->setPackage('');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'user', 'id', true, null, null);
+        $this->addForeignKey('account_id', 'AccountId', 'INTEGER', 'account', 'id', true, null, null);
         $this->addColumn('is_authorized', 'IsAuthorized', 'BOOLEAN', true, 1, null);
     } // initialize()
 
@@ -146,10 +146,10 @@ class AuthorizedTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('User', '\\User', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('Account', '\\Account', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':user_id',
+    0 => ':account_id',
     1 => ':id',
   ),
 ), null, null, null, false);
@@ -212,7 +212,7 @@ class AuthorizedTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? AuthorizedTableMap::CLASS_DEFAULT : AuthorizedTableMap::OM_CLASS;
+        return $withPrefix ? AccountAuthorizedTableMap::CLASS_DEFAULT : AccountAuthorizedTableMap::OM_CLASS;
     }
 
     /**
@@ -226,22 +226,22 @@ class AuthorizedTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Authorized object, last column rank)
+     * @return array           (AccountAuthorized object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = AuthorizedTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = AuthorizedTableMap::getInstanceFromPool($key))) {
+        $key = AccountAuthorizedTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = AccountAuthorizedTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + AuthorizedTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + AccountAuthorizedTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = AuthorizedTableMap::OM_CLASS;
-            /** @var Authorized $obj */
+            $cls = AccountAuthorizedTableMap::OM_CLASS;
+            /** @var AccountAuthorized $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            AuthorizedTableMap::addInstanceToPool($obj, $key);
+            AccountAuthorizedTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -264,18 +264,18 @@ class AuthorizedTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = AuthorizedTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = AuthorizedTableMap::getInstanceFromPool($key))) {
+            $key = AccountAuthorizedTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = AccountAuthorizedTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Authorized $obj */
+                /** @var AccountAuthorized $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                AuthorizedTableMap::addInstanceToPool($obj, $key);
+                AccountAuthorizedTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -296,12 +296,12 @@ class AuthorizedTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(AuthorizedTableMap::COL_ID);
-            $criteria->addSelectColumn(AuthorizedTableMap::COL_USER_ID);
-            $criteria->addSelectColumn(AuthorizedTableMap::COL_IS_AUTHORIZED);
+            $criteria->addSelectColumn(AccountAuthorizedTableMap::COL_ID);
+            $criteria->addSelectColumn(AccountAuthorizedTableMap::COL_ACCOUNT_ID);
+            $criteria->addSelectColumn(AccountAuthorizedTableMap::COL_IS_AUTHORIZED);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.user_id');
+            $criteria->addSelectColumn($alias . '.account_id');
             $criteria->addSelectColumn($alias . '.is_authorized');
         }
     }
@@ -315,7 +315,7 @@ class AuthorizedTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(AuthorizedTableMap::DATABASE_NAME)->getTable(AuthorizedTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(AccountAuthorizedTableMap::DATABASE_NAME)->getTable(AccountAuthorizedTableMap::TABLE_NAME);
     }
 
     /**
@@ -323,16 +323,16 @@ class AuthorizedTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(AuthorizedTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(AuthorizedTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new AuthorizedTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(AccountAuthorizedTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(AccountAuthorizedTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new AccountAuthorizedTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Authorized or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a AccountAuthorized or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Authorized object or primary key or array of primary keys
+     * @param mixed               $values Criteria or AccountAuthorized object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -343,27 +343,27 @@ class AuthorizedTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AuthorizedTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AccountAuthorizedTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Authorized) { // it's a model object
+        } elseif ($values instanceof \AccountAuthorized) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(AuthorizedTableMap::DATABASE_NAME);
-            $criteria->add(AuthorizedTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(AccountAuthorizedTableMap::DATABASE_NAME);
+            $criteria->add(AccountAuthorizedTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = AuthorizedQuery::create()->mergeWith($criteria);
+        $query = AccountAuthorizedQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            AuthorizedTableMap::clearInstancePool();
+            AccountAuthorizedTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                AuthorizedTableMap::removeInstanceFromPool($singleval);
+                AccountAuthorizedTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -371,20 +371,20 @@ class AuthorizedTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the authorized table.
+     * Deletes all rows from the account_authorized table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return AuthorizedQuery::create()->doDeleteAll($con);
+        return AccountAuthorizedQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Authorized or Criteria object.
+     * Performs an INSERT on the database, given a AccountAuthorized or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Authorized object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or AccountAuthorized object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -393,22 +393,22 @@ class AuthorizedTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AuthorizedTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AccountAuthorizedTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Authorized object
+            $criteria = $criteria->buildCriteria(); // build Criteria from AccountAuthorized object
         }
 
-        if ($criteria->containsKey(AuthorizedTableMap::COL_ID) && $criteria->keyContainsValue(AuthorizedTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.AuthorizedTableMap::COL_ID.')');
+        if ($criteria->containsKey(AccountAuthorizedTableMap::COL_ID) && $criteria->keyContainsValue(AccountAuthorizedTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.AccountAuthorizedTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = AuthorizedQuery::create()->mergeWith($criteria);
+        $query = AccountAuthorizedQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -417,7 +417,7 @@ class AuthorizedTableMap extends TableMap
         });
     }
 
-} // AuthorizedTableMap
+} // AccountAuthorizedTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-AuthorizedTableMap::buildTableMap();
+AccountAuthorizedTableMap::buildTableMap();

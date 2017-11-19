@@ -308,12 +308,12 @@ CREATE TABLE `dwd_wind`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- user
+-- account
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `account`;
 
-CREATE TABLE `user`
+CREATE TABLE `account`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `forename` VARCHAR(64) NOT NULL,
@@ -327,21 +327,41 @@ CREATE TABLE `user`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- authorized
+-- account_authorized
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `authorized`;
+DROP TABLE IF EXISTS `account_authorized`;
 
-CREATE TABLE `authorized`
+CREATE TABLE `account_authorized`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `user_id` INTEGER NOT NULL,
+    `account_id` INTEGER NOT NULL,
     `is_authorized` TINYINT(1) NOT NULL,
     PRIMARY KEY (`id`),
-    INDEX `authorized_fi_29554a` (`user_id`),
-    CONSTRAINT `authorized_fk_29554a`
-        FOREIGN KEY (`user_id`)
-        REFERENCES `user` (`id`)
+    INDEX `account_authorized_fi_474870` (`account_id`),
+    CONSTRAINT `account_authorized_fk_474870`
+        FOREIGN KEY (`account_id`)
+        REFERENCES `account` (`id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- account_verification
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `account_verification`;
+
+CREATE TABLE `account_verification`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `account_id` INTEGER NOT NULL,
+    `link` VARCHAR(256) NOT NULL,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    PRIMARY KEY (`id`),
+    INDEX `account_verification_fi_474870` (`account_id`),
+    CONSTRAINT `account_verification_fk_474870`
+        FOREIGN KEY (`account_id`)
+        REFERENCES `account` (`id`)
 ) ENGINE=InnoDB;
 
 # This restores the fkey checks, after having unset them earlier

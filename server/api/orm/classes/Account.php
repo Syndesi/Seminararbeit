@@ -1,9 +1,9 @@
 <?php
 
-use Base\AuthorizedQuery as BaseAuthorizedQuery;
+use Base\Account as BaseAccount;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'authorized' table.
+ * Skeleton subclass for representing a row from the 'account' table.
  *
  *
  *
@@ -12,7 +12,7 @@ use Base\AuthorizedQuery as BaseAuthorizedQuery;
  * long as it does not already exist in the output directory.
  *
  */
-class AuthorizedQuery extends BaseAuthorizedQuery
+class Account extends BaseAccount
 {
 
 }

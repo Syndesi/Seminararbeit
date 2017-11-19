@@ -1,0 +1,74 @@
+{
+  "language": "en",
+  "error_codes": {
+    "Network Error":    "Network Error",
+    "emailAlreadyUsed": "This Email is already in use.",
+    "notLogedIn":       "You are currently not loged in.",
+    "passwordIsWrong":  "The given password is wrong.",
+    "userDoesNotExist": "This user does not exist."
+  },
+  "components": {
+    "diagram": {},
+    "geogebra": {},
+    "header": {
+      "title":       "Seminar Paper",
+      "map":         "Map",
+      "icons":       "Icons",
+      "wiki":        "Wiki",
+      "kriging":     "Kriging",
+      "beta":        "Beta Distribution",
+      "demo":        "Demo",
+      "setup":       "Setup",
+      "github":      "Github",
+      "login":       "Login",
+      "register":    "Register",
+      "account":     "Account",
+      "logout":      "Logout",
+      "adminUpdate": "Update",
+      "adminUser":   "User"
+    },
+    "mapbox": {},
+    "markdown": {},
+    "marker": {}
+  },
+  "site": {
+    "index": {},
+    "map": {},
+    "mk": {},
+    "account": {
+      "login": {
+        "title":                      "Login",
+        "email":                      "Email:",
+        "emailPlaceholder":           "Enter email",
+        "password":                   "Password:",
+        "passwordPlaceholder":        "Enter password",
+        "login":                      "Login",
+        "warningEmailEmpty":          "The email must be filled out.",
+        "warningPasswordEmpty":       "The password must be filled out.",
+        "logedIn":                    "You are now loged in."
+      },
+      "register": {
+        "title":                      "Register",
+        "forename":                   "Forename:",
+        "forenamePlaceholder":        "Enter forename",
+        "surname":                    "Surname:",
+        "surnamePlaceholder":         "Enter surname",
+        "email":                      "Email:",
+        "emailPlaceholder":           "Enter email",
+        "password":                   "Password:",
+        "passwordPlaceholder":        "Not 1234",
+        "password2":                  "Password (check):",
+        "passwordPlaceholder2":       "Seriously, don't use 1234",
+        "register":                   "Register",
+        "warningMismatchingPassword": "These passwords are not the same.",
+        "warningShortPassword":       "This password must be at least 8 characters long.",
+        "warningForenameEmpty":       "The forename must be filled out.",
+        "warningSurnameEmpty":        "The surname must be filled out.",
+        "warningEmailEmpty":          "The email must be filled out.",
+        "warningPasswordEmpty":       "The password must be filled out.",
+        "warningPasswordEmpty2":      "The second password must also be specified for verification.",
+        "registered":                 "You are now registered."
+      }
+    }
+  }
+}
