@@ -24,6 +24,7 @@
       "register":    "Register",
       "account":     "Account",
       "logout":      "Logout",
+      "logedOut":    "Loged out",
       "adminUpdate": "Update",
       "adminUser":   "User"
     },
@@ -36,6 +37,15 @@
     "map": {},
     "mk": {},
     "account": {
+      "account": {
+        "title":                      "Account",
+        "forename":                   "Forename:",
+        "surname":                    "Surname:",
+        "email":                      "Email:",
+        "created":                    "Created:",
+        "updated":                    "Updated:",
+        "toUpdate":                   "Update"
+      },
       "login": {
         "title":                      "Login",
         "email":                      "Email:",
@@ -68,6 +78,25 @@
         "warningPasswordEmpty":       "The password must be filled out.",
         "warningPasswordEmpty2":      "The second password must also be specified for verification.",
         "registered":                 "You are now registered."
+      },
+      "update": {
+        "title":                      "Update",
+        "forename":                   "Forename:",
+        "forenamePlaceholder":        "Enter forename",
+        "surname":                    "Surname:",
+        "surnamePlaceholder":         "Enter surname",
+        "password":                   "Password:",
+        "passwordPlaceholder":        "Not 1234",
+        "password2":                  "Password (check):",
+        "passwordPlaceholder2":       "Seriously, don't use 1234",
+        "update":                     "Update",
+        "warningMismatchingPassword": "These passwords are not the same.",
+        "warningShortPassword":       "This password must be at least 8 characters long.",
+        "warningForenameEmpty":       "The forename must be filled out.",
+        "warningSurnameEmpty":        "The surname must be filled out.",
+        "warningPasswordEmpty":       "The password must be filled out.",
+        "warningPasswordEmpty2":      "The second password must also be specified for verification.",
+        "updated":                    "You are now updated."
       }
     }
   }

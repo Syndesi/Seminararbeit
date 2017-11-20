@@ -24,6 +24,7 @@
       "register":    "Registrieren",
       "account":     "Account",
       "logout":      "Abmelden",
+      "logedOut":    "Abgemeldet",
       "adminUpdate": "Update",
       "adminUser":   "Benutzer"
     },
@@ -36,6 +37,15 @@
     "map": {},
     "mk": {},
     "account": {
+      "account": {
+        "title":                      "Account",
+        "forename":                   "Vorname:",
+        "surname":                    "Nachname:",
+        "email":                      "Email:",
+        "created":                    "Erstellt:",
+        "updated":                    "Zuletzt Bearbeitet:",
+        "toUpdate":                   "Bearbeiten"
+      },
       "login": {
         "title":                      "Login",
         "email":                      "Email:",
@@ -68,6 +78,25 @@
         "warningPasswordEmpty":       "Ein Passwort muss angegeben werden.",
         "warningPasswordEmpty2":      "Das zweite Passwort muss zur Überprüfung ebenfalls angegeben werden.",
         "registered":                 "Du bist nun registriert."
+      },
+      "update": {
+        "title":                      "Bearbeiten",
+        "forename":                   "Vorname:",
+        "forenamePlaceholder":        "Vorname eingeben",
+        "surname":                    "Nachname:",
+        "surnamePlaceholder":         "Nachname eingeben",
+        "password":                   "Passwort:",
+        "passwordPlaceholder":        "Nicht 1234",
+        "password2":                  "Passwort wiederholen:",
+        "passwordPlaceholder2":       "Ernsthaft, benutze nicht 1234",
+        "update":                     "Update",
+        "warningMismatchingPassword": "Diese Passwörter stimmen nicht überein.",
+        "warningShortPassword":       "Das Passwort muss mindestenst 8 Zeichen lang sein.",
+        "warningForenameEmpty":       "Der Vorname muss angegeben werden.",
+        "warningSurnameEmpty":        "Der Nachname muss angegeben werden.",
+        "warningPasswordEmpty":       "Ein Passwort muss angegeben werden.",
+        "warningPasswordEmpty2":      "Das zweite Passwort muss zur Überprüfung ebenfalls angegeben werden.",
+        "updated":                    "Du bist nun geupdated."
       }
     }
   }

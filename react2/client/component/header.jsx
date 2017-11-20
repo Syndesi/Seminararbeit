@@ -1,6 +1,7 @@
 import React from 'react';
 import {observer} from 'mobx-react';
 import {Link} from 'react-router-dom';
+import {toast} from 'react-toastify';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 
@@ -41,6 +42,11 @@ export default class Header extends React.Component {
     });
   }
 
+  logout(){
+    toast(this.props.store.lang.components.header['logedOut']);
+    this.toggleUserDropdown();
+  }
+
   switchLang(el){
     //this.refs["language"].classList.toggle('fullscreen');
     var lang = el.currentTarget.getAttribute('data-lang');
@@ -50,8 +56,8 @@ export default class Header extends React.Component {
 
   render() {
     var l = this.props.store.lang.components.header;
-    var isLogedIn = false;
-    var isAdmin = false;
+    var isLogedIn = true;
+    var isAdmin = true;
     var adminSettings = (
       <div>
         <DropdownItem divider />
@@ -94,7 +100,7 @@ export default class Header extends React.Component {
               <DropdownToggle nav>Syndesi</DropdownToggle>
               <DropdownMenu right>
                 <Link to="/account" onClick={this.toggleUserDropdown.bind(this)} className="dropdown-item">{l.account}</Link>
-                <Link to="/account/logout" onClick={this.toggleUserDropdown.bind(this)} className="dropdown-item">{l.logout}</Link>
+                <div onClick={this.logout.bind(this)} className="dropdown-item">{l.logout}</div>
               </DropdownMenu>
             </Dropdown>
           </NavItem>
