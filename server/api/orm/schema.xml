@@ -157,4 +157,31 @@
       <reference local="station_id" foreign="id"/>
     </foreign-key>
   </table>
+
+  <table name="account" phpName="Account">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="forename" type="varchar" size="64" required="true" />
+    <column name="surname" type="varchar" size="64" required="true" />
+    <column name="email" type="varchar" size="256" required="true" />
+    <column name="email_verified" type="boolean" required="true" />
+    <column name="hash" type="varchar" size="256" required="true" />
+    <behavior name="timestampable" />
+  </table>
+  <table name="account_authorized" phpName="AccountAuthorized">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="account_id" type="integer" required="true" />
+    <column name="is_authorized" type="boolean" required="true" />
+    <foreign-key foreignTable="account">
+      <reference local="account_id" foreign="id"/>
+    </foreign-key>
+  </table>
+  <table name="account_verification" phpName="AccountVerification">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="account_id" type="integer" required="true" />
+    <column name="link" type="varchar" size="256" required="true" />
+    <behavior name="timestampable" />
+    <foreign-key foreignTable="account">
+      <reference local="account_id" foreign="id"/>
+    </foreign-key>
+  </table>
 </database>

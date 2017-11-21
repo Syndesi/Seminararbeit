@@ -307,5 +307,62 @@ CREATE TABLE `dwd_wind`
         REFERENCES `dwd_station` (`id`)
 ) ENGINE=InnoDB;
 
+-- ---------------------------------------------------------------------
+-- account
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `account`;
+
+CREATE TABLE `account`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `forename` VARCHAR(64) NOT NULL,
+    `surname` VARCHAR(64) NOT NULL,
+    `email` VARCHAR(256) NOT NULL,
+    `email_verified` TINYINT(1) NOT NULL,
+    `hash` VARCHAR(256) NOT NULL,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- account_authorized
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `account_authorized`;
+
+CREATE TABLE `account_authorized`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `account_id` INTEGER NOT NULL,
+    `is_authorized` TINYINT(1) NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `account_authorized_fi_474870` (`account_id`),
+    CONSTRAINT `account_authorized_fk_474870`
+        FOREIGN KEY (`account_id`)
+        REFERENCES `account` (`id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- account_verification
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `account_verification`;
+
+CREATE TABLE `account_verification`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `account_id` INTEGER NOT NULL,
+    `link` VARCHAR(256) NOT NULL,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    PRIMARY KEY (`id`),
+    INDEX `account_verification_fi_474870` (`account_id`),
+    CONSTRAINT `account_verification_fk_474870`
+        FOREIGN KEY (`account_id`)
+        REFERENCES `account` (`id`)
+) ENGINE=InnoDB;
+
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

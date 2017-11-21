@@ -16,7 +16,7 @@ try{
     $a = new $apiName($r);
     $a->resolveRoute($r->route);
   } else {
-    throw new Exception('This API does not exist.');
+    $r->abort('unknownAPI', 'This API does not exist.');
   }
 } catch(Exception $e){
   $r->abort($e->getCode(), $e->getMessage());

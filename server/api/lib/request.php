@@ -296,11 +296,12 @@ class Request{
 
   public function sendHeaders(){
     header('X-Powered-By: Syndesi');
-    header('Access-Control-Allow-Origin: *'); 
+    //header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Origin: '.$_SERVER['HTTP_ORIGIN']);
     header("Access-Control-Allow-Credentials: true");
-    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+    header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
     header('Access-Control-Max-Age: 1000');
-    header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
+    header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization, X-Requested-With, Accept, Client-Security-Token');
     header('Accept: application/json, application/xml, text/xml, application/x-yaml, text/yaml, application/x-www-form-urlencoded, multipart/form-data');
   }
 

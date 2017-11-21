@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
 
-require('./font/roboto/stylesheet.scss');
-require('./font/robotoMono/stylesheet.scss');
-require('./font/material/stylesheet.scss');
-require('./font/icomoon/stylesheet.scss');
+require('./res/font/roboto/stylesheet.scss');
+require('./res/font/robotoMono/stylesheet.scss');
+require('./res/font/material/stylesheet.scss');
+require('./res/font/icomoon/stylesheet.scss');
 require('./style/main.scss');
 
 
