@@ -58,6 +58,10 @@ class Store {
         break;
     }
   }
+
+  logout(){
+    this.user = {};
+  }
   
 }
 

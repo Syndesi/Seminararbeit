@@ -76,7 +76,8 @@ export default class Update extends React.Component {
       return false;
     }
     var route = this.props.route;
-    axios.put(this.props.store.apiUrl+'account', f)
+    console.log('updating...');
+    axios.put(this.props.store.apiUrl+'account', f, {withCredentials: true})
     .then(function(res){
       if(res.data.status != 'OK'){
         s.toastError(res.data.status, res.data.error_message);

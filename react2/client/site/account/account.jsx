@@ -37,10 +37,10 @@ export default class Account extends React.Component {
     var s = this.state;
     var user = {
       forename: "Sören",
-      surname: "Klein",
-      email: "soerenklein98@gmail.com",
-      created: "20.11.2017 12:43",
-      updated: "20.11.2017 12:43"
+      surname:  "Klein",
+      email:    "soerenklein98@gmail.com",
+      created:  "20.11.2017 12:43",
+      updated:  "20.11.2017 12:43"
     };
     return (
       <div className="container">

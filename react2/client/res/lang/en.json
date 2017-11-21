@@ -24,7 +24,6 @@
       "register":    "Register",
       "account":     "Account",
       "logout":      "Logout",
-      "logedOut":    "Loged out",
       "adminUpdate": "Update",
       "adminUser":   "User"
     },
@@ -56,6 +55,12 @@
         "warningEmailEmpty":          "The email must be filled out.",
         "warningPasswordEmpty":       "The password must be filled out.",
         "logedIn":                    "You are now loged in."
+      },
+      "logout": {
+        "title":                      "Logout",
+        "message":                    "If you see this, click",
+        "home":                       "this link to go home",
+        "logedOut":                   "Loged out"
       },
       "register": {
         "title":                      "Register",

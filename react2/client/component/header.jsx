@@ -2,6 +2,7 @@ import React from 'react';
 import {observer} from 'mobx-react';
 import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
+import axios from 'axios';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 
@@ -40,11 +41,6 @@ export default class Header extends React.Component {
     this.setState({
       userDropdownOpen: !this.state.userDropdownOpen
     });
-  }
-
-  logout(){
-    toast(this.props.store.lang.components.header['logedOut']);
-    this.toggleUserDropdown();
   }
 
   switchLang(el){
@@ -92,7 +88,7 @@ export default class Header extends React.Component {
         {settings}
       </Nav>
     );
-    if(isLogedIn){
+    if('id' in this.props.store.user){
       userMenu = (
         <Nav className="ml-auto" navbar>
           <NavItem>
@@ -100,7 +96,7 @@ export default class Header extends React.Component {
               <DropdownToggle nav>Syndesi</DropdownToggle>
               <DropdownMenu right>
                 <Link to="/account" onClick={this.toggleUserDropdown.bind(this)} className="dropdown-item">{l.account}</Link>
-                <div onClick={this.logout.bind(this)} className="dropdown-item">{l.logout}</div>
+                <Link to="/account/logout" onClick={this.toggleUserDropdown.bind(this)} className="dropdown-item">{l.logout}</Link>
               </DropdownMenu>
             </Dropdown>
           </NavItem>

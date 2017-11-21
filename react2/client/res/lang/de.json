@@ -24,7 +24,6 @@
       "register":    "Registrieren",
       "account":     "Account",
       "logout":      "Abmelden",
-      "logedOut":    "Abgemeldet",
       "adminUpdate": "Update",
       "adminUser":   "Benutzer"
     },
@@ -56,6 +55,12 @@
         "warningEmailEmpty":          "Die E-Mail Adresse muss angegeben werden.",
         "warningPasswordEmpty":       "Das Passwort muss angegeben werden.",
         "logedIn":                    "Du bist nun angemeldet."
+      },
+      "logout": {
+        "title":                      "Abmelden",
+        "message":                    "Wenn du dies siehst, klicke",
+        "home":                       "hier um Zur Startseite zu gelangen.",
+        "logedOut":                   "Abgemeldet"
       },
       "register": {
         "title":                      "Registrieren",
