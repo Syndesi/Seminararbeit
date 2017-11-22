@@ -1,0 +1,18 @@
+{
+  "version":          "0.0.4",
+  "previousVersions": [],
+  "repositoryApi":    "https://api.github.com/repos/Syndesi/Seminararbeit",
+  "settings": {
+    "account":        {
+      "algo":         "PASSWORD_DEFAULT",
+      "cost":         12
+    },
+    "dateformat":     "Y-m-d H:i:s",
+    "database":       {
+      "host":         "localhost",
+      "database":     "seminararbeit",
+      "user":         "seminararbeit",
+      "password":     "wMHo60z1HhTnVVq5"
+    }
+  }
+}

@@ -56,7 +56,7 @@ export default class Update extends React.Component {
     var list = [];
     for(var i in this.state.updates){
       var el = this.state.updates[i];
-      var liClass = 'list-group-item d-flex justify-content-between align-items-center';
+      var liClass = 'list-group-item d-flex justify-content-between align-items-center cursor';
       var badgeClass = 'badge badge-pill';
       if(this.state.currentUpdate == i){
         liClass += ' active';

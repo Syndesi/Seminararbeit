@@ -1,26 +1,49 @@
 import React from 'react';
 import {Switch, Route} from 'react-router-dom';
+import {ToastContainer} from 'react-toastify';
 
-import Index from './page/index.jsx';
-import Station from './page/station.jsx';
+import Header from './component/header.jsx';
 
-import Bar from './components/bar.jsx';
-import Page from './components/page.jsx';
+
+import SetupRouter from './site/setup/setupRouter.jsx';
+import AccountRouter from './site/account/accountRouter.jsx';
+import AdminRouter from './site/admin/adminRouter.jsx';
+
+import Index from './site/index.jsx';
+import Map from './site/map.jsx';
+import Icon from './site/icon.jsx';
+import Mk from './site/mk.jsx';
+
+import Kriging from './site/md/kriging.jsx';
+import Beta from './site/md/beta.jsx';
+
 
 export default class Router extends React.Component {
 
   render() {
     var store = this.props.store;
-    store.history = this.props.history;
     return (
       <div className="app">
-        <Bar store={store} />
-        <Page>
-          <Switch>
-            <Route exact path='/' render={()=><Index store={store}/>}/>
-            <Route path='/station/' render={()=><Station store={store}/>}/>
-          </Switch>
-        </Page>
+        <Header store={store} />
+        <ToastContainer 
+          position="top-right"
+          autoClose={4000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          pauseOnHover
+        />
+        <Switch>
+          <Route exact path='/' render={(route)=><Index route={route} store={store} />}/>
+          <Route path='/map' render={(route)=><Map route={route} store={store} />}/>
+          <Route path='/icon' render={(route)=><Icon route={route} store={store} />}/>
+          <Route path='/wiki/demo' render={(route)=><Mk route={route} />}/>
+          <Route path='/wiki/kriging' render={(route)=><Kriging route={route} />}/>
+          <Route path='/wiki/beta' render={(route)=><Beta route={route} />}/>
+          <Route path='/setup' render={(route)=><SetupRouter route={route} store={store} />}/>
+          <Route path='/account' render={(route)=><AccountRouter route={route} store={store} />}/>
+          <Route path='/admin' render={(route)=><AdminRouter route={route} store={store} />}/>
+        </Switch>
       </div>
     );
   }

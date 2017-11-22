@@ -1,16 +1,67 @@
-import {observable, action} from 'mobx';
+import {observable} from 'mobx';
+import {toast} from 'react-toastify';
 import axios from 'axios';
-import _ from 'lodash';
-import mapboxgl from 'mapbox-gl';
+
+import langDe from './res/lang/de.json';
+import langEn from './res/lang/en.json';
 
 class Store {
 
-  @observable apiURL = 'http://localhost/Seminararbeit/server/api/';
-  @observable mapboxApiKey = 'pk.eyJ1Ijoic29lcmVua2xlaW4iLCJhIjoiY2o3dzBvYWx5NTI3YzJ3bnQ0MjQ3a2sxeSJ9.6jye-1MdKmbCy3GTS1ATGg';
-
+  @observable apiUrl = 'http://localhost/Seminararbeit/server/api/';
+  @observable text = 'hello world! :D';
+  @observable lang = langEn;
+  @observable user = {};
+  
   constructor(){
-    console.log('loaded');
-    mapboxgl.accessToken = 'pk.eyJ1Ijoic29lcmVua2xlaW4iLCJhIjoiTFhjai1qcyJ9.JvmV0WKbbrySeFyHJQYRfg';
+    console.log('Store loaded');
+    this.updateUserData();
+  }
+
+  updateUserData(){
+    var self = this;
+    axios.get(this.apiUrl+'account/status', {withCredentials: true})
+    .then(function(res){
+      console.log(res);
+      if(res.data.status != 'OK'){
+        s.toastError(res.data.status, res.data.error_message);
+        return false;
+      } else {
+        console.log('user updated');
+        self.user = res.data.result;
+      }
+    })
+    .catch(function(error){
+      console.log(error);
+      s.toastError(error.message, error.message);
+      console.log(error);
+      return false;
+    });
+  }
+
+  toastError(code, message){
+    if(code in this.lang.error_codes){
+      message = this.lang.error_codes[code];
+    }
+    toast.warning(message);
+  }
+
+  switchLang(lang){
+    console.log('Switching language to ['+lang+']');
+    switch(lang){
+      case 'de':
+        this.lang = langDe;
+        break;
+      case 'en':
+        this.lang = langEn;
+        break;
+      default:
+        console.log('The language ['+lang+'] does not exist.');
+        break;
+    }
+  }
+
+  logout(){
+    this.user = {};
   }
   
 }
