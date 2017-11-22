@@ -103,6 +103,13 @@
         "warningPasswordEmpty2":      "Das zweite Passwort muss zur Überprüfung ebenfalls angegeben werden.",
         "updated":                    "Du bist nun geupdated."
       }
+    },
+    "admin": {
+      "update": {
+        "title":                      "Update",
+        "updateButton":               "Update",
+        "currentVersion":             "Aktuelle Version:"
+      }
     }
   }
 }

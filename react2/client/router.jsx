@@ -7,6 +7,7 @@ import Header from './component/header.jsx';
 
 import SetupRouter from './site/setup/setupRouter.jsx';
 import AccountRouter from './site/account/accountRouter.jsx';
+import AdminRouter from './site/admin/adminRouter.jsx';
 
 import Index from './site/index.jsx';
 import Map from './site/map.jsx';
@@ -41,6 +42,7 @@ export default class Router extends React.Component {
           <Route path='/wiki/beta' render={(route)=><Beta route={route} />}/>
           <Route path='/setup' render={(route)=><SetupRouter route={route} store={store} />}/>
           <Route path='/account' render={(route)=><AccountRouter route={route} store={store} />}/>
+          <Route path='/admin' render={(route)=><AdminRouter route={route} store={store} />}/>
         </Switch>
       </div>
     );

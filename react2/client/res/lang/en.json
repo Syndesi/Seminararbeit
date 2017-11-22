@@ -103,6 +103,13 @@
         "warningPasswordEmpty2":      "The second password must also be specified for verification.",
         "updated":                    "You are now updated."
       }
+    },
+    "admin": {
+      "update": {
+        "title":                      "Update",
+        "updateButton":               "Update",
+        "currentVersion":             "Current version:"
+      }
     }
   }
 }

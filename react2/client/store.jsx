@@ -14,6 +14,7 @@ class Store {
   
   constructor(){
     console.log('Store loaded');
+    this.updateUserData();
   }
 
   updateUserData(){
@@ -25,7 +26,7 @@ class Store {
         s.toastError(res.data.status, res.data.error_message);
         return false;
       } else {
-        toast('user updated');
+        console.log('user updated');
         self.user = res.data.result;
       }
     })
