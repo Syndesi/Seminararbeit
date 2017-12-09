@@ -2,6 +2,7 @@
 set_time_limit(0);
 
 require_once __DIR__.'/../lib/route.php';
+require_once __DIR__.'/../lib/point.php';
 use Propel\Runtime\Propel;
 
 class UbaRoute extends \lib\Route {
@@ -21,6 +22,7 @@ class UbaRoute extends \lib\Route {
     $this->addRoute('GET:/{substance:a}/report/{day:d}', function($p){$this->getReport($p['substance'], $p['day']);});                         // /api/uba/o3/report/2017-09-08
     $this->addRoute('GET:/{substance:a}/report/{day:d}/{hour:i}', function($p){$this->getReport($p['substance'], $p['day'], $p['hour']);});    // /api/uba/o3/report/2017-09-08/7
     $this->addRoute('POST:/{substance:a}/{day:d}', function($p){$this->importSubstance($p['substance'], $p['day']);});                         // /api/uba/o3/2017-09-08
+    $this->addRoute('POST:/setGeo', function($p){$this->setGeo();});                                                                           // /api/uba/setGeo
   }
 
   private function count(){
@@ -119,6 +121,42 @@ class UbaRoute extends \lib\Route {
     $res = [];
     foreach($entrys as $entry){
       $res[$entry->getId()] = $this->stationToArray($entry);
+    }
+    $this->r->finish($res);
+  }
+
+  private function setGeo(){
+    $entrys = UbaStationQuery::create()->find();
+    $p = new \lib\Point(0, 0, 0);
+    $res = [
+      'failed'  => [],
+      'updated' => []
+    ];
+    $alternative = [
+      'B Frohnau, Funkturm (3.5 m)' => 'Berlin Frohnau, Funkturm',
+      'Westpfalz-Waldmohr' => 'Waldmohr',
+      'Westeifel Wascheid' => 'Wascheid',
+      'Plauen-DWD' => 'Plauen Deutscher Wetterdienst',
+      'Zartau/Waldstation' => 'Klötze',
+      'Unterharz / Friedrichsbrunn' => 'Friedrichsbrunn'
+    ];
+    foreach($entrys as $entry){
+      $address = $entry->getName();
+      if(array_key_exists($address, $alternative)){
+        $address = $alternative[$address];
+      }
+      $address = str_replace('/', ' ', $address);
+      $address = str_replace('B ', 'Berlin ', $address);
+      $gps = $p->fromAddress($address);
+      if($gps){
+        $entry->setLat($gps->lat);
+        $entry->setLng($gps->lng);
+        $entry->setAlt($gps->alt);
+        $entry->save();
+        $res['updated'][$address] = $gps;
+      } else {
+        $res['failed'][$entry->getId()] = $address;
+      }
     }
     $this->r->finish($res);
   }
