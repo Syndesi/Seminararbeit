@@ -12,6 +12,7 @@ class UpdateRoute extends \lib\Route {
     parent::__construct($r);
     $this->addRoute('GET:/', function($p){$this->getAvailableUpdates();});
     $this->addRoute('GET:/update', function($p){$this->updateWebsite('0.0.3');});
+    $this->addRoute('GET:/demo', function($p){$this->demo();});
    }
 
   private function getAvailableUpdates(){
@@ -27,6 +28,19 @@ class UpdateRoute extends \lib\Route {
     //file_put_contents($zipPath, file_get_contents($zipUrl));
     $this->downloadFile($zipUrl, $zipPath);
     $this->r->finish($zipPath);
+  }
+
+  private function demo(){
+    $host = 'host_1';
+    $database = 'database_2';
+    $user = 'user_3';
+    $password = 'password_4';
+    $res = [
+      'dsn' => 'mysql:host='.$host.';dbname='.$database,
+      'user' => $user,
+      'password' => $password
+    ];
+    $this->r->finish($res);
   }
 
   private function getReleaseByVersion($version){
