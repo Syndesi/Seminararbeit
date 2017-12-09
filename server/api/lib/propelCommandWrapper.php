@@ -1,5 +1,4 @@
 <?php
-// path of current file: /api/lib/propel.php
 namespace lib;
 
 use Symfony\Component\Finder\Finder;
