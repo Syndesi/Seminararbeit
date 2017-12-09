@@ -132,12 +132,13 @@ class UbaRoute extends \lib\Route {
       'failed'  => [],
       'updated' => []
     ];
+    // alternative phrases for the same place because Google don't know the first ones yet (12.2017)
     $alternative = [
       'B Frohnau, Funkturm (3.5 m)' => 'Berlin Frohnau, Funkturm',
-      'Westpfalz-Waldmohr' => 'Waldmohr',
-      'Westeifel Wascheid' => 'Wascheid',
-      'Plauen-DWD' => 'Plauen Deutscher Wetterdienst',
-      'Zartau/Waldstation' => 'Klötze',
+      'Westpfalz-Waldmohr'          => 'Waldmohr',
+      'Westeifel Wascheid'          => 'Wascheid',
+      'Plauen-DWD'                  => 'Plauen Deutscher Wetterdienst',
+      'Zartau/Waldstation'          => 'Klötze',
       'Unterharz / Friedrichsbrunn' => 'Friedrichsbrunn'
     ];
     foreach($entrys as $entry){

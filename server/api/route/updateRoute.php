@@ -13,7 +13,7 @@ class UpdateRoute extends \lib\Route {
     $this->addRoute('GET:/', function($p){$this->getAvailableUpdates();});
     $this->addRoute('GET:/update', function($p){$this->updateWebsite('0.0.3');});
     $this->addRoute('GET:/demo', function($p){$this->demo();});
-   }
+  }
 
   private function getAvailableUpdates(){
     $url = $this->apiUrl.'/releases';

@@ -9,7 +9,10 @@ namespace lib;
  * @param  string  $agent   The user-agent in the HTTP-request.
  * @return boolean          True, could be improved.
  */
-function downloadWebContent($url, $path, $timeout = 600, $agent = $_SERVER['HTTP_USER_AGENT']){
+function downloadWebContent($url, $path, $timeout = 600, $agent = false){
+  if(!$agent){
+    $agent = $_SERVER['HTTP_USER_AGENT'];
+  }
   $f = fopen($path, 'w+');
   $ch = curl_init($url);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -20,7 +23,7 @@ function downloadWebContent($url, $path, $timeout = 600, $agent = $_SERVER['HTTP
   curl_exec($ch); 
   curl_close($ch);
   fclose($f);
-  return $true;
+  return true;
 }
 
 /**
@@ -30,7 +33,10 @@ function downloadWebContent($url, $path, $timeout = 600, $agent = $_SERVER['HTTP
  * @param  string $agent The user-agent in the HTTP-request.
  * @return string        The content of the given URL.
  */
-function getWebContent($url, $agent = $_SERVER['HTTP_USER_AGENT']){
+function getWebContent($url, $agent = false){
+  if(!$agent){
+    $agent = $_SERVER['HTTP_USER_AGENT'];
+  }
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_URL, $url);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
