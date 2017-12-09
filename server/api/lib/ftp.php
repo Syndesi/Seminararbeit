@@ -58,8 +58,6 @@ class FTP {
     if(is_dir($tempfile)){ return $tempfile;}
   }
 
-
-
   public function scandir($path){
     return ftp_nlist($this->ftp, $path);
   }
