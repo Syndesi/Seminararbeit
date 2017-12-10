@@ -35,18 +35,22 @@ function rm($path){
   if(!($path = realpath($path))){
     return false;
   }
-  foreach(scandir($path) as $i => $name){
-    if($name == '.' || $name == '..'){
-      continue;
+  if(!is_dir($path)){
+    unlink($path);
+  } else {
+    foreach(scandir($path) as $i => $name){
+      if($name == '.' || $name == '..'){
+        continue;
+      }
+      $tmp = $path.'/'.$name;
+      if(is_dir($tmp)){
+        rm($tmp);
+      } else {
+        unlink($tmp);
+      }
     }
-    $tmp = $path.'/'.$name;
-    if(is_dir($tmp)){
-      rm($tmp);
-    } else {
-      unlink($tmp);
-    }
+    rmdir($path);
   }
-  rmdir($path);
   return true;
 }
 

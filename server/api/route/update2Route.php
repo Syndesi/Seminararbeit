@@ -10,7 +10,7 @@ use Propel\Runtime\Propel;
 
 class Update2Route extends \lib\Route {
 
-  protected $propelConfigPath = __DIR__.'/../../config/propel.json';
+  protected $propelConfigPath = 'config/propel.json';
   protected $apiUrl           = 'https://api.github.com/repos/Syndesi/Seminararbeit';
 
   public function __construct($r){
@@ -26,12 +26,13 @@ class Update2Route extends \lib\Route {
     if(!$destination){
       $destination = realpath(__DIR__.'/../../../../').'/seminararbeit_updated'.'/';
     }
-    $zipPath = __DIR__.'/../../../../update.zip';
+    $zipPath = __DIR__.'/../../update.zip';
     $tmpPath = __DIR__.'/../../update/';
     $release = $this->getReleaseByVersion($version);
     lib\downloadWebContent($release['zipball_url'], $zipPath);
     lib\unzip($zipPath, $tmpPath);
-    lib\mv(realpath($tmpPath.'/'.scandir($tmpPath)[2].'/server'), $destination);
+    lib\cp(realpath($tmpPath.'/'.scandir($tmpPath)[2].'/server'), $destination);
+    $this->copyConfig(__DIR__.'/../../', $destination);
     lib\rm($zipPath);
     lib\rm($tmpPath);
     $this->r->finish($release);
@@ -54,14 +55,23 @@ class Update2Route extends \lib\Route {
     return false;
   }
 
-  private function setPropelConfig($host, $database, $user, $password){
-    $config = json_decode(file_get_contents($this->propelConfigPath), true);
+  private function copyConfig($from, $to){
+    // Propel config
+    $oldConfig = json_decode(file_get_contents($from.$this->propelConfigPath), true);
+    $newConfig = json_decode(file_get_contents($to.$this->propelConfigPath), true);
+    $oldConfig = $oldConfig['propel']['database']['connections']['default'];
+    $newConfig['propel']['database']['connections']['default']['dsn']      = $oldConfig['dsn'];
+    $newConfig['propel']['database']['connections']['default']['user']     = $oldConfig['user'];
+    $newConfig['propel']['database']['connections']['default']['password'] = $oldConfig['password'];
+    file_put_contents($to.$this->propelConfigPath, json_encode($newConfig, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+  }
+
+  private function initConfig($host, $database, $user, $password){
+    $config = json_decode(file_get_contents(__DIR__.'/../../'.$this->propelConfigPath), true);
     $config['propel']['database']['connections']['default']['dsn']      = 'mysql:host='.$host.';dbname='.$database;
     $config['propel']['database']['connections']['default']['user']     = $user;
     $config['propel']['database']['connections']['default']['password'] = $password;
-    // uncomment this only in productive mode!
-    //file_put_contents($this->propelConfigPath, json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-    return 'finished';
+    file_put_contents(__DIR__.'/../../'.$this->propelConfigPath, json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
   }
 
   private function testPropelConfig(){
