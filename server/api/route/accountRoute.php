@@ -1,6 +1,8 @@
 <?php
 
 require_once __DIR__.'/../lib/route.php';
+require_once __DIR__.'/../lib/config.php';
+require_once __DIR__.'/../lib/email.php';
 use Propel\Runtime\Propel;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\NestedValidationException;
@@ -17,14 +19,16 @@ class AccountRoute extends \lib\Route {
 
   public function __construct($r){
     parent::__construct($r);
-    $this->addRoute('GET:/',        function($p){$this->getOwnAccount();});      // /api/account
-    $this->addRoute('GET:/{id:i}',  function($p){$this->getAccount($p['id']);}); // /api/account/1
-    $this->addRoute('POST:/',       function($p){$this->createAccount();});      // /api/account
-    $this->addRoute('PUT:/',        function($p){$this->updateOwnAccount();});   // /api/account
-    $this->addRoute('DELETE:/',     function($p){$this->deleteOwnAccount();});   // /api/account
-    $this->addRoute('POST:/login',  function($p){$this->login();});              // /api/account/login
-    $this->addRoute('GET:/logout',  function($p){$this->logout();});             // /api/account/logout
-    $this->addRoute('GET:/status',  function($p){$this->isLoggedIn();});         // /api/account/loggedIn
+    $this->addRoute('GET:/',                 function($p){$this->getOwnAccount();});             // /api/account
+    $this->addRoute('GET:/{id:i}',           function($p){$this->getAccount($p['id']);});        // /api/account/1
+    $this->addRoute('POST:/',                function($p){$this->createAccount();});             // /api/account
+    $this->addRoute('PUT:/',                 function($p){$this->updateOwnAccount();});          // /api/account
+    $this->addRoute('DELETE:/',              function($p){$this->deleteOwnAccount();});          // /api/account
+    $this->addRoute('GET:/verify/{verify}',  function($p){$this->verifyAccount($p['verify']);}); // /api/account
+    $this->addRoute('POST:/login',           function($p){$this->login();});                     // /api/account/login
+    $this->addRoute('GET:/logout',           function($p){$this->logout();});                    // /api/account/logout
+    $this->addRoute('GET:/status',           function($p){$this->isLoggedIn();});                // /api/account/loggedIn
+    $this->config = \lib\getConfig();
   }
 
   private function getOwnAccount(){
@@ -64,6 +68,7 @@ class AccountRoute extends \lib\Route {
     if($account !== null){
       $this->r->abort('emailAlreadyUsed', 'This e-mail is already in use.');
     }
+    // create the account
     $account = new Account();
     $account->setForename($data['forename']);
     $account->setSurname($data['surname']);
@@ -71,6 +76,24 @@ class AccountRoute extends \lib\Route {
     $account->setEmailVerified(false);
     $account->setHash($this->getHash($data['password']));
     $account->save();
+    // create a verification link
+    $verify_link = md5($account->getId().'_'.time().'_'.random_int(0, 10000000));
+    $verify = new AccountVerification();
+    $verify->setAccountId($account->getId());
+    $verify->setLink($verify_link);
+    $verify->save();
+    // send email
+    $email = new \lib\email();
+    $email->setSubject('Verify your account');
+    $verify_id = 's1Ui5KAznkWAepaej4yRrDOp1SSxlx4q4QeSl6F9kQFhaDCyvC';
+    $link = $this->config['apiUrl'].'/account/verify/'.$verify_link;
+    $email->setBody(
+       '<h2>Hello,</h2>'
+      .'<p>Thank you for creating an account on Project-Ozone. But in order to use it, you will need to click on the following link to verify it:</p>'
+      .'<a href="'.$link.'">Verify your account</a>'
+    );
+    $email->addAddress($account->getEmail(), $account->getForename().' '.$account->getSurname());
+    $email->send();
     $this->r->finish([
       'id'       => $account->getId(),
       'forename' => $account->getForename(),
@@ -79,8 +102,29 @@ class AccountRoute extends \lib\Route {
     ]);
   }
 
+  private function verifyAccount($code){
+    $verify = AccountVerificationQuery::create()->findOneByLink($code);
+    if($verify == null){
+      $this->r->abort('verificationCodeDoesNotExist', 'The given verification code does not exist.');
+    }
+    $account = AccountQuery::create()->findPk($verify->getAccountId());
+    $account->setEmailVerified(true);
+    $account->save();
+    $verify->delete();
+    // send email
+    $email = new \lib\email();
+    $email->setSubject('Your account is verified');
+    $email->setBody(
+       '<h2>Hello,</h2>'
+      .'<p>Thank you for verifying your account, it is now fully usable.</p>'
+    );
+    $email->addAddress($account->getEmail(), $account->getForename().' '.$account->getSurname());
+    $email->send();
+    $this->r->finish('Account is verified.');
+  }
+
   private function getHash($password){
-    return password_hash($password, $this->hash['algo'], $this->hash['options']);
+    return password_hash($password, constant($this->config['settings']['account']['algo']), ['cost' => $this->config['settings']['account']['cost']]);
   }
 
   private function updateOwnAccount(){
@@ -142,7 +186,7 @@ class AccountRoute extends \lib\Route {
     if(!password_verify($data['password'], $hash)){
       $this->r->abort('passwordIsWrong', 'The password is wrong.');
     }
-    if(password_needs_rehash($hash, $this->hash['algo'], $this->hash['options'])){
+    if(password_needs_rehash($hash, constant($this->config['settings']['account']['algo']), ['cost' => $this->config['settings']['account']['cost']])){
       $newHash = $this->getHash($data['password']);
       $account->setHash($newHash);
       $account->save();

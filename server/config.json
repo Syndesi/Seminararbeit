@@ -1,7 +1,8 @@
 {
-  "version":          "0.0.4",
+  "version":          "0.0.5",
   "previousVersions": [],
   "repositoryApi":    "https://api.github.com/repos/Syndesi/Seminararbeit",
+  "apiUrl":           "http://localhost/Seminararbeit/server/api",
   "settings": {
     "account":        {
       "algo":         "PASSWORD_DEFAULT",
@@ -13,6 +14,18 @@
       "database":     "seminararbeit",
       "user":         "seminararbeit",
       "password":     "wMHo60z1HhTnVVq5"
-    }
+    },
+    "email": {
+      "smtp":         true,
+      "host":         "mail.project-ozone.de",
+      "smtpAuth":     true,
+      "username":     "Project Ozone",
+      "email":        "tmp@project-ozone.de",
+      "password":     ")k7#k_W[Iz*U",
+      "smtpSecure":   "ssl",
+      "port":         465
+    },
+    "googleKey":      "AIzaSyCZzatd8k_zH2szRitmdp75lgRLX2lStL8",
+    "gpsPrecision":   5
   }
 }

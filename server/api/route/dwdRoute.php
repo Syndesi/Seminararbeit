@@ -7,7 +7,6 @@ use Propel\Runtime\Propel;
 
 class DwdRoute extends \lib\Route {
 
-  // TU, N, RR, P0, EB, ST, SD, FF
   private $types = [
     'TU' => ['air_temperature/historical',
              'air_temperature/recent'],
@@ -26,7 +25,7 @@ class DwdRoute extends \lib\Route {
             'wind/recent']
   ];
 
-  private $tmp         = __DIR__.'/../../tmp/';
+  private $tmp         = __DIR__.'/../../storage/';
   private $ftp         = 'ftp-cdc.dwd.de';
   private $maxTmpFiles = 20;
   private $pageSize    = 24 * 7;

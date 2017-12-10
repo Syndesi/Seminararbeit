@@ -1,6 +1,8 @@
 <?php
 namespace lib;
 
+require_once __DIR__.'/../lib/config.php';
+
 class Point implements \JsonSerializable {
 
   public $lng;
@@ -8,12 +10,11 @@ class Point implements \JsonSerializable {
   public $alt;
   protected $precision = 5;
 
-  private $googleKey = 'AIzaSyCZzatd8k_zH2szRitmdp75lgRLX2lStL8'; // for Google-API's
-
   public function __construct($lng = 0, $lat = 0, $alt = false){
     $this->lng = $lng;
     $this->lat = $lat;
     $this->alt = $alt;
+    $this->config = \lib\getConfig();
     return $this;
   }
 
@@ -38,9 +39,9 @@ class Point implements \JsonSerializable {
    */
   public function jsonSerialize(){
     $res = [
-      'lng' => round($this->lng, $this->precision),
-      'lat' => round($this->lat, $this->precision),
-      'alt' => round($this->alt, $this->precision)
+      'lng' => round($this->lng, $this->$this->config['settings']['gpsPrecision']),
+      'lat' => round($this->lat, $this->$this->config['settings']['gpsPrecision']),
+      'alt' => round($this->alt, $this->$this->config['settings']['gpsPrecision'])
     ];
     if($this->alt === false){
       unset($res['alt']);
@@ -55,7 +56,7 @@ class Point implements \JsonSerializable {
    */
   public function fromAddress(string $address){
     $address = preg_replace('!\s+!', '+', trim($address));
-    $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key='.$this->googleKey;
+    $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key='.$this->config['settings']['googleKey'];
     if(!$file = file_get_contents($url)){
       throw new Exception('The url ['.$url.'] can not be loaded.');
     }
@@ -76,7 +77,7 @@ class Point implements \JsonSerializable {
    * @return Point         The point with updated altitude or false if an error occurred.
    */
   public function loadAltitude(Point $point){
-    $url = 'https://maps.googleapis.com/maps/api/elevation/json?locations='.$point->lat.','.$point->lng.'&key='.$this->googleKey;
+    $url = 'https://maps.googleapis.com/maps/api/elevation/json?locations='.$point->lat.','.$point->lng.'&key='.$this->config['settings']['googleKey'];
     if(!$file = file_get_contents($url)){
       throw new Exception('The url ['.$url.'] can not be loaded.');
     }

@@ -3,6 +3,7 @@ set_time_limit(0);
 
 require_once __DIR__.'/../lib/route.php';
 require_once __DIR__.'/../lib/file.php';
+require_once __DIR__.'/../lib/config.php';
 require_once __DIR__.'/../lib/http.php';
 require_once __DIR__.'/../lib/propelCommandWrapper.php';
 require_once __DIR__.'/../lib/zip.php';
@@ -11,14 +12,14 @@ use Propel\Runtime\Propel;
 class Update2Route extends \lib\Route {
 
   protected $propelConfigPath = 'config/propel.json';
-  protected $apiUrl           = 'https://api.github.com/repos/Syndesi/Seminararbeit';
-
+  
   public function __construct($r){
     parent::__construct($r);
     $this->addRoute('GET:/', function($p){$this->getAvailableUpdates();});
     $this->addRoute('GET:/config', function($p){$this->testPropelConfig();});
     $this->addRoute('POST:/update/{version}', function($p){$this->update($p['version']);});
     $this->addRoute('POST:/postupdate', function($p){$this->applyingUpdate();});
+    $this->config = lib\getConfig();
   }
 
 
@@ -41,13 +42,13 @@ class Update2Route extends \lib\Route {
   }
 
   private function getAvailableUpdates(){
-    $url = $this->apiUrl.'/releases';
+    $url = $this->config['repositoryApi'].'/releases';
     $data = json_decode(lib\getWebContent($url), true);
     $this->r->finish($data);
   }
 
   private function getReleaseByVersion($version){
-    $url = $this->apiUrl.'/releases';
+    $url = $this->config['repositoryApi'].'/releases';
     $data = json_decode(lib\getWebContent($url), true);
     foreach($data as $i => $release){
       if($release['tag_name'] == $version){
