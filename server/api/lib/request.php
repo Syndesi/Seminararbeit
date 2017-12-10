@@ -297,7 +297,11 @@ class Request{
   public function sendHeaders(){
     header('X-Powered-By: Syndesi');
     //header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Origin: '.$_SERVER['HTTP_ORIGIN']);
+    $origin = '*';
+    if(array_key_exists('HTTP_ORIGIN', $_SERVER)){
+      $origin = $_SERVER['HTTP_ORIGIN'];
+    }
+    header('Access-Control-Allow-Origin: '.$origin);
     header("Access-Control-Allow-Credentials: true");
     header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
     header('Access-Control-Max-Age: 1000');

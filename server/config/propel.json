@@ -1,0 +1,42 @@
+{
+  "propel": {
+    "general": {
+      "project": "Seminararbeit",
+      "version": "2.0.0-dev"
+    },
+    "paths": {
+      "projectDir": "current_path/../api/orm",
+      "schemaDir": "current_path/../api/orm",
+      "outputDir": "current-path/../api/orm",
+      "phpDir": "current-path/../api/orm/classes",
+      "phpConfDir": "current-path/../api/orm/conf",
+      "sqlDir": "current-path/../api/orm/sql",
+      "composerDir": "current-path/../"
+    },
+    "database": {
+      "connections": {
+        "default": {
+          "adapter": "mysql",
+          "classname": "Propel\\Runtime\\Connection\\ConnectionWrapper",
+          "dsn": "mysql:host=localhost;dbname=seminararbeit",
+          "user": "seminararbeit",
+          "password": "wMHo60z1HhTnVVq5",
+          "settings": {
+            "charset": "utf8mb4",
+            "queries": [
+              "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci, COLLATION_CONNECTION = utf8mb4_unicode_ci, COLLATION_DATABASE = utf8mb4_unicode_ci, COLLATION_SERVER = utf8mb4_unicode_ci"
+            ]
+          }
+        }
+      }
+    },
+    "runtime": {
+      "defaultConnection": "default",
+      "connections": ["default"]
+    },
+    "generator": {
+      "defaultConnection": "default",
+      "connections": ["default"]
+    }
+  }
+}
