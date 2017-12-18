@@ -11,21 +11,22 @@
     "diagram": {},
     "geogebra": {},
     "header": {
-      "title":       "Seminar Paper",
-      "map":         "Map",
-      "icons":       "Icons",
-      "wiki":        "Wiki",
-      "kriging":     "Kriging",
-      "beta":        "Beta Distribution",
-      "demo":        "Demo",
-      "setup":       "Setup",
-      "github":      "Github",
-      "login":       "Login",
-      "register":    "Register",
-      "account":     "Account",
-      "logout":      "Logout",
-      "adminUpdate": "Update",
-      "adminUser":   "User"
+      "title":           "Seminar Paper",
+      "map":             "Map",
+      "icons":           "Icons",
+      "wiki":            "Wiki",
+      "kriging":         "Kriging",
+      "beta":            "Beta Distribution",
+      "demo":            "Demo",
+      "setup":           "Setup",
+      "github":          "Github",
+      "login":           "Login",
+      "register":        "Register",
+      "account":         "Account",
+      "logout":          "Logout",
+      "adminUpdate":     "Update",
+      "adminInsertData": "Insert Data",
+      "adminUser":       "User"
     },
     "mapbox": {},
     "markdown": {},
@@ -109,6 +110,12 @@
         "title":                      "Update",
         "updateButton":               "Update",
         "currentVersion":             "Current version:"
+      },
+      "insertData": {
+        "panel": {
+          "dwd":                      "DWD",
+          "uba":                      "UBA"
+        }
       }
     }
   }

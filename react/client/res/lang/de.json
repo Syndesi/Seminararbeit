@@ -11,21 +11,22 @@
     "diagram": {},
     "geogebra": {},
     "header": {
-      "title":       "Seminararbeit",
-      "map":         "Karte",
-      "icons":       "Icons",
-      "wiki":        "Wiki",
-      "kriging":     "Kriging",
-      "beta":        "Betaverteilung",
-      "demo":        "Demo",
-      "setup":       "Setup",
-      "github":      "Github",
-      "login":       "Login",
-      "register":    "Registrieren",
-      "account":     "Account",
-      "logout":      "Abmelden",
-      "adminUpdate": "Update",
-      "adminUser":   "Benutzer"
+      "title":           "Seminararbeit",
+      "map":             "Karte",
+      "icons":           "Icons",
+      "wiki":            "Wiki",
+      "kriging":         "Kriging",
+      "beta":            "Betaverteilung",
+      "demo":            "Demo",
+      "setup":           "Setup",
+      "github":          "Github",
+      "login":           "Login",
+      "register":        "Registrieren",
+      "account":         "Account",
+      "logout":          "Abmelden",
+      "adminUpdate":     "Update",
+      "adminInsertData": "Daten einfügen",
+      "adminUser":       "Benutzer"
     },
     "mapbox": {},
     "markdown": {},
@@ -109,6 +110,12 @@
         "title":                      "Update",
         "updateButton":               "Update",
         "currentVersion":             "Aktuelle Version:"
+      },
+      "insertData": {
+        "panel": {
+          "dwd":                      "DWD",
+          "uba":                      "UBA"
+        }
       }
     }
   }

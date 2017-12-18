@@ -129,8 +129,10 @@ export default class Mapbox extends React.Component {
 
   render() {
     var mapClass = 'mapComponent';
+    var fullscreen_icon = 'fullscreen';
     if(this.state.isFullscreen){
       mapClass += ' fullscreen';
+      fullscreen_icon = 'fullscreen_exit';
     }
     var maps = [];
     for(var key in this.styles){
@@ -156,10 +158,8 @@ export default class Mapbox extends React.Component {
             <Button onClick={this.home.bind(this)}><span className="icon material">near_me</span></Button>
             <Button onClick={this.zoomIn.bind(this)}><span className="icon material">add</span></Button>
             <Button onClick={this.zoomOut.bind(this)}><span className="icon material">remove</span></Button>
-            <Button onClick={this.rotate.bind(this)}>O</Button>
-            <Button onClick={this.pitch.bind(this)}>/</Button>
             <Button id="layers" onClick={this.toggleLayers.bind(this)}><span className="icon material">layers</span></Button>
-            <Button onClick={this.fullscreen.bind(this)}><span className="icon material">fullscreen</span></Button>
+            <Button onClick={this.fullscreen.bind(this)}><span className="icon material">{fullscreen_icon}</span></Button>
             <a href="https://www.mapbox.com/" target="_blank" className="btn btn-secondary"><span className="icon icomoon">mapbox</span></a>
             <Popover className="mapLayerPopover" placement="right" isOpen={this.state.isLayerOpen} target="layers" toggle={this.toggleLayers.bind(this)}>
               <PopoverHeader>Style</PopoverHeader>

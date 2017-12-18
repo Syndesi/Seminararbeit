@@ -58,6 +58,7 @@ export default class Header extends React.Component {
       <div>
         <DropdownItem divider />
         <Link to="/admin/update" className="dropdown-item text-danger">{l.adminUpdate}</Link>
+        <Link to="/admin/insertData" className="dropdown-item text-danger">{l.adminInsertData}</Link>
         <Link to="/admin/user" className="dropdown-item text-danger">{l.adminUser}</Link>
       </div>
     );

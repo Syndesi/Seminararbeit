@@ -4782,6 +4782,10 @@ marching-simplex-table@^1.0.0:
   dependencies:
     convex-hull "^1.0.3"
 
+markdown-it-footnote@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/markdown-it-footnote/-/markdown-it-footnote-3.0.1.tgz#7f3730747cacc86e2fe0bf8a17a710f34791517a"
+
 markdown-it-katex@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/markdown-it-katex/-/markdown-it-katex-2.0.3.tgz#d7b86a1aea0b9d6496fab4e7919a18fdef589c39"
