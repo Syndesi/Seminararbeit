@@ -3,7 +3,7 @@ import {observer} from 'mobx-react';
 import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import axios from 'axios';
-import format from 'date-format';
+import dateFormat from 'dateformat';
 
 import Markdown from '../../component/markdown.jsx';
 
@@ -22,6 +22,7 @@ export default class Update extends React.Component {
 
   getAvailableUpdates(){
     var self = this;
+    var s = this.store;
     axios.get(this.props.store.apiUrl+'update/', null, {withCredentials: true})
     .then(function(res){
       console.log(res);
@@ -79,7 +80,7 @@ export default class Update extends React.Component {
       return null;
     }
     var update = this.state.updates[this.state.currentUpdate];
-    var date = format('yyyy.MM.dd hh:mm', new Date(update.published_at));
+    var date = dateFormat(new Date(update.published_at), "yyyy.mm.dd_HH:MM");
     var detail = (
       <div className="card-body">
         <a href={update.html_url}><h2>{update.name}</h2></a>

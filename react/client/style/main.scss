@@ -1,6 +1,8 @@
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";
 @import "../../node_modules/mapbox-gl/dist/mapbox-gl.css";
 @import "../../node_modules/katex/dist/katex.min.css";
+@import "../../node_modules/react-day-picker/lib/style.css";
+
 
 @import "./header.scss";
 @import "./map.scss";
@@ -8,6 +10,7 @@
 @import "./markdown.scss";
 @import "./geogebra.scss";
 @import "./toastify.scss";
+@import "./datepicker.scss";
 
 body {
   font-family:'roboto';

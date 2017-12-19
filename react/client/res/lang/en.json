@@ -30,7 +30,33 @@
     },
     "mapbox": {},
     "markdown": {},
-    "marker": {}
+    "marker": {},
+    "datepicker": {
+      "months":          [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ],
+      "days": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "today":                        "Today"
+    }
   },
   "site": {
     "index": {},

@@ -1,0 +1,50 @@
+.datePickerPopover {
+  max-width:none;
+  width:300px;
+  > .popover-inner > .row {
+    margin-left:0px;
+    margin-right:0px;
+  }
+  .week {
+    float:left;
+    width:100%;
+    display:flex;
+    list-style-type:none;
+    padding-left:0px;
+    margin-bottom:0px;
+    align-items:stretch;
+    > li {
+      float:left;
+      width:14.28%;
+      position:relative;
+      text-align:center;
+      padding-top:6px;
+      padding-bottom:8px;
+      cursor:pointer;
+      border-top:2px solid transparent;
+      border-bottom:2px solid transparent;
+      transition:border-color 0.2s ease-in-out;
+      &.active,
+      &:hover,
+      &:focus {
+        border-top-color:$primary;
+        border-bottom-color:$primary;
+      }
+      > .dots {
+        float:left;
+        width:100%;
+        text-align:center;
+        font-size:1px;
+        margin-bottom:-8px;
+        > .dot {
+          display:inline-block;
+          width:4px;
+          height:4px;
+          border-radius:50%;
+          margin:1.5px;
+          background-color:$primary;
+        }
+      }
+    }
+  }
+}

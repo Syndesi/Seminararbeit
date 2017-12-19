@@ -3,9 +3,14 @@ import {observer} from 'mobx-react';
 import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import axios from 'axios';
-import format from 'date-format';
+import dateFormat from 'dateformat';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+
+import {saveAs} from 'file-saver';
+import fileDialog from 'file-dialog';
 
 import Markdown from '../../component/markdown.jsx';
+import DatePicker from '../../component/datepicker.jsx';
 
 
 @observer
@@ -16,6 +21,19 @@ export default class InsertData extends React.Component {
     this.state = {
       panel:  'uba',
       panels: ['uba', 'dwd'],
+      form: {
+        uba: {
+          from: false,
+          to:   false,
+          types: {
+            o3:   false,
+            no2:  false,
+            so3:  false,
+            co:   false,
+            pm10: false
+          }
+        }
+      },
       log:    [
         {
           status: 'ok',
@@ -31,6 +49,28 @@ export default class InsertData extends React.Component {
         }
       ]
     };
+  }
+
+  downloadLog(){
+    var name = 'log_'+dateFormat(new Date(), "yyyymmdd_HHMM")+'.json';
+    var file = new File([JSON.stringify(this.state.log)], name, {type: "application/json;charset=utf-8"});
+    saveAs(file);
+  }
+
+  loadLog(){
+    var self = this;
+    fileDialog({multiple: false, accept: '.json'}, files => {
+      var reader = new FileReader();
+      reader.onload = function(e){
+        self.setState({
+          log: JSON.parse(e.target.result)
+        });
+      };
+      reader.onerror = function(e){
+        self.store.toastError('error', 'File could not read. Error code: '+e.target.error.code);
+      };
+      reader.readAsText(files[0]);
+    })
   }
 
   switchPanel(el){
@@ -49,19 +89,28 @@ export default class InsertData extends React.Component {
     });
   }
 
+  setUbaStart(day){
+    console.log(day);
+  }
+
+  setUbaEnd(day){
+    console.log(day);
+  }
+
   getPanel(){
     var res = null;
-    switch(this.state.panel){
+    var s = this.state;
+    switch(s.panel){
       case 'uba':
         res = (
           <form>
             <div className="form-group">
               <label for="dateStart">start</label>
-              <input type="text" className="form-control" id="dateStart" aria-describedby="dateStart" />
+              <DatePicker store={this.props.store}/>
             </div>
             <div className="form-group">
               <label for="dateEnd">end</label>
-              <input type="text" className="form-control" id="dateEnd" aria-describedby="dateEnd" />
+              <DayPickerInput className="form-control" onDayChange={day => this.setUbaEnd(day)} />
             </div>
             <div className="form-check">
               <label className="form-check-label">
@@ -158,8 +207,8 @@ export default class InsertData extends React.Component {
           <div className="col-md-4">
             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
               <div className="btn-group mr-2 mb-2">
-                <button className="btn btn-primary" title="save log"><span className="icon material">file_download</span></button>
-                <button className="btn btn-primary" title="load log"><span className="icon material">file_upload</span></button>
+                <button className="btn btn-primary" onClick={this.downloadLog.bind(this)} title="save log"><span className="icon material">file_download</span></button>
+                <button className="btn btn-primary" onClick={this.loadLog.bind(this)} title="load log"><span className="icon material">file_upload</span></button>
               </div>
               <div className="btn-group mr-2 mb-2">
                 <button className="btn btn-primary" title="retry failed operations"><span className="icon material">autorenew</span></button>
