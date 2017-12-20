@@ -34,7 +34,7 @@ export default class Router extends React.Component {
           pauseOnHover
         />
         <Switch>
-          <Route exact path='/' render={(route)=><Index route={route} store={store} />}/>
+          <Route exact path='/' render={(route)=><Map route={route} store={store} />}/>
           <Route path='/map' render={(route)=><Map route={route} store={store} />}/>
           <Route path='/icon' render={(route)=><Icon route={route} store={store} />}/>
           <Route path='/wiki/demo' render={(route)=><Mk route={route} />}/>

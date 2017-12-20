@@ -115,9 +115,6 @@ export default class Header extends React.Component {
               <Link to="/map" className="nav-item nav-link">{l.map}</Link>
             </NavItem>
             <NavItem>
-              <Link to="/icon" className="nav-item nav-link">{l.icons}</Link>
-            </NavItem>
-            <NavItem>
               <Dropdown nav isOpen={this.state.wikiDropdownOpen} toggle={this.toggleWikiDropdown.bind(this)}>
                 <DropdownToggle nav caret>{l.wiki}</DropdownToggle>
                 <DropdownMenu>
@@ -127,6 +124,9 @@ export default class Header extends React.Component {
                   <Link to="/wiki/demo" onClick={this.toggleWikiDropdown.bind(this)} className="dropdown-item">{l.demo}</Link>
                 </DropdownMenu>
               </Dropdown>
+            </NavItem>
+            <NavItem>
+              <Link to="/admin/insertData" className="nav-item nav-link">tmp</Link>
             </NavItem>
             <NavItem>
               <Link to="/setup" className="nav-item nav-link">{l.setup}</Link>

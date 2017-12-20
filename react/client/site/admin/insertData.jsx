@@ -90,11 +90,11 @@ export default class InsertData extends React.Component {
   }
 
   setUbaStart(day){
-    console.log(day);
+    console.log('start: '+day.format('DD.MM.YYYY'));
   }
 
   setUbaEnd(day){
-    console.log(day);
+    console.log('end: '+day.format('DD.MM.YYYY'));
   }
 
   getPanel(){
@@ -104,14 +104,7 @@ export default class InsertData extends React.Component {
       case 'uba':
         res = (
           <form>
-            <div className="form-group">
-              <label for="dateStart">start</label>
-              <DatePicker store={this.props.store}/>
-            </div>
-            <div className="form-group">
-              <label for="dateEnd">end</label>
-              <DayPickerInput className="form-control" onDayChange={day => this.setUbaEnd(day)} />
-            </div>
+            <DatePicker label="start" onChange={this.setUbaStart.bind(this)} store={this.props.store}/>
             <div className="form-check">
               <label className="form-check-label">
                 <input className="form-check-input" type="checkbox" value="" />

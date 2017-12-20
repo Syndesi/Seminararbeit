@@ -56,7 +56,7 @@ export default class Map extends React.Component {
     return (
       <div className="container">
         <div className="row">
-          <div className="col-md-8">
+          <div className="col-md-12">
             <div className="card">
               <div className="card-img-top">
                 <Mapbox store={this.props.store}/>
@@ -64,29 +64,6 @@ export default class Map extends React.Component {
               <div className="card-body">
                 <h4 className="card-title">Map</h4>
                 <p className="card-text">Legende etc.</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">Stationsdaten</h4>
-                <p className="card-text">Diagram etc.</p>
-                <Diagram />
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Stationsname</th>
-                      <th>Lng</th>
-                      <th>Lat</th>
-                      <th>Alt</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rows}
-                  </tbody>
-                </table>
               </div>
             </div>
           </div>

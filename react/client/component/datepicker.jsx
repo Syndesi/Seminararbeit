@@ -2,6 +2,7 @@ import React from 'react';
 import {observer} from 'mobx-react';
 import dateFormat from 'dateformat';
 import {Popover, PopoverHeader, PopoverBody} from 'reactstrap';
+import moment from 'moment';
 
 
 
@@ -10,9 +11,14 @@ export default class DatePicker extends React.Component {
 
   constructor(props){
     super(props);
+    var day = moment();
+    if(this.props.value !== false){
+      day = moment(this.props.value, this.props.format);
+    }
     this.state = {
-      currentDay: false,
-      isPopoverOpen: false
+      currentDay:     day,
+      displayedMonth: moment(day).startOf('month'),
+      isPopoverOpen:  false
     };
   }
 
@@ -28,116 +34,104 @@ export default class DatePicker extends React.Component {
     });
   }
 
+  previousMonth(){
+    this.setState({
+      displayedMonth: this.state.displayedMonth.subtract(1, 'month')
+    });
+  }
+
+  nextMonth(){
+    this.setState({
+      displayedMonth: this.state.displayedMonth.add(1, 'month')
+    });
+  }
+
+  getDays(year, month){
+    var res = [];
+    moment.locale('de');
+    var start = moment().year(year).month(month).startOf('month').startOf('week');
+    var end = moment().year(year).month(month).endOf('month').endOf('week');
+    var tmp = start;
+    while(tmp.isSameOrBefore(end)){
+      res.push(moment(tmp));
+      tmp.add(1, 'd');
+    }
+    return res;
+  }
+
+  setDay(el){
+    var date = el.currentTarget.getAttribute('data-date');
+    this.setState({
+      currentDay: moment(date)
+    });
+    this.props.onChange(moment(date));
+    this.closePopover();
+  }
+
   render() {
     var l = this.props.store.lang.components.datepicker;
     var state = this.state;
-    var date = new Date();
-    var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-    var lastDay  = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    console.log(firstDay);
-    console.log(firstDay.getDay());
+    var current = moment(this.state.currentDay);
+    var days = this.getDays(this.state.displayedMonth.year(), this.state.displayedMonth.month());
+    var weeks = [];
+    for(var i in days){
+      var week = Math.floor(i / 7);
+      if(!weeks[week]){
+        weeks[week] = [];
+      }
+      var dayClass = '';
+      if(!this.state.displayedMonth.isSame(days[i], 'month')){
+        dayClass += ' text-secondary';
+      }
+      if(days[i].isSame(current, 'day')){
+        dayClass += ' active';
+      }
+      weeks[week].push(<li className={dayClass} data-date={days[i].format()} onClick={this.setDay.bind(this)}>{days[i].format('D')}</li>);
+    }
+    var calendar = [];
+    for(var i in weeks){
+      calendar.push(<ul className="week">{weeks[i]}</ul>);
+    }
+    //<li>
+    //  2
+    //  <div className="dots">
+    //    <div className="dot" />
+    //    <div className="dot bg-success" />
+    //    <div className="dot bg-danger" />
+    //  </div>
+    //</li>
+    var today = this.state.displayedMonth.format('MMMM YYYY');
+    var inputValue = this.state.currentDay.format('DD.MM.YYYY');
     return (
-      <div class="form-group datepicker">
-        <label for="datepicker">DatePicker</label>
-        <input type="text" class="form-control" id="datepicker" placeholder="Datepicker" onClick={this.openPopover.bind(this)} />
+      <div className="form-group datepicker">
+        <label for="datepicker">{this.props.label}</label>
+        <input type="text" className="form-control" id="datepicker" placeholder="Datepicker" onClick={this.openPopover.bind(this)} value={inputValue} />
         <Popover className="datePickerPopover" placement="bottom" isOpen={this.state.isPopoverOpen} target="datepicker" toggle={this.closePopover.bind(this)}>
           <div className="row">
-            <ul class="nav d-flex w-100 justify-content-between">
-              <li class="nav-item">
-                <a class="nav-link active" href="#">-</a>
+            <ul className="nav d-flex w-100 justify-content-between">
+              <li className="nav-item">
+                <a className="nav-link" onClick={this.previousMonth.bind(this)} href="#"><span className="icon material">keyboard_arrow_left</span></a>
               </li>
-              <li class="nav-item">
-                19.12.2017
+              <li className="nav-item">
+                {today}
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">-</a>
+              <li className="nav-item">
+                <a className="nav-link" onClick={this.nextMonth.bind(this)} href="#"><span className="icon material">keyboard_arrow_right</span></a>
               </li>
             </ul>
           </div>
           <div className="row">
-            <ul class="week">
-              <li>1</li>
-              <li>
-                2
-                <div className="dots">
-                  <div className="dot" />
-                  <div className="dot" />
-                  <div className="dot" />
-                  <div className="dot bg-success" />
-                  <div className="dot bg-success" />
-                  <div className="dot bg-success" />
-                  <div className="dot bg-success" />
-                  <div className="dot bg-danger" />
-                  <div className="dot bg-danger" />
-                  <div className="dot bg-danger" />
-                  <div className="dot bg-danger" />
-                </div>
-              </li>
-              <li>3</li>
-              <li>4</li>
-              <li>5</li>
-              <li>6</li>
-              <li>7</li>
-            </ul>
-            <ul class="week">
-              <li>8</li>
-              <li className="active">9</li>
-              <li>10</li>
-              <li>11</li>
-              <li>
-                12
-                <div className="dots">
-                  <div className="dot bg-success" />
-                  <div className="dot bg-danger" />
-                </div>
-              </li>
-              <li>
-                13
-                <div className="dots">
-                  <div className="dot" />
-                </div>
-              </li>
-              <li>14</li>
-            </ul>
-            <ul class="week">
-              <li>15</li>
-              <li>16</li>
-              <li>17</li>
-              <li>18</li>
-              <li>19</li>
-              <li>20</li>
-              <li>21</li>
-            </ul>
-            <ul class="week">
-              <li>22</li>
-              <li>23</li>
-              <li>24</li>
-              <li>25</li>
-              <li>26</li>
-              <li>27</li>
-              <li>28</li>
-            </ul>
-            <ul class="week">
-              <li>29</li>
-              <li>30</li>
-              <li>31</li>
-              <li className="text-secondary">1</li>
-              <li className="text-secondary">2</li>
-              <li className="text-secondary">3</li>
-              <li className="text-secondary">4</li>
-            </ul>
-            <ul class="week">
-              <li className="text-secondary">5</li>
-              <li className="text-secondary">6</li>
-              <li className="text-secondary">7</li>
-              <li className="text-secondary">8</li>
-              <li className="text-secondary">9</li>
-              <li className="text-secondary">10</li>
-              <li className="text-secondary">11</li>
-            </ul>
+            {calendar}
           </div>
         </Popover>
       </div>
     );
   }
+}
+
+DatePicker.defaultProps = {
+  label:    '',
+  onChange: function(date){console.log(date.format('DD.MM.YYYY'));},
+  value:    false,
+  format:   ''
 }
