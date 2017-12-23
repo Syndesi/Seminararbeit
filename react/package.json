@@ -26,6 +26,7 @@
     "react-custom-scrollbars": "^4.0.2",
     "react-day-picker": "^7.0.5",
     "react-dom": "^16.1.1",
+    "react-focus-trap": "^2.5.0",
     "react-resize-detector": "^1.1.0",
     "react-router-dom": "^4.1.1",
     "react-toastify": "^2.2.1",

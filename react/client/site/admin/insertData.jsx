@@ -105,6 +105,7 @@ export default class InsertData extends React.Component {
         res = (
           <form>
             <DatePicker label="start" onChange={this.setUbaStart.bind(this)} store={this.props.store}/>
+            <DatePicker label="end" onChange={this.setUbaEnd.bind(this)} store={this.props.store}/>
             <div className="form-check">
               <label className="form-check-label">
                 <input className="form-check-input" type="checkbox" value="" />

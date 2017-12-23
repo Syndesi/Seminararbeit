@@ -1,10 +1,18 @@
 .datePickerPopover {
   max-width:none;
   width:300px;
-  > .popover-inner > .row {
-    margin-left:0px;
-    margin-right:0px;
+  > .popover-inner {
+    > .row {
+      margin-left:0px;
+      margin-right:0px;
+    }
+    > .navbar-nav {
+      .navbar-brand {
+        margin-right:0px;
+      }
+    }
   }
+
   .week {
     float:left;
     width:100%;

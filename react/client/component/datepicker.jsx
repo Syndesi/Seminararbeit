@@ -3,6 +3,7 @@ import {observer} from 'mobx-react';
 import dateFormat from 'dateformat';
 import {Popover, PopoverHeader, PopoverBody} from 'reactstrap';
 import moment from 'moment';
+import FocusTrap from 'react-focus-trap';
 
 
 
@@ -68,7 +69,7 @@ export default class DatePicker extends React.Component {
     this.closePopover();
   }
 
-  render() {
+  render(){
     var l = this.props.store.lang.components.datepicker;
     var state = this.state;
     var current = moment(this.state.currentDay);
@@ -79,14 +80,36 @@ export default class DatePicker extends React.Component {
       if(!weeks[week]){
         weeks[week] = [];
       }
-      var dayClass = '';
+      var dayClass = [];
       if(!this.state.displayedMonth.isSame(days[i], 'month')){
-        dayClass += ' text-secondary';
+        dayClass.push('text-secondary');
       }
       if(days[i].isSame(current, 'day')){
-        dayClass += ' active';
+        dayClass.push('active');
       }
-      weeks[week].push(<li className={dayClass} data-date={days[i].format()} onClick={this.setDay.bind(this)}>{days[i].format('D')}</li>);
+      if(dayClass.length == 0){
+        dayClass = null;
+      } else {
+        dayClass = dayClass.join(' ');
+      }
+      var dots = null;
+      if(days[i].format('YYYY-MM-DD') in this.props.dots){
+        var dotList = this.props.dots[days[i].format('YYYY-MM-DD')];
+        var dotsList = [];
+        for(var d in dotList){
+          var style = {
+            backgroundColor: dotList[d]
+          };
+          dotsList.push(<div className="dot" style={style} />);
+        }
+        var dots = <div className="dots">{dotsList}</div>
+      }
+      weeks[week].push(
+        <li className={dayClass} data-date={days[i].format()} onClick={this.setDay.bind(this)}>
+          {days[i].format('D')}
+          {dots}
+        </li>
+      );
     }
     var calendar = [];
     for(var i in weeks){
@@ -105,25 +128,27 @@ export default class DatePicker extends React.Component {
     return (
       <div className="form-group datepicker">
         <label for="datepicker">{this.props.label}</label>
-        <input type="text" className="form-control" id="datepicker" placeholder="Datepicker" onClick={this.openPopover.bind(this)} value={inputValue} />
-        <Popover className="datePickerPopover" placement="bottom" isOpen={this.state.isPopoverOpen} target="datepicker" toggle={this.closePopover.bind(this)}>
-          <div className="row">
-            <ul className="nav d-flex w-100 justify-content-between">
-              <li className="nav-item">
-                <a className="nav-link" onClick={this.previousMonth.bind(this)} href="#"><span className="icon material">keyboard_arrow_left</span></a>
-              </li>
-              <li className="nav-item">
-                {today}
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" onClick={this.nextMonth.bind(this)} href="#"><span className="icon material">keyboard_arrow_right</span></a>
-              </li>
-            </ul>
-          </div>
-          <div className="row">
-            {calendar}
-          </div>
-        </Popover>
+        <input type="text" className="form-control" onClick={this.openPopover.bind(this)} ref={node => this.input = node} placeholder="Datepicker" value={inputValue} />
+        <FocusTrap onExit={this.closePopover.bind(this)} active={this.state.isPopoverOpen}>
+          <Popover className="datePickerPopover" placement="bottom" isOpen={this.state.isPopoverOpen} target={this.input} toggle={this.closePopover.bind(this)}>
+            <nav class="navbar-nav">
+              <ul className="nav d-flex w-100 justify-content-between">
+                <li className="nav-item">
+                  <a className="nav-link px-2" onClick={this.previousMonth.bind(this)} href="#"><span className="icon material">keyboard_arrow_left</span></a>
+                </li>
+                <li className="nav-item navbar-brand">
+                  {today}
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link px-2" onClick={this.nextMonth.bind(this)} href="#"><span className="icon material">keyboard_arrow_right</span></a>
+                </li>
+              </ul>
+            </nav>
+            <div className="row">
+              {calendar}
+            </div>
+          </Popover>
+        </FocusTrap>
       </div>
     );
   }
@@ -133,5 +158,10 @@ DatePicker.defaultProps = {
   label:    '',
   onChange: function(date){console.log(date.format('DD.MM.YYYY'));},
   value:    false,
-  format:   ''
+  format:   '',
+  dots:     {
+    '2017-12-23':  ['#ff0000', '#00ff00', '#0000ff'],
+    '2018-01-13':  ['#007BFF'],
+    '2018-05-19':  ['#007BFF']
+  }
 }
