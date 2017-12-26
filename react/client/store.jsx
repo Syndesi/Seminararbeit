@@ -45,6 +45,13 @@ class Store {
     toast.warning(message);
   }
 
+  toastInfo(code, message){
+    if(code in this.lang.info_codes){
+      message = this.lang.info_codes[code];
+    }
+    toast(message);
+  }
+
   switchLang(lang){
     console.log('Switching language to ['+lang+']');
     switch(lang){

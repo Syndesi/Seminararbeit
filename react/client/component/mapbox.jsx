@@ -6,6 +6,25 @@ import {Button, Popover, PopoverHeader, PopoverBody} from 'reactstrap';
 export default class Mapbox extends React.Component {
 
   accessToken = 'pk.eyJ1Ijoic29lcmVua2xlaW4iLCJhIjoiTFhjai1qcyJ9.JvmV0WKbbrySeFyHJQYRfg';
+  heightmap = {
+    "version": 8,
+    "sources": {
+      "raster-tiles": {
+        "type": "raster",
+        "tiles": [
+          'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token='+this.accessToken
+        ],
+        "tileSize": 256
+      }
+    },
+    "layers": [{
+      "id": "simple-tiles",
+      "type": "raster",
+      "source": "raster-tiles",
+      "minzoom": 0,
+      "maxzoom": 22
+    }]
+  };
   styles = {
     'Streets':           ['mapbox://styles/mapbox/streets-v9',                     'https://api.mapbox.com/styles/v1/mapbox/streets-v9/static/'],
     'Light':             ['mapbox://styles/mapbox/light-v9',                       'https://api.mapbox.com/styles/v1/mapbox/light-v9/static/'],
@@ -13,7 +32,8 @@ export default class Mapbox extends React.Component {
     'Outdoors':          ['mapbox://styles/mapbox/outdoors-v9',                    'https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/static/'],
     'Satellite':         ['mapbox://styles/mapbox/satellite-v9',                   'https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/'],
     'Satellite-Streets': ['mapbox://styles/mapbox/satellite-streets-v9',           'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v9/static/'],
-    'custom':            ['mapbox://styles/soerenklein/cj7w3d3g63oc82rp8g68m2m8u', 'https://api.mapbox.com/styles/v1/soerenklein/cj7w3d3g63oc82rp8g68m2m8u/static/']
+    'custom':            ['mapbox://styles/soerenklein/cj7w3d3g63oc82rp8g68m2m8u', 'https://api.mapbox.com/styles/v1/soerenklein/cj7w3d3g63oc82rp8g68m2m8u/static/'],
+    'Heightmap':         [this.heightmap,                                          'https://api.mapbox.com/v4/mapbox.terrain-rgb/static/']
   };
 
   constructor(props){

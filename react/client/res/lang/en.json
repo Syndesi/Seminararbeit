@@ -7,6 +7,9 @@
     "passwordIsWrong":  "The given password is wrong.",
     "userDoesNotExist": "This user does not exist."
   },
+  "info_codes": {
+    "Network Error":    "Network Error"
+  },
   "components": {
     "diagram": {},
     "geogebra": {},

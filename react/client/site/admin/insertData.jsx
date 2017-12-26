@@ -5,6 +5,7 @@ import {toast} from 'react-toastify';
 import axios from 'axios';
 import dateFormat from 'dateformat';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
+import moment from 'moment';
 
 import {saveAs} from 'file-saver';
 import fileDialog from 'file-dialog';
@@ -23,14 +24,14 @@ export default class InsertData extends React.Component {
       panels: ['uba', 'dwd'],
       form: {
         uba: {
-          from: false,
-          to:   false,
-          types: {
-            o3:   false,
-            no2:  false,
-            so3:  false,
-            co:   false,
-            pm10: false
+          start:  moment().subtract(1, 'days').format('DD.MM.YYYY'),
+          end:    moment().format('DD.MM.YYYY'),
+          types:  {
+            o3:   true,
+            co:   true,
+            no2:  true,
+            so2:  true,
+            pm10: true
           }
         }
       },
@@ -89,12 +90,86 @@ export default class InsertData extends React.Component {
     });
   }
 
+  setUbaInput(el){
+    var input = el.currentTarget.value;
+    this.setState({
+      form: {
+        ...this.state.form,
+        uba: {
+          ...this.state.form.uba,
+          [el.currentTarget.getAttribute('type')]: input
+        }
+      }
+    });
+  }
+
   setUbaStart(day){
-    console.log('start: '+day.format('DD.MM.YYYY'));
+    this.setState({
+      form: {
+        ...this.state.form,
+        uba: {
+          ...this.state.form.uba,
+          start: day.format('DD.MM.YYYY')
+        }
+      }
+    });
   }
 
   setUbaEnd(day){
-    console.log('end: '+day.format('DD.MM.YYYY'));
+    this.setState({
+      form: {
+        ...this.state.form,
+        uba: {
+          ...this.state.form.uba,
+          end: day.format('DD.MM.YYYY')
+        }
+      }
+    });
+  }
+
+  setUbaSubstance(el){
+    var substance = el.currentTarget.getAttribute('data-substance');
+    this.setState({
+      form: {
+        ...this.state.form,
+        uba: {
+          ...this.state.form.uba,
+          types: {
+            ...this.state.form.uba.types,
+            [substance]: el.currentTarget.checked
+          }
+        }
+      }
+    });
+  }
+
+  generateUbaActions(){
+    var actions = [];
+    var start = moment(this.state.form.uba.start, 'DD.MM.YYYY');
+    var end = moment(this.state.form.uba.end, 'DD.MM.YYYY');
+    if(!start._isValid || !end._isValid){
+      return false; // date is incorrect
+    }
+    var substances = [];
+    for(var substance in this.state.form.uba.types){
+      if(this.state.form.uba.types[substance]){
+        substances.push(substance);
+      }
+    }
+    var tmp = moment(start);
+    var action = '';
+    while(tmp.isSameOrBefore(end)){
+      for(var i in substances){
+        action = this.props.store.apiUrl+'uba/'+substances[i]+'/'+tmp.format('DD-MM-YYYY');
+        actions.push(action);
+      }
+      tmp.add(1, 'd');
+    }
+    console.log(actions);
+    this.props.store.toastInfo(false, actions.length+' actions generated.');
+    var time = moment(0).subtract(1, 'hour').add(actions.length * 10, 'seconds');
+    this.props.store.toastInfo(false, 'Estimated time: '+time.format('HH:mm'));
+    return actions;
   }
 
   getPanel(){
@@ -102,41 +177,41 @@ export default class InsertData extends React.Component {
     var s = this.state;
     switch(s.panel){
       case 'uba':
+        var substanceCheckboxes = [];
+        for(var substance in this.state.form.uba.types){
+          var type = this.state.form.uba.types[substance];
+          substanceCheckboxes.push(
+            <div className="form-check">
+              <label className="form-check-label">
+                <input className="form-check-input" type="checkbox" onClick={this.setUbaSubstance.bind(this)} data-substance={substance} defaultChecked={this.state.form.uba.types[substance]}/>
+                {substance.toUpperCase()}
+              </label>
+            </div>
+          );
+        }
         res = (
           <form>
-            <DatePicker label="start" onChange={this.setUbaStart.bind(this)} store={this.props.store}/>
-            <DatePicker label="end" onChange={this.setUbaEnd.bind(this)} store={this.props.store}/>
-            <div className="form-check">
-              <label className="form-check-label">
-                <input className="form-check-input" type="checkbox" value="" />
-                O3
-              </label>
+            <div class="form-group">
+              <label for="ubaStart">Start</label>
+              <div class="input-group">
+                <input type="text" id="ubaStart" className="form-control" type="start" onChange={this.setUbaInput.bind(this)} placeholder="Datepicker" value={this.state.form.uba.start}/>
+                <span class="input-group-btn">
+                  <DatePicker date={this.state.form.uba.start} onChange={this.setUbaStart.bind(this)}/>
+                </span>
+              </div>
             </div>
-            <div className="form-check">
-              <label className="form-check-label">
-                <input className="form-check-input" type="checkbox" value="" />
-                NO2
-              </label>
+            <div class="form-group">
+              <label for="ubaEnd">End</label>
+              <div class="input-group">
+                <input type="text" id="ubaEnd" className="form-control" type="end" onChange={this.setUbaInput.bind(this)} placeholder="Datepicker" value={this.state.form.uba.end}/>
+                <span class="input-group-btn">
+                  <DatePicker date={this.state.form.uba.end} onChange={this.setUbaEnd.bind(this)}/>
+                </span>
+              </div>
             </div>
-            <div className="form-check">
-              <label className="form-check-label">
-                <input className="form-check-input" type="checkbox" value="" />
-                SO2
-              </label>
-            </div>
-            <div className="form-check">
-              <label className="form-check-label">
-                <input className="form-check-input" type="checkbox" value="" />
-                CO
-              </label>
-            </div>
-            <div className="form-check">
-              <label className="form-check-label">
-                <input className="form-check-input" type="checkbox" value="" />
-                PM10
-              </label>
-            </div>
-            <button className="btn btn-primary" type="button">import data</button>
+            <p className="mb-1">Zu importierende Substanzen:</p>
+            {substanceCheckboxes}
+            <button className="btn btn-primary" type="button" onClick={this.generateUbaActions.bind(this)}>import data</button>
           </form>
         );
         break;
@@ -147,7 +222,7 @@ export default class InsertData extends React.Component {
         res = <p>this panel does not exist.</p>
         break;
     }
-    return res;
+    return <div className="py-3">{res}</div>;
   }
 
   render() {

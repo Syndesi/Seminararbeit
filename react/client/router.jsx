@@ -18,6 +18,11 @@ import Kriging from './site/md/kriging.jsx';
 import Beta from './site/md/beta.jsx';
 
 
+
+
+import Heightmap from './site/heightmap.jsx';
+
+
 export default class Router extends React.Component {
 
   render() {
@@ -43,6 +48,7 @@ export default class Router extends React.Component {
           <Route path='/setup' render={(route)=><SetupRouter route={route} store={store} />}/>
           <Route path='/account' render={(route)=><AccountRouter route={route} store={store} />}/>
           <Route path='/admin' render={(route)=><AdminRouter route={route} store={store} />}/>
+          <Route path='/heightmap' render={(route)=><Heightmap route={route} store={store} />}/>
         </Switch>
       </div>
     );

@@ -1,10 +1,8 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-import dateFormat from 'dateformat';
 import {Popover, PopoverHeader, PopoverBody} from 'reactstrap';
 import moment from 'moment';
 import FocusTrap from 'react-focus-trap';
-
 
 
 @observer
@@ -12,26 +10,20 @@ export default class DatePicker extends React.Component {
 
   constructor(props){
     super(props);
-    var day = moment();
-    if(this.props.value !== false){
-      day = moment(this.props.value, this.props.format);
+    var date = moment(props.date, 'DD.MM.YYYY');
+    if(!date._isValid){
+      date = moment();
     }
     this.state = {
-      currentDay:     day,
-      displayedMonth: moment(day).startOf('month'),
+      date:           date,
+      displayedMonth: moment(date).startOf('month'),
       isPopoverOpen:  false
     };
   }
 
-  openPopover(){
+  togglePopover(){
     this.setState({
-      isPopoverOpen: true
-    });
-  }
-
-  closePopover(){
-    this.setState({
-      isPopoverOpen: false
+      isPopoverOpen: !this.state.isPopoverOpen
     });
   }
 
@@ -62,19 +54,25 @@ export default class DatePicker extends React.Component {
 
   setDay(el){
     var date = el.currentTarget.getAttribute('data-date');
-    this.setState({
-      currentDay: moment(date)
-    });
     this.props.onChange(moment(date));
-    this.closePopover();
+    this.togglePopover();
+  }
+
+  componentWillReceiveProps(props){
+    var date = moment(props.date, 'DD.MM.YYYY');
+    if(!date._isValid){
+      date = moment();
+    }
+    this.state = {
+      date:           date,
+      displayedMonth: moment(date).startOf('month'),
+      isPopoverOpen:  false
+    };
   }
 
   render(){
-    var l = this.props.store.lang.components.datepicker;
-    var state = this.state;
-    var current = moment(this.state.currentDay);
-    var days = this.getDays(this.state.displayedMonth.year(), this.state.displayedMonth.month());
-    var weeks = [];
+    var days    = this.getDays(this.state.displayedMonth.year(), this.state.displayedMonth.month());
+    var weeks   = [];
     for(var i in days){
       var week = Math.floor(i / 7);
       if(!weeks[week]){
@@ -84,7 +82,7 @@ export default class DatePicker extends React.Component {
       if(!this.state.displayedMonth.isSame(days[i], 'month')){
         dayClass.push('text-secondary');
       }
-      if(days[i].isSame(current, 'day')){
+      if(days[i].isSame(this.state.date, 'day')){
         dayClass.push('active');
       }
       if(dayClass.length == 0){
@@ -115,22 +113,12 @@ export default class DatePicker extends React.Component {
     for(var i in weeks){
       calendar.push(<ul className="week">{weeks[i]}</ul>);
     }
-    //<li>
-    //  2
-    //  <div className="dots">
-    //    <div className="dot" />
-    //    <div className="dot bg-success" />
-    //    <div className="dot bg-danger" />
-    //  </div>
-    //</li>
     var today = this.state.displayedMonth.format('MMMM YYYY');
-    var inputValue = this.state.currentDay.format('DD.MM.YYYY');
     return (
-      <div className="form-group datepicker">
-        <label for="datepicker">{this.props.label}</label>
-        <input type="text" className="form-control" onClick={this.openPopover.bind(this)} ref={node => this.input = node} placeholder="Datepicker" value={inputValue} />
-        <FocusTrap onExit={this.closePopover.bind(this)} active={this.state.isPopoverOpen}>
-          <Popover className="datePickerPopover" placement="bottom" isOpen={this.state.isPopoverOpen} target={this.input} toggle={this.closePopover.bind(this)}>
+      <button class="btn btn-primary" onClick={this.togglePopover.bind(this)} ref={node => this.button = node}>
+        <span className="icon material">event</span>
+        <FocusTrap onExit={this.togglePopover.bind(this)} active={this.state.isPopoverOpen}>
+          <Popover className="datePickerPopover" placement="bottom-end" isOpen={this.state.isPopoverOpen} target={this.button} toggle={this.togglePopover.bind(this)}>
             <nav class="navbar-nav">
               <ul className="nav d-flex w-100 justify-content-between">
                 <li className="nav-item">
@@ -149,16 +137,14 @@ export default class DatePicker extends React.Component {
             </div>
           </Popover>
         </FocusTrap>
-      </div>
+      </button>
     );
   }
 }
 
 DatePicker.defaultProps = {
-  label:    '',
+  date:     '',
   onChange: function(date){console.log(date.format('DD.MM.YYYY'));},
-  value:    false,
-  format:   '',
   dots:     {
     '2017-12-23':  ['#ff0000', '#00ff00', '#0000ff'],
     '2018-01-13':  ['#007BFF'],
