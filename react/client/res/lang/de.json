@@ -31,7 +31,14 @@
       "adminInsertData": "Daten einfügen",
       "adminUser":       "Benutzer"
     },
-    "mapbox": {},
+    "mapbox": {
+      "zoomIn":          "Größer",
+      "zoomOut":         "Kleiner",
+      "home":            "Hauptansicht",
+      "layers":          "Kartenmaterial",
+      "fullscreen":      "Fullscreen",
+      "mapbox":          "Mapbox"
+    },
     "markdown": {},
     "marker": {}
   },

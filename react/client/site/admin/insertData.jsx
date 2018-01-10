@@ -35,36 +35,23 @@ export default class InsertData extends React.Component {
           }
         }
       },
-      log:    [
-        {
-          status: 'ok',
-          message: 'Hello world! :D'
-        },
-        {
-          status: 'ok',
-          message: 'Log message demo'
-        },
-        {
-          status: 'error',
-          message: 'Download failed'
-        }
-      ]
+      actions: []
     };
   }
 
-  downloadLog(){
-    var name = 'log_'+dateFormat(new Date(), "yyyymmdd_HHMM")+'.json';
-    var file = new File([JSON.stringify(this.state.log)], name, {type: "application/json;charset=utf-8"});
+  downloadActions(){
+    var name = 'actions_'+dateFormat(new Date(), "yyyymmdd_HHMM")+'.json';
+    var file = new File([JSON.stringify(this.state.actions, null, 2)], name, {type: "application/json;charset=utf-8"});
     saveAs(file);
   }
 
-  loadLog(){
+  loadActions(){
     var self = this;
     fileDialog({multiple: false, accept: '.json'}, files => {
       var reader = new FileReader();
       reader.onload = function(e){
         self.setState({
-          log: JSON.parse(e.target.result)
+          actions: JSON.parse(e.target.result)
         });
       };
       reader.onerror = function(e){
@@ -84,9 +71,9 @@ export default class InsertData extends React.Component {
     });
   }
 
-  clearLog(){
+  clearActions(){
     this.setState({
-      log: []
+      actions: []
     });
   }
 
@@ -157,19 +144,95 @@ export default class InsertData extends React.Component {
       }
     }
     var tmp = moment(start);
-    var action = '';
+    var action = [];
     while(tmp.isSameOrBefore(end)){
       for(var i in substances){
-        action = this.props.store.apiUrl+'uba/'+substances[i]+'/'+tmp.format('DD-MM-YYYY');
-        actions.push(action);
+        actions.push({
+          url:     this.props.store.apiUrl+'uba/'+substances[i]+'/'+tmp.format('YYYY-MM-DD'),
+          time:    moment(tmp),
+          status:  'unstarted',
+          message: (substances[i]).toUpperCase()
+        });
       }
       tmp.add(1, 'd');
     }
     console.log(actions);
+    this.setState({
+      actions: actions
+    }, () => {
+      this.runActions('unstarted');
+    });
     this.props.store.toastInfo(false, actions.length+' actions generated.');
     var time = moment(0).subtract(1, 'hour').add(actions.length * 10, 'seconds');
     this.props.store.toastInfo(false, 'Estimated time: '+time.format('HH:mm'));
-    return actions;
+  }
+
+  runNextAction(status){
+    var self = this;
+    for(var i in this.state.actions){
+      var action = this.state.actions[i];
+      if(action.status != status){
+        continue;
+      }
+      axios.post(action.url, {}, {withCredentials: true})
+      .then(function (res){
+        if(res.data.status == 'OK'){
+          self.setState({
+            actions: {
+              ...self.state.actions,
+              [i]: {
+                ...action,
+                status:  'ok',
+                data:    res.data,
+                message: action.message + ' - ok'
+              }
+            }
+          });
+          console.log('successfully loaded '+action.url);
+        } else {
+          console.log(res);
+        }
+        self.runNextAction(status);
+      });
+      return true;
+    }
+  }
+
+  runActions(status){
+    this.runNextAction(status);
+    //var self = this;
+    //for(var i in this.state.actions){
+    //  var action = this.state.actions[i];
+    //  if(action.status != status){
+    //    continue;
+    //  }
+    //  axios.post(action.url, {}, {withCredentials: true})
+    //  .then(function (res){
+    //    if(res.data.status == 'OK'){
+    //      self.setState({
+    //        actions: {
+    //          ...self.state.actions,
+    //          [i]: {
+    //            ...action,
+    //            status:  'ok',
+    //            data:    res.data,
+    //            message: action.message + ' - ok'
+    //          }
+    //        }
+    //      });
+    //      console.log('state updated');
+    //    } else {
+    //      console.log(res);
+    //    }
+    //  });
+    //  console.log(action);
+    //}
+    //console.log('Actions finished');
+    //console.log(this.state);
+  }
+
+  restartActions(){
+    this.runActions('failed');
   }
 
   getPanel(){
@@ -240,25 +303,28 @@ export default class InsertData extends React.Component {
         </li>
       );
     }
-    var log = [];
-    for(var i in this.state.log){
-      var logEntry = this.state.log[i];
-      var logClass = 'list-group-item';
-      switch(logEntry.status){
-        case 'ok':
-          logClass += ' list-group-item-success';
+    var actions = [];
+    for(var i in this.state.actions){
+      var entry = this.state.actions[i];
+      var actionsClass = 'list-group-item';
+      switch(entry.status){
+        case 'unstarted':
+          //actionsClass += ' ';
           break;
-        case 'error':
-          logClass += ' list-group-item-danger';
+        case 'ok':
+          actionsClass += ' list-group-item-success';
+          break;
+        case 'failed':
+          actionsClass += ' list-group-item-danger';
           break;
         default:
           break;
       }
-      log.push(
-        <li className={logClass}>
+      actions.push(
+        <li className={actionsClass}>
           <div class="d-flex w-100 justify-content-between">
-            <p class="mb-1">{logEntry.message}</p>
-            <small>3 days ago</small>
+            <p class="mb-1">{entry.message}</p>
+            <small>{entry.time.format('DD.MM.YYYY')}</small>
           </div>
         </li>
       );
@@ -276,16 +342,16 @@ export default class InsertData extends React.Component {
           <div className="col-md-4">
             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
               <div className="btn-group mr-2 mb-2">
-                <button className="btn btn-primary" onClick={this.downloadLog.bind(this)} title="save log"><span className="icon material">file_download</span></button>
-                <button className="btn btn-primary" onClick={this.loadLog.bind(this)} title="load log"><span className="icon material">file_upload</span></button>
+                <button className="btn btn-primary" onClick={this.downloadActions.bind(this)} title="save action"><span className="icon material">file_download</span></button>
+                <button className="btn btn-primary" onClick={this.loadActions.bind(this)} title="load action"><span className="icon material">file_upload</span></button>
               </div>
               <div className="btn-group mr-2 mb-2">
-                <button className="btn btn-primary" title="retry failed operations"><span className="icon material">autorenew</span></button>
-                <button className="btn btn-primary" onClick={this.clearLog.bind(this)} title="clear log"><span className="icon material">clear</span></button>
+                <button className="btn btn-primary" onClick={this.restartActions.bind(this)} title="retry failed operations"><span className="icon material">autorenew</span></button>
+                <button className="btn btn-primary" onClick={this.clearActions.bind(this)} title="clear action"><span className="icon material">clear</span></button>
               </div>
             </div>
             <ul className="list-group">
-              {log}
+              {actions}
             </ul>
           </div>
         </div>

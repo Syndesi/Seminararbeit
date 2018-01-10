@@ -6,34 +6,13 @@ import {Button, Popover, PopoverHeader, PopoverBody} from 'reactstrap';
 export default class Mapbox extends React.Component {
 
   accessToken = 'pk.eyJ1Ijoic29lcmVua2xlaW4iLCJhIjoiTFhjai1qcyJ9.JvmV0WKbbrySeFyHJQYRfg';
-  heightmap = {
-    "version": 8,
-    "sources": {
-      "raster-tiles": {
-        "type": "raster",
-        "tiles": [
-          'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token='+this.accessToken
-        ],
-        "tileSize": 256
-      }
-    },
-    "layers": [{
-      "id": "simple-tiles",
-      "type": "raster",
-      "source": "raster-tiles",
-      "minzoom": 0,
-      "maxzoom": 22
-    }]
-  };
   styles = {
     'Streets':           ['mapbox://styles/mapbox/streets-v9',                     'https://api.mapbox.com/styles/v1/mapbox/streets-v9/static/'],
     'Light':             ['mapbox://styles/mapbox/light-v9',                       'https://api.mapbox.com/styles/v1/mapbox/light-v9/static/'],
     'Dark':              ['mapbox://styles/mapbox/dark-v9',                        'https://api.mapbox.com/styles/v1/mapbox/dark-v9/static/'],
     'Outdoors':          ['mapbox://styles/mapbox/outdoors-v9',                    'https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/static/'],
     'Satellite':         ['mapbox://styles/mapbox/satellite-v9',                   'https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/'],
-    'Satellite-Streets': ['mapbox://styles/mapbox/satellite-streets-v9',           'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v9/static/'],
-    'custom':            ['mapbox://styles/soerenklein/cj7w3d3g63oc82rp8g68m2m8u', 'https://api.mapbox.com/styles/v1/soerenklein/cj7w3d3g63oc82rp8g68m2m8u/static/'],
-    'Heightmap':         [this.heightmap,                                          'https://api.mapbox.com/v4/mapbox.terrain-rgb/static/']
+    'Satellite-Streets': ['mapbox://styles/mapbox/satellite-streets-v9',           'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v9/static/']
   };
 
   constructor(props){
@@ -148,6 +127,7 @@ export default class Mapbox extends React.Component {
   }
 
   render() {
+    var l = this.props.store.lang.components.mapbox;
     var mapClass = 'mapComponent';
     var fullscreen_icon = 'fullscreen';
     if(this.state.isFullscreen){
@@ -156,17 +136,17 @@ export default class Mapbox extends React.Component {
     }
     var maps = [];
     for(var key in this.styles){
-      var buttonClass = 'm-2 p-0';
+      var buttonClass = 'btn btn-outline-primary m-2 p-0 cursor';
       if(this.state.currentStyle == key){
         buttonClass += ' active';
       }
       maps.push(
-        <Button outline className={buttonClass} data-style={key} onClick={this.setStyle.bind(this)}>
+        <button type="button" className={buttonClass} data-style={key} onClick={this.setStyle.bind(this)}>
           <div className="img">
             <img src={this.getStaticMapLink(key)} alt={key} />
           </div>
           <p>{key}</p>
-        </Button>
+        </button>
       );
     }
 
@@ -175,12 +155,13 @@ export default class Mapbox extends React.Component {
         <div className="map" data-element="map"></div>
         <div className="overlay">
           <div className="btn-group-vertical" role="group" aria-label="Basic example">
-            <Button onClick={this.home.bind(this)}><span className="icon material">near_me</span></Button>
-            <Button onClick={this.zoomIn.bind(this)}><span className="icon material">add</span></Button>
-            <Button onClick={this.zoomOut.bind(this)}><span className="icon material">remove</span></Button>
-            <Button id="layers" onClick={this.toggleLayers.bind(this)}><span className="icon material">layers</span></Button>
-            <Button onClick={this.fullscreen.bind(this)}><span className="icon material">{fullscreen_icon}</span></Button>
-            <a href="https://www.mapbox.com/" target="_blank" className="btn btn-secondary"><span className="icon icomoon">mapbox</span></a>
+            <button type="button" className="btn btn-primary" onClick={this.home.bind(this)} title={l.home}><span className="icon material">near_me</span></button>
+            <button type="button" className="btn btn-primary" onClick={this.zoomIn.bind(this)} title={l.zoomIn}><span className="icon material">add</span></button>
+            <button type="button" className="btn btn-primary" onClick={this.zoomOut.bind(this)} title={l.zoomOut}><span className="icon material">remove</span></button>
+            <button type="button" className="btn btn-primary" id="layers" onClick={this.toggleLayers.bind(this)} title={l.layers}><span className="icon material">layers</span></button>
+            <button type="button" className="btn btn-primary" onClick={this.fullscreen.bind(this)} title={l.fullscreen}><span className="icon material">{fullscreen_icon}</span></button>
+            <a href="https://www.mapbox.com/" target="_blank" className="btn btn-primary" title={l.mapbox}><span className="icon icomoon">mapbox</span></a>
+
             <Popover className="mapLayerPopover" placement="right" isOpen={this.state.isLayerOpen} target="layers" toggle={this.toggleLayers.bind(this)}>
               <PopoverHeader>Style</PopoverHeader>
               <PopoverBody>

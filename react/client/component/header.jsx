@@ -106,7 +106,7 @@ export default class Header extends React.Component {
       );
     }
     return (
-      <Navbar color="light" light expand="sm">
+      <Navbar dark expand="sm">
         <Link to="/" className="navbar-brand">{l.title}</Link>
         <NavbarToggler onClick={this.toggle.bind(this)} />
         <Collapse isOpen={this.state.isOpen} navbar>

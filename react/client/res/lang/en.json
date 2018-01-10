@@ -31,7 +31,14 @@
       "adminInsertData": "Insert Data",
       "adminUser":       "User"
     },
-    "mapbox": {},
+    "mapbox": {
+      "zoomIn":          "zoom in",
+      "zoomOut":         "zoom out",
+      "home":            "back to home",
+      "layers":          "layers",
+      "fullscreen":      "fullscreen",
+      "mapbox":          "mapbox"
+    },
     "markdown": {},
     "marker": {},
     "datepicker": {
